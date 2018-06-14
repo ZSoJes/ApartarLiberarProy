@@ -19,7 +19,7 @@ import proyector.dataBase.Conexion;
  */
 public class ProfesorDB {
     private final Connection conn;
-
+    private static String OS = System.getProperty("os.name").toLowerCase();
     public ProfesorDB() throws SQLException {
         Conexion connect = new Conexion();
         conn = connect.getConexion();
@@ -239,16 +239,16 @@ public class ProfesorDB {
     
     public boolean bulkLoadProfe(String ruta){
         boolean correcto = false;
+        String a = "STRINGDECODE('charset=UTF-8'))";
         try {
             PreparedStatement prep;
-            System.out.println("ruta: " + ruta.replace('\\', '/'));//" + ruta.replace('\\', '/') + "
+            System.out.println("ruta: " + ruta.replace('\\', '/'));
             String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) "
-                       + "SELECT * FROM CSVREAD(\'" + ruta.replace('\\', '/') + "\', null, STRINGDECODE(\'charset=UTF-8\'))";
+                       + "SELECT * FROM CSVREAD('" + ruta.replace('\\', '/') + "', null, ";
+            sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":a); //si es windows decode char con windows 1252 sino usa UTF-8
             System.out.println("SQL: "+ sql);
             prep = conn.prepareStatement(sql);
-//            int a = 
-                    prep.executeUpdate();
-//            correcto = (a==1?true:false);
+            prep.executeUpdate();
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error al insertar multiples registros a la db Profesores: " + e);

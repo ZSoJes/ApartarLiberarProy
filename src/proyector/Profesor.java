@@ -1877,26 +1877,34 @@ public class Profesor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnAddCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCSVActionPerformed
-        int status = fcProfCSV.showOpenDialog(null);
-        if (status == fcProfCSV.APPROVE_OPTION) {
-            File selectedFile = fcProfCSV.getSelectedFile();
-            System.out.println(":::::::::::::::::::::::::::::::::...\n"
-                             + "Ubicación del archivo: " + selectedFile.getParent());
-            System.out.println("Nombre del archivo: " + selectedFile.getName());
-            
-            try {
-                ProfesorDB prof = new ProfesorDB();
-//                if(
-                    prof.bulkLoadProfe(selectedFile.getPath());//){
-                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
-                    System.out.println("dibujo tabla nuevamente");
-                    getTable();
-                    txtBusqueda.requestFocusInWindow();
-//                }else{
-//                    JOptionPane.showMessageDialog(null, "Rectifique los datos\n!!!No se han creado los registros!!!");
-//                }
-            } catch (Exception e) {            
-                System.out.println("Error al leer archivo que fue recibido");
+        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
+                                                          + "\n-Los datos deben ser separados por coma(,)"
+                                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                                                          + "\n-La informacion debe tener el siguiente orden"
+                                                          + "\n\tID_PROFESOR\n\tID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR"  
+                                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if(respuesta == JOptionPane.OK_OPTION){
+            int status = fcProfCSV.showOpenDialog(null);
+            if (status == fcProfCSV.APPROVE_OPTION) {
+                File selectedFile = fcProfCSV.getSelectedFile();
+                System.out.println(":::::::::::::::::::::::::::::::::...\n"
+                                 + "Ubicación del archivo: " + selectedFile.getParent());
+                System.out.println("Nombre del archivo: " + selectedFile.getName());
+
+                try {
+                    ProfesorDB prof = new ProfesorDB();
+    //                if(
+                        prof.bulkLoadProfe(selectedFile.getPath());//){
+                        JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
+                        System.out.println("dibujo tabla nuevamente");
+                        getTable();
+                        txtBusqueda.requestFocusInWindow();
+    //                }else{
+    //                    JOptionPane.showMessageDialog(null, "Rectifique los datos\n!!!No se han creado los registros!!!");
+    //                }
+                } catch (Exception e) {            
+                    System.out.println("Error al leer archivo que fue recibido");
+                }
             }
         }
     }//GEN-LAST:event_btnAddCSVActionPerformed
