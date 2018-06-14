@@ -241,10 +241,14 @@ public class ProfesorDB {
         boolean correcto = false;
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) SELECT * FROM CSVREAD(?)");
-            prep.setString(1, ruta);
-            int a = prep.executeUpdate();
-            correcto=(a==1?true:false);
+            System.out.println("ruta: " + ruta.replace('\\', '/'));//" + ruta.replace('\\', '/') + "
+            String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) "
+                       + "SELECT * FROM CSVREAD(\'" + ruta.replace('\\', '/') + "\', null, STRINGDECODE(\'charset=UTF-8\'))";
+            System.out.println("SQL: "+ sql);
+            prep = conn.prepareStatement(sql);
+//            int a = 
+                    prep.executeUpdate();
+//            correcto = (a==1?true:false);
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error al insertar multiples registros a la db Profesores: " + e);

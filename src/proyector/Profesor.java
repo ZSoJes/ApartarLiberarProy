@@ -9,6 +9,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -197,11 +201,7 @@ public class Profesor extends javax.swing.JFrame {
         lblHide = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
-        jDialog1 = new javax.swing.JDialog();
-        jPanel3 = new javax.swing.JPanel();
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        fcProfCSV = new javax.swing.JFileChooser();
         pnlBkProfesor = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         logo1 = new javax.swing.JLabel();
@@ -240,7 +240,7 @@ public class Profesor extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtBusqueda = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        btnAddCSV = new javax.swing.JButton();
 
         dlgNuevo.setMinimumSize(new java.awt.Dimension(700, 370));
         dlgNuevo.setModal(true);
@@ -959,56 +959,6 @@ public class Profesor extends javax.swing.JFrame {
 
         dlgActualizar.getAccessibleContext().setAccessibleParent(this);
 
-        jDialog1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jDialog1.setModal(true);
-
-        jPanel3.setBackground(new java.awt.Color(71, 191, 217));
-
-        jFileChooser1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFileChooser1ActionPerformed(evt);
-            }
-        });
-
-        jTextField1.setText("jTextField1");
-
-        jTextField2.setText("jTextField2");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jFileChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 199, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jFileChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Profesores]");
         setIconImage(img.getImage());
@@ -1423,13 +1373,13 @@ public class Profesor extends javax.swing.JFrame {
 
         pnlBkProfesor.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
 
-        jButton2.setText("<html>Agregar<br>Muchos<br>Muchisimos<br>profesores</html>");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnAddCSV.setText("<html>Agregar<br>Muchos<br>Muchisimos<br>profesores</html>");
+        btnAddCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnAddCSVActionPerformed(evt);
             }
         });
-        pnlBkProfesor.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 520, -1, -1));
+        pnlBkProfesor.add(btnAddCSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1926,22 +1876,30 @@ public class Profesor extends javax.swing.JFrame {
         jTable1.setRowSorter(trsFiltro);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jFileChooser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFileChooser1ActionPerformed
-        String dir = jFileChooser1.getSelectedFile().getAbsolutePath();
-        jTextField1.setText(dir.replace('\\', '/'));
-        dir = dir.replace('\\', '/');
-        try {
-            ProfesorDB profe = new ProfesorDB();
-            profe.bulkLoadProfe(dir);
-        } catch (SQLException e) {
-            System.out.println("Error al insertar a partir de filechooser: " + e);
+    private void btnAddCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCSVActionPerformed
+        int status = fcProfCSV.showOpenDialog(null);
+        if (status == fcProfCSV.APPROVE_OPTION) {
+            File selectedFile = fcProfCSV.getSelectedFile();
+            System.out.println(":::::::::::::::::::::::::::::::::...\n"
+                             + "Ubicación del archivo: " + selectedFile.getParent());
+            System.out.println("Nombre del archivo: " + selectedFile.getName());
+            
+            try {
+                ProfesorDB prof = new ProfesorDB();
+//                if(
+                    prof.bulkLoadProfe(selectedFile.getPath());//){
+                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
+                    System.out.println("dibujo tabla nuevamente");
+                    getTable();
+                    txtBusqueda.requestFocusInWindow();
+//                }else{
+//                    JOptionPane.showMessageDialog(null, "Rectifique los datos\n!!!No se han creado los registros!!!");
+//                }
+            } catch (Exception e) {            
+                System.out.println("Error al leer archivo que fue recibido");
+            }
         }
-    }//GEN-LAST:event_jFileChooser1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jDialog1.setLocationRelativeTo(pnlBkProfesor);
-        jDialog1.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnAddCSVActionPerformed
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -1994,6 +1952,7 @@ public class Profesor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnAddCSV;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBusqueda;
     private javax.swing.JButton btnCerrar;
@@ -2008,6 +1967,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JDialog dlgBorrar;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JPanel dlgPnlFormulario;
+    private javax.swing.JFileChooser fcProfCSV;
     private javax.swing.JLabel ico1;
     private javax.swing.JLabel ico2;
     private javax.swing.JLabel ico3;
@@ -2015,14 +1975,11 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JLabel ico5;
     private javax.swing.JLabel ico6;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JDialog jDialog1;
-    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -2036,13 +1993,10 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel lbl1;
