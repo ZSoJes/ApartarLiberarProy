@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" columnCount="2" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1cdc581d-9c70-4cdd-8be4-fa51dc821bc1">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<scriptlet name="Imagen" class="com.rutas.Imagenes"/>
+	<queryString>
+		<![CDATA[SELECT * FROM E_VIDEOPROYECTORES;]]>
+	</queryString>
+	<field name="ID_VIDEOPROYECTOR" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MARCA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MODELO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NO_SERIE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CREADO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ACTUALIZADO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="354" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-1" y="0" width="277" height="354" uuid="01def704-4dc1-4157-93a6-b16960cf5560"/>
+				<graphicElement>
+					<pen lineStyle="Dashed" lineColor="#333333"/>
+				</graphicElement>
+			</rectangle>
+			<image scaleImage="RetainShape">
+				<reportElement x="0" y="3" width="275" height="40" uuid="162eabf2-4e2a-4e5b-9e1e-f68430deb45e"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "headR" )]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="1" y="48" width="275" height="20" uuid="623c1f20-4caa-47e3-a02a-5c8f42036add"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento de Desarrollo Académico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-1" y="85" width="277" height="20" uuid="81b97982-2a65-45d1-8d2d-c1917e939457"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Videoproyector]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="116" width="275" height="36" uuid="63d5419b-0b15-4e77-b627-d94b167771c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RealSize">
+				<reportElement x="45" y="180" width="185" height="82" uuid="33e3e8df-bdad-49b9-a6e2-a294edbfc62c"/>
+				<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "proyEj" )]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="1" y="318" width="275" height="17" uuid="56d8d9cb-cb83-4fde-af24-2d51c1de02a8"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hora maxima de entrega]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="335" width="275" height="19" uuid="8d692d3d-97ba-4180-a703-85b352132ef9"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[de 20 a 45 hrs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="267" width="249" height="51" uuid="f83d8ddf-9bc0-41f4-8a94-ec67e0436169"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[RECUERDA QUE EL CUIDADO Y RESGUARDO DE LOS VIDEOPROYECTORES ES RESPONSABILIDAD DE LA PERSONA QUE LO SOLICITA]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

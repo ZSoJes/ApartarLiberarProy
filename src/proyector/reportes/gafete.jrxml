@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd08e6cd-3a53-4c01-b486-a5c506a67139">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<scriptlet name="Imagen" class="com.rutas.Imagenes"/>
+	<parameter name="idUsuario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from E_USUARIOS WHERE ID_USUARIO = $P{idUsuario};]]>
+	</queryString>
+	<field name="ID_USUARIO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="A_PATERNO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="A_MATERNO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PASSWORD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ADMINDR" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CREADO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ACTUALIZADO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50"/>
+	</title>
+	<summary>
+		<band height="392" splitType="Stretch">
+			<elementGroup>
+				<image>
+					<reportElement x="282" y="42" width="241" height="298" uuid="b9f8b5a7-354d-44f6-8e38-39a6f8ca2eb1"/>
+					<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "back" )]]></imageExpression>
+				</image>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="282" y="203" width="241" height="20" forecolor="#FF6666" backcolor="#FFFFFF" uuid="f251194e-90ff-43e0-a288-b129d3756e8d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADMINDR} == true ? "Administrador" : ""]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="282" y="223" width="241" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="7c43c697-dba6-4926-b2e5-51f4843683e3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="Serif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ID_USUARIO}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement stretchType="RelativeToBandHeight" x="294" y="246" width="214" height="43" uuid="eac5b1d9-6764-47d2-935f-e789bc6c4f8b"/>
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false" barHeight="65">
+						<jr:codeExpression><![CDATA[$F{ID_USUARIO}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+			</elementGroup>
+			<elementGroup>
+				<image>
+					<reportElement x="36" y="42" width="241" height="298" uuid="7067523f-2982-4fcf-972d-9c6dd7eded3a"/>
+					<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "front" )]]></imageExpression>
+				</image>
+				<textField>
+					<reportElement x="57" y="273" width="220" height="20" uuid="af35dfbf-118e-4ddc-8154-d9c0421c6ae3"/>
+					<textElement>
+						<font fontName="Lucida Sans" size="13" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{A_MATERNO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="57" y="249" width="220" height="20" uuid="394042c6-cfb5-40a0-be1e-c14d0f301e77"/>
+					<textElement>
+						<font fontName="Lucida Sans" size="13" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{A_PATERNO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="57" y="226" width="220" height="20" uuid="06fc6ce8-10b9-4485-b6cb-fcead3ec59de"/>
+					<textElement>
+						<font fontName="Lucida Sans" size="13" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+		</band>
+	</summary>
+</jasperReport>

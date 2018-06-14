@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5a15ae79-8dd8-4897-b5de-4797956cfdf9">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#45678A">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDAE6">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 1" uuid="c46020b6-7056-4603-aac6-d722b3cc38e0">
+		<queryString>
+			<![CDATA[SELECT  SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 01  THEN 1 ELSE 0 END)  AS ENE, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 02  THEN 1 ELSE 0 END)  AS FEB, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 03  THEN 1 ELSE 0 END)  AS MAR, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 04  THEN 1 ELSE 0 END)  AS ABR, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 05  THEN 1 ELSE 0 END)  AS MAY, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 06  THEN 1 ELSE 0 END)  AS JUN, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 07  THEN 1 ELSE 0 END)  AS JUL, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 08  THEN 1 ELSE 0 END)  AS AGO, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 09  THEN 1 ELSE 0 END)  AS SEP, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 10  THEN 1 ELSE 0 END)  AS OCT, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 11  THEN 1 ELSE 0 END)  AS NOV, 
+SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 12  THEN 1 ELSE 0 END)  AS DIC 
+FROM (SELECT *  FROM E_PRESTAMOS  WHERE ESTATUS = FALSE AND EXTRACT(YEAR FROM CREADO) = '2018')]]>
+		</queryString>
+		<field name="ENE" class="java.lang.Long"/>
+		<field name="FEB" class="java.lang.Long"/>
+		<field name="MAR" class="java.lang.Long"/>
+		<field name="ABR" class="java.lang.Long"/>
+		<field name="MAY" class="java.lang.Long"/>
+		<field name="JUN" class="java.lang.Long"/>
+		<field name="JUL" class="java.lang.Long"/>
+		<field name="AGO" class="java.lang.Long"/>
+		<field name="SEP" class="java.lang.Long"/>
+		<field name="OCT" class="java.lang.Long"/>
+		<field name="NOV" class="java.lang.Long"/>
+		<field name="DIC" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\JuanGS\\NetBeansProjects\\Proyector\\src\\proyector\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ID_VIDEOPROYECTOR, NO_SERIE, NOMBRE, $P{date1}, $P{date2} FROM E_VIDEOPROYECTORES;]]>
+	</queryString>
+	<field name="ID_VIDEOPROYECTOR" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NO_SERIE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="?1" class="java.lang.Object"/>
+	<field name="?2" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="47" uuid="31b9e9ea-9805-4a20-8ab2-1d3d212f3692"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reportes de Prestamos de Videoproyectores  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="44" width="117" height="20" uuid="15035519-23fa-4f51-b59e-9171d495ea9c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date1}.substring(0,10)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="44" width="117" height="20" uuid="8715e01b-241c-416d-98fc-f5ddbc5e90bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date2}.substring(0,10)]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="143" splitType="Stretch">
+			<textField>
+				<reportElement x="14" y="21" width="150" height="20" uuid="baf93b2a-ec12-481c-a268-42dc5289f335"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NO_SERIE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="21" width="129" height="20" uuid="7d6e3aed-9d03-4261-bbe6-d42d1bd078cf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="176" y="25" width="1" height="15" uuid="278b1385-3582-42b6-af00-a62e45b19e87"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="20" width="555" height="1" uuid="01331663-ae97-4b28-97af-574d0d969e8d"/>
+				<graphicElement>
+					<pen lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<subreport>
+				<reportElement x="0" y="42" width="555" height="100" uuid="4777a269-4cf1-41ff-957d-5a4cb06989d7"/>
+				<subreportParameter name="idProyector">
+					<subreportParameterExpression><![CDATA[$F{ID_VIDEOPROYECTOR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="date2">
+					<subreportParameterExpression><![CDATA[$P{date2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="date1">
+					<subreportParameterExpression><![CDATA[$P{date1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteProyector_subreportPrestamo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="16">
+			<textField>
+				<reportElement x="435" y="0" width="80" height="16" uuid="d80f3cb6-1af3-4a69-b96b-255da213d7f9"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="16" uuid="7f6cc875-02ff-4eca-bebe-1f7dc9d21361"/>
+				<textElement verticalAlignment="Bottom">
+					<font isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="802">
+			<pieChart>
+				<chart theme="default">
+					<reportElement x="0" y="0" width="555" height="200" uuid="1ef086b7-4d76-4e8f-9b6a-32e187d67ec7"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Prestamos realizados durante el año 2018"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset maxCount="12">
+					<dataset resetType="None">
+						<datasetRun subDataset="New Dataset 1" uuid="f87366e9-3d0e-48bf-8e43-da17c7104006"/>
+					</dataset>
+					<pieSeries>
+						<keyExpression><![CDATA["ENERO (" + $F{ENE} + ")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{ENE}]]></valueExpression>
+						<labelExpression><![CDATA["ENE"]]></labelExpression>
+						<sectionHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["EneT(" + $F{ENE} + ")"]]></hyperlinkTooltipExpression>
+						</sectionHyperlink>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["FEBRERO (" + $F{FEB}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{FEB}]]></valueExpression>
+						<labelExpression><![CDATA["FEB"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["MARZO (" + $F{MAR}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{MAR}]]></valueExpression>
+						<labelExpression><![CDATA["MAR"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["ABRRIL (" + $F{ABR}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{ABR}]]></valueExpression>
+						<labelExpression><![CDATA["ABR"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["MAYO (" + $F{MAY}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{MAY}]]></valueExpression>
+						<labelExpression><![CDATA["MAY"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["JUNIO (" + $F{JUN}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{JUN}]]></valueExpression>
+						<labelExpression><![CDATA["JUN"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["JULIO (" + $F{JUL}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{JUL}]]></valueExpression>
+						<labelExpression><![CDATA["JUL"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["AGOSTO (" + $F{AGO}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{AGO}]]></valueExpression>
+						<labelExpression><![CDATA["AGO"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["SEPTIEMBRE (" + $F{SEP}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{SEP}]]></valueExpression>
+						<labelExpression><![CDATA["SEP"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["OCTUBRE (" + $F{OCT}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{OCT}]]></valueExpression>
+						<labelExpression><![CDATA["OCT"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["NOVIEMBRE (" + $F{NOV}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{NOV}]]></valueExpression>
+						<labelExpression><![CDATA["NOV"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["DICIEMBRE (" + $F{DIC}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{DIC}]]></valueExpression>
+						<labelExpression><![CDATA["DIC"]]></labelExpression>
+					</pieSeries>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<pie3DChart>
+				<chart theme="default">
+					<reportElement x="0" y="200" width="555" height="200" uuid="e754e2e1-5456-4147-92a6-716e3fa6e6d7"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Prestamos realizados durante el año 2018"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset maxCount="12">
+					<dataset resetType="None">
+						<datasetRun subDataset="New Dataset 1" uuid="9af779a4-d49a-4112-bcdf-0c34df898491"/>
+					</dataset>
+					<pieSeries>
+						<keyExpression><![CDATA["ENERO (" + $F{ENE} + ")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{ENE}]]></valueExpression>
+						<labelExpression><![CDATA["ENE"]]></labelExpression>
+						<sectionHyperlink>
+							<hyperlinkTooltipExpression><![CDATA["EneT(" + $F{ENE} + ")"]]></hyperlinkTooltipExpression>
+						</sectionHyperlink>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["FEBRERO (" + $F{FEB}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{FEB}]]></valueExpression>
+						<labelExpression><![CDATA["FEB"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["MARZO (" + $F{MAR}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{MAR}]]></valueExpression>
+						<labelExpression><![CDATA["MAR"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["ABRRIL (" + $F{ABR}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{ABR}]]></valueExpression>
+						<labelExpression><![CDATA["ABR"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["MAYO (" + $F{MAY}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{MAY}]]></valueExpression>
+						<labelExpression><![CDATA["MAY"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["JUNIO (" + $F{JUN}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{JUN}]]></valueExpression>
+						<labelExpression><![CDATA["JUN"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["JULIO (" + $F{JUL}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{JUL}]]></valueExpression>
+						<labelExpression><![CDATA["JUL"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["AGOSTO (" + $F{AGO}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{AGO}]]></valueExpression>
+						<labelExpression><![CDATA["AGO"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["SEPTIEMBRE (" + $F{SEP}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{SEP}]]></valueExpression>
+						<labelExpression><![CDATA["SEP"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["OCTUBRE (" + $F{OCT}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{OCT}]]></valueExpression>
+						<labelExpression><![CDATA["OCT"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["NOVIEMBRE (" + $F{NOV}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{NOV}]]></valueExpression>
+						<labelExpression><![CDATA["NOV"]]></labelExpression>
+					</pieSeries>
+					<pieSeries>
+						<keyExpression><![CDATA["DICIEMBRE (" + $F{DIC}+")"]]></keyExpression>
+						<valueExpression><![CDATA[$F{DIC}]]></valueExpression>
+						<labelExpression><![CDATA["DIC"]]></labelExpression>
+					</pieSeries>
+				</pieDataset>
+				<pie3DPlot isShowLabels="true" depthFactor="1.0" isCircular="true">
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+			<barChart>
+				<chart isShowLegend="false" theme="default">
+					<reportElement x="-1" y="400" width="555" height="150" uuid="2b153c53-2079-4115-9c55-2bf3f9bb872f"/>
+					<chartTitle position="Top">
+						<titleExpression><![CDATA["PRESTAMOS REALIZADOS DURANTE EL AÑO 2018"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset resetType="None">
+						<datasetRun subDataset="New Dataset 1" uuid="72a0ab94-2d62-4bcd-a066-bbcf5a19eb62"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["ENERO"]]></seriesExpression>
+						<categoryExpression><![CDATA["ENERO (" + $F{ENE} + ")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ENE}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["FEBRERO"]]></seriesExpression>
+						<categoryExpression><![CDATA["FEBRERO (" + $F{FEB} + ")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{FEB}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["MARZO"]]></seriesExpression>
+						<categoryExpression><![CDATA["MARZO ("+$F{MAR}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{MAR}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["ABRIL"]]></seriesExpression>
+						<categoryExpression><![CDATA["ABRIL ("+$F{ABR}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ABR}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["MAYO"]]></seriesExpression>
+						<categoryExpression><![CDATA["MAYO ("+$F{MAY}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{MAY}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["JUNIO"]]></seriesExpression>
+						<categoryExpression><![CDATA["JUNIO ("+ $F{JUN} +")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{JUN}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot backgroundAlpha="1.0" foregroundAlpha="1.0"/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat verticalTickLabels="true"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat verticalTickLabels="true"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<stackedAreaChart>
+				<chart>
+					<reportElement x="0" y="550" width="555" height="120" uuid="a23c61c3-d18b-478a-b939-63d4c702b499"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="New Dataset 1" uuid="d50010e9-9805-41bd-9b28-3fc05816727e"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["ENE"]]></seriesExpression>
+						<categoryExpression><![CDATA["ENE("+$F{ENE}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ENE}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["FEB"]]></seriesExpression>
+						<categoryExpression><![CDATA["FEB("+$F{FEB}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{FEB}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["MAR"]]></seriesExpression>
+						<categoryExpression><![CDATA["MAR("+$F{MAR}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{MAR}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["ABR"]]></seriesExpression>
+						<categoryExpression><![CDATA["ABR("+$F{ABR}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ABR}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["MAY"]]></seriesExpression>
+						<categoryExpression><![CDATA["MAY("+$F{MAY}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{MAY}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["JUN"]]></seriesExpression>
+						<categoryExpression><![CDATA["JUN("+$F{JUN}+")"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{JUN}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<areaPlot>
+					<plot/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</areaPlot>
+			</stackedAreaChart>
+			<componentElement>
+				<reportElement x="187" y="670" width="328" height="132" uuid="f76b9666-7f7c-4516-9763-df584aaa7ccd"/>
+				<sc:spiderChart xmlns:sc="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<sc:chartSettings>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</sc:chartSettings>
+					<sc:spiderDataset>
+						<dataset>
+							<datasetRun subDataset="New Dataset 1" uuid="6e5163e8-d000-4b5f-a2c1-027a569dc8c3"/>
+						</dataset>
+						<categorySeries>
+							<seriesExpression><![CDATA["ENE"]]></seriesExpression>
+							<categoryExpression><![CDATA["ENE("+$F{ENE}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ENE}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["FEB"]]></seriesExpression>
+							<categoryExpression><![CDATA["FEB("+$F{FEB}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{FEB}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["MAR"]]></seriesExpression>
+							<categoryExpression><![CDATA["MAR("+$F{MAR}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{MAR}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["ABR"]]></seriesExpression>
+							<categoryExpression><![CDATA["ABR("+$F{ABR}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ABR}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["MAY"]]></seriesExpression>
+							<categoryExpression><![CDATA["MAY("+$F{MAY}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{MAY}]]></valueExpression>
+						</categorySeries>
+						<categorySeries>
+							<seriesExpression><![CDATA["JUN"]]></seriesExpression>
+							<categoryExpression><![CDATA["JUN("+$F{JUN}+")"]]></categoryExpression>
+							<valueExpression><![CDATA[$F{JUN}]]></valueExpression>
+						</categorySeries>
+					</sc:spiderDataset>
+					<sc:spiderPlot isWebFilled="true"/>
+				</sc:spiderChart>
+			</componentElement>
+		</band>
+	</summary>
+	<noData>
+		<band/>
+	</noData>
+</jasperReport>
