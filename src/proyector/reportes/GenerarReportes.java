@@ -150,14 +150,26 @@ public class GenerarReportes {
         }
     }
     
-    public void getRRTods(String[] date) {
+    public void getRRTods(String[] date, int opc) {
         try {
             Conexion conn = new Conexion();
             JasperReport report = null;
-
+            String ruta = "";
             try {
-                InputStream f = new FileInputStream(new File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator + "reporteProyector.jasper");
-                System.out.println("Current dir:" + new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteProyector.jasper");
+                switch (opc){
+                    case 1:
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reportePry" + File.separator + "PryPrestamos.jasper";
+                    break;
+                    case 2:
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteProf" + File.separator + "ProfPrestamos.jasper";
+                    break;
+                    case 3:
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteDep" + File.separator + "DepPrestamos.jasper";
+                    break;
+                }
+                
+                InputStream f = new FileInputStream(ruta);
+                System.out.println("Current dir:" + ruta);
                 report = (JasperReport) JRLoader.loadObject(f);
             } catch (JRException | IOException e) {
                 System.out.println("Error cargando plantilla del reporte " + e);
@@ -174,7 +186,7 @@ public class GenerarReportes {
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         } catch (JRException | SQLException e) {
-            System.out.println("Error al generar los codigos de barra: " + e);
+            System.out.println("Error al generar reporte TODO: " + e);
         }
     }
 }

@@ -239,13 +239,13 @@ public class ProfesorDB {
     
     public boolean bulkLoadProfe(String ruta){
         boolean correcto = false;
-        String a = "STRINGDECODE('charset=UTF-8'))";
         try {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
             String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) "
                        + "SELECT * FROM CSVREAD('" + ruta.replace('\\', '/') + "', null, ";
-            sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":a); //si es windows decode char con windows 1252 sino usa UTF-8
+            //sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":"STRINGDECODE('charset=UTF-8'))"); //si es windows decode char con windows 1252 sino usa UTF-8 -se debe usar windows1252 en linux error charsetUTF8
+            sql = sql.concat("STRINGDECODE('charset=windows-1252'))");
             System.out.println("SQL: "+ sql);
             prep = conn.prepareStatement(sql);
             prep.executeUpdate();

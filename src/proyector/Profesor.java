@@ -1881,7 +1881,7 @@ public class Profesor extends javax.swing.JFrame {
                                                           + "\n-Los datos deben ser separados por coma(,)"
                                                           + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
                                                           + "\n-La informacion debe tener el siguiente orden"
-                                                          + "\n\tID_PROFESOR\n\tID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR"  
+                                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
                                                      , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         if(respuesta == JOptionPane.OK_OPTION){
             int status = fcProfCSV.showOpenDialog(null);

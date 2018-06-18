@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f7532bd1-321b-4714-96b9-0a53b11886d6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73B0E6">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDBE6" pattern="" isBold="true">
+		<pen lineWidth="1.0"/>
+		<box>
+			<pen lineWidth="3.0" lineStyle="Solid"/>
+			<topPen lineWidth="0.0" lineStyle="Solid"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#73B0E6">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="border">
+		<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<subDataset name="ProyPrestadosReg" uuid="e07a9b97-7fbf-4676-9d1b-5331d19fb054">
+		<parameter name="idPry" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date1" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date2" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT 
+    TO_CHAR(CREADO, 'DD MM YYYY') AS FECHA, 
+    TO_CHAR(CREADO, 'HH:MM') AS SALIDA, 
+    TO_CHAR(ACTUALIZADO, 'HH:MM') AS REGRESO, 
+    (SELECT CONCAT(NOMBRE, ' ', A_PATERNO, ' ', A_MATERNO) FROM E_PROFESORES WHERE E_PROFESORES.ID_PROFESOR = E_PRESTAMOS.ID_PROFESOR) AS PROFESOR
+FROM 
+    E_PRESTAMOS 
+WHERE 
+    E_PRESTAMOS.ID_VIDEOPROYECTOR = $P{idPry}
+    AND 
+    CREADO 
+        BETWEEN 
+        TO_DATE($P{date1}, 'YYYY-MM-DDTHH24:MI:SS"Z"') AND
+        TO_DATE($P{date2}, 'YYYY-MM-DDTHH24:MI:SS"Z"')
+ORDER BY 
+    CREADO]]>
+		</queryString>
+		<field name="FECHA" class="java.lang.String"/>
+		<field name="SALIDA" class="java.lang.String"/>
+		<field name="REGRESO" class="java.lang.String"/>
+		<field name="PROFESOR" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="PryPrestadosCOUNT" uuid="da85da57-ca13-4f78-b394-4bdfa8d84f78">
+		<parameter name="idProy" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date1" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="date2" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT 
+    COUNT(*) AS TOTAL_PRESTAMOS, 
+    (SELECT 
+        CONCAT(
+                CAST((SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) / 60) AS int), 
+                'hrs ', 
+                ((SUM( DATEDIFF('MI', CREADO, ACTUALIZADO) )) % 60), 
+                'min' 
+        ) 
+    FROM 
+        E_PRESTAMOS 
+    WHERE 
+        E_PRESTAMOS.ID_VIDEOPROYECTOR = $P{idProy}
+        AND
+        CREADO BETWEEN
+            TO_DATE($P{date1}, 'YYYY-MM-DDTHH24:MI:SS"Z"') 
+            AND 
+            TO_DATE($P{date2}, 'YYYY-MM-DDTHH24:MI:SS"Z"')) 
+    AS TOTAL_HORAS
+FROM 
+    E_PRESTAMOS 
+WHERE 
+    E_PRESTAMOS.ID_VIDEOPROYECTOR = $P{idProy}
+    AND
+    CREADO 
+        BETWEEN 
+        TO_DATE($P{date1}, 'YYYY-MM-DDTHH24:MI:SS"Z"') AND
+        TO_DATE($P{date2}, 'YYYY-MM-DDTHH24:MI:SS"Z"')]]>
+		</queryString>
+		<field name="TOTAL_PRESTAMOS" class="java.lang.Long"/>
+		<field name="TOTAL_HORAS" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="date1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("2018-05-01T00:00:00Z")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("2018-05-30T23:59:00Z")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+    ID_VIDEOPROYECTOR, 
+    NO_SERIE, 
+    NOMBRE 
+FROM 
+    E_VIDEOPROYECTORES 
+WHERE 
+    E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR 
+    IN 
+    (SELECT 
+        ID_VIDEOPROYECTOR 
+    FROM 
+        E_PRESTAMOS 
+    WHERE 
+        CREADO 
+        BETWEEN 
+            TO_DATE($P{date1}, 'YYYY-MM-DDTHH24:MI:SS"Z"') AND
+            TO_DATE($P{date2}, 'YYYY-MM-DDTHH24:MI:SS"Z"')
+    )
+ORDER BY 
+    NOMBRE]]>
+	</queryString>
+	<field name="ID_VIDEOPROYECTOR" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NO_SERIE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="428a9304-4dd3-4c1b-a227-45af258d3f3b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Registro de Prestamos de Videoproyectores]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="20" width="555" height="20" uuid="fcb093eb-ae5f-4b84-b595-ea70cf3f5b58"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Información registrada entre: "+
+$P{date1}.substring(8,10)+"/"+$P{date1}.substring(5,7)+"/"+$P{date1}.substring(0,4)+
+" - " +
+$P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0,4)]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="119" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="22" width="186" height="20" uuid="2636027e-889a-4426-9f28-e909c51ad97f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["  "+$F{NO_SERIE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="22" width="356" height="20" uuid="94b54265-da24-4e59-9e8f-bbff1a906b2c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nombre: "+$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="22" width="555" height="1" uuid="32d45dd1-1c12-4252-b11a-44cd51550faf"/>
+				<graphicElement>
+					<pen lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="188" y="24" width="1" height="15" uuid="ffd99049-3254-442e-b341-5f06c754d831"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
+			<componentElement>
+				<reportElement key="table 2" positionType="Float" x="21" y="45" width="527" height="59" uuid="e824a163-39e8-4409-9b0b-5e175e54fec7"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ProyPrestadosReg" uuid="8154b609-a7c9-44a0-af85-24125e7a1429">
+						<datasetParameter name="idPry">
+							<datasetParameterExpression><![CDATA[$F{ID_VIDEOPROYECTOR}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="date1">
+							<datasetParameterExpression><![CDATA[$P{date1}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="date2">
+							<datasetParameterExpression><![CDATA[$P{date2}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="4d08b154-3f19-4b90-94c5-d1f7a8f388ac">
+						<jr:columnHeader style="border" height="23" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="23" backcolor="#CFDBE6" uuid="e2c21fa4-6a32-470e-a9ca-c7394f55c22c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[FECHA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="border" height="18" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="18" uuid="b706f19e-6775-4956-9119-b6e819546c1a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:columnGroup width="362" uuid="107137d5-91d5-475b-8677-d0e205f99f7d">
+						<jr:column width="90" uuid="9a7195c0-a29c-46d4-a5cb-2cc0a69a4833">
+							<jr:columnHeader style="border" height="23" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="23" backcolor="#CFDBE6" uuid="67756b1c-2e79-4b74-9b0d-b18daaf1bf32"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[SALIDA]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="border" height="18" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="18" uuid="322bd127-1c57-4a54-b9b2-d7f7b054b13f"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{SALIDA}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="2c67d2f8-7ce0-41f8-98e3-f55ed64903b2">
+							<jr:columnHeader style="border" height="23" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="90" height="23" backcolor="#CFDBE6" uuid="48b6759d-d1be-4d23-8956-c0aacb5457f4"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[REGRESO]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="border" height="18" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="18" uuid="cb851d42-0bfc-4fae-9ac2-f5b001b0b76e"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{REGRESO}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="182" uuid="7ce00d27-fa74-485f-9016-c5ad411d2713">
+							<jr:columnHeader style="border" height="23" rowSpan="1">
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="182" height="23" backcolor="#CFDBE6" uuid="22ccb88e-6fe0-4b3c-908d-f6a9aa42245c"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[PROFESOR]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="border" height="18" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="182" height="18" uuid="689fce04-9a90-4365-85ce-cafa15963867"/>
+									<textElement verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[" "+$F{PROFESOR}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table 2" positionType="FixRelativeToBottom" x="21" y="104" width="527" height="15" uuid="4e11bb2d-da9f-40c2-90ba-0ebf2b66ac83"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="PryPrestadosCOUNT" uuid="cb2775ad-5edb-49cc-9e3a-f96e634af924">
+						<datasetParameter name="idProy">
+							<datasetParameterExpression><![CDATA[$F{ID_VIDEOPROYECTOR}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="date1">
+							<datasetParameterExpression><![CDATA[$P{date1}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="date2">
+							<datasetParameterExpression><![CDATA[$P{date2}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="78fbd6bf-54a7-4fb8-a9cb-bba9f734f2a1">
+						<jr:detailCell style="table_CH" height="15" rowSpan="1">
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="361" uuid="f7ea1728-3ae5-41ed-840d-d4ab18481a41">
+						<jr:detailCell height="15" rowSpan="1">
+							<box>
+								<pen lineWidth="1.0"/>
+								<topPen lineWidth="1.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="1.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="361" height="15" uuid="bb125401-5825-4e28-b77d-2e1c669d69f0"/>
+								<textElement verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[" Se presto un total de: "+$F{TOTAL_PRESTAMOS} + " veces, " +
+" con un tiempo de: " + $F{TOTAL_HORAS} + " prestado"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="435" y="0" width="80" height="20" uuid="2b6191e1-89b1-4959-83a4-bfc5d172a94d"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="20" uuid="be162531-1888-4a30-95dc-bc04cd0a6faa"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

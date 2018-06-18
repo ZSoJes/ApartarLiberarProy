@@ -118,8 +118,6 @@ public class ARegistro extends javax.swing.JFrame {
 
         PrestamoDB reg = new PrestamoDB();
         Calendar c = Calendar.getInstance(); //calendar toma los meses del 0(enero) a 11(dic)
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
         String[][] data = new String[0][8];
 
         //definiciones
@@ -211,6 +209,8 @@ public class ARegistro extends javax.swing.JFrame {
 
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < 9; j++) {
+                Calendar c1 = Calendar.getInstance();
+                Calendar c2 = Calendar.getInstance();
                 if (j == 0) {
                     data2[i][j] = data[i][0];
                 }
@@ -251,22 +251,18 @@ public class ARegistro extends javax.swing.JFrame {
                     arr = formatFecha(data[i][7]);
                     c2.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
 
-                    long hours = TimeUnit.MILLISECONDS.toHours(Math.abs(c2.getTimeInMillis() - c1.getTimeInMillis()));
-                    long minutes = TimeUnit.MILLISECONDS.toMinutes(Math.abs(c2.getTimeInMillis() - c1.getTimeInMillis()));
-                    if (minutes < 59) {
-//                        System.out.println("Se presto por alrededor de: " + minutes + "min");
-                        data2[i][8] = minutes + "min ";
-                    } else{// if (minutes < 1439) {
-                        int horasMin = (int) (hours * 60);
-                        int restante = (int) (minutes - horasMin);
-//                        System.out.println("Se presto por alrededor de: " + hours + "hrs " + restante + "min");
-                        data2[i][8] = hours + "hrs " + restante + "min ";
-//                    } else {
-//                        int dias = (int) (minutes / 1440);
-//                        int minRest = (int) minutes - (1440 * dias);
-//                        int horas = minRest / 60;
-//                        int minutos = minRest - (60 * horas);
-//                        data2[i][8] = dias + "dia(s) " + horas + "hr(s) " + minutos + "min ";
+                    long end = c2.getTimeInMillis();
+                    long start = c1.getTimeInMillis();
+                    long diferencia = TimeUnit.MILLISECONDS.toSeconds(Math.abs(end - start));
+                    int horas = 0;
+                    int minutos = 0;
+                    if (diferencia > 3600) {
+                        horas = (int)Math.floor(diferencia/3600);
+                        diferencia = diferencia - (horas*3600);
+                        data2[i][8] = horas + "hrs ";
+                    } else if (diferencia > 60) {
+                        minutos = (int)Math.floor(diferencia/60);
+                        data2[i][8] = data2[i][8].concat(minutos + "min ");
                     }
                 }
             }
@@ -452,11 +448,10 @@ public class ARegistro extends javax.swing.JFrame {
             }
         });
 
-        dlgReporte.setMinimumSize(new java.awt.Dimension(505, 600));
+        dlgReporte.setTitle("[Reportes Generador]");
+        dlgReporte.setMinimumSize(new java.awt.Dimension(520, 610));
         dlgReporte.setModal(true);
-        dlgReporte.setUndecorated(true);
-        dlgReporte.setPreferredSize(new java.awt.Dimension(505, 600));
-        dlgReporte.setResizable(false);
+        dlgReporte.setPreferredSize(new java.awt.Dimension(520, 610));
 
         pblBkReporte.setBackground(new java.awt.Color(255, 193, 7));
         pblBkReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
@@ -601,7 +596,7 @@ public class ARegistro extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(33, 33, 33));
-        jLabel6.setText("Es necesario indicar la fecha en la que deben recuperarse los datos:");
+        jLabel6.setText("<html>Es necesario indicar la fecha<br>en la que deben recuperarse los datos:");
 
         pnlDatos.setBackground(new java.awt.Color(100, 221, 23));
         pnlDatos.setBorder(javax.swing.BorderFactory.createTitledBorder("Especifique los datos"));
@@ -650,10 +645,10 @@ public class ARegistro extends javax.swing.JFrame {
                             .addComponent(dRb4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlDatosLayout.createSequentialGroup()
                                 .addComponent(dRb3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(38, 38, 38)
                                 .addComponent(dRb1))))
                     .addComponent(jLabel10))
-                .addGap(31, 31, 31))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         pnlDatosLayout.setVerticalGroup(
             pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -661,11 +656,10 @@ public class ARegistro extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dRb1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(dRb3)
-                        .addComponent(dRb5)))
+                .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dRb3)
+                    .addComponent(dRb5)
+                    .addComponent(dRb1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dRb4)
@@ -712,7 +706,7 @@ public class ARegistro extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(33, 33, 33));
-        jLabel11.setText("Debe especificar una opcion de las siguientes para recuperar los datos necesarios:");
+        jLabel11.setText("<html>Debe especificar una opcion de las siguientes<br>para recuperar los datos necesarios:");
 
         javax.swing.GroupLayout pblBkReporteLayout = new javax.swing.GroupLayout(pblBkReporte);
         pblBkReporte.setLayout(pblBkReporteLayout);
@@ -728,11 +722,11 @@ public class ARegistro extends javax.swing.JFrame {
                             .addComponent(pnlDatos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlBotones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pblBkReporteLayout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(0, 13, Short.MAX_VALUE)))
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 222, Short.MAX_VALUE)))
                         .addGap(11, 11, 11))
                     .addGroup(pblBkReporteLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pblBkReporteLayout.setVerticalGroup(
@@ -741,11 +735,11 @@ public class ARegistro extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTituloDlg)
                 .addGap(27, 27, 27)
-                .addComponent(jLabel6)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
@@ -1199,9 +1193,17 @@ public class ARegistro extends javax.swing.JFrame {
             System.out.println("Arrays fehcas de rb6: " + Arrays.toString(fch));
             if(fch.length > 0){
                 GenerarReportes gr = new GenerarReportes();
-                gr.getRRTods(fch);
+                if(dRb5.isSelected()){
+                    gr.getRRTods(fch,1);
+                }else if(dRb2.isSelected()){
+                    gr.getRRTods(fch,2);
+                }else if(dRb1.isSelected()){
+                    gr.getRRTods(fch,3);
+                }
             }
         }
+        dlgReporte.setVisible(false);
+        dlgReporte.dispose();
     }//GEN-LAST:event_btnGenerarRRActionPerformed
     
     public String[] rbFechaEsp(){
@@ -1213,9 +1215,9 @@ public class ARegistro extends javax.swing.JFrame {
             if(jDateChooser2.getDate().after(jDateChooser1.getDate())){  //comprobar que la fecha1 no es menor a la fecha2
                 System.out.println("fecha 1 es menor que fecha 2");
                 if(!dateJC1.equals(dateJC2)){
-                    System.out.println("datos : "+dateJC1 + " : "+dateJC2);
                     fechas[0] = dateJC1.concat("T00:00:00Z");
-                    fechas[1] = dateJC2.concat("T23:59:00Z");
+                    fechas[1] = dateJC2.concat("T23:59:59Z");
+                    System.out.println("datos : "+Arrays.toString(fechas));
                 }else{ JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
             }else{ JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
         }else{ JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}

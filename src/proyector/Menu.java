@@ -2190,7 +2190,6 @@ public class Menu extends javax.swing.JFrame {
                 LeerInicio leer = new LeerInicio();
                 //leer usuario
                 boolean existe = leer.getExisteUsuario(usuario);
-                System.out.println("Si existe es 1: " + existe);
                 //comprobar que existe
                 if (existe) {
                     System.out.println("Este usuario existe!!!");
@@ -2354,7 +2353,7 @@ public class Menu extends javax.swing.JFrame {
                                         //revisar si la credencial no existe en la bd
 
                                         if (!(leer.getExisteUsuario(credencial))) {
-                                            System.out.println("id" + credencial);
+                                            System.out.println("\nVerficiando id...\nID valido :)\n");
                                             crear.setUsuario(datos, false, credencial);
                                             GenerarReportes g = new GenerarReportes();
                                             g.credencialUsuario(credencial);
@@ -2410,6 +2409,7 @@ public class Menu extends javax.swing.JFrame {
         txtAMatN.setText("");
         txtAutorizaNuevo.setText("");
         txtCredencialN.setText("");
+        txtCredencialN.setEnabled(false);
         jCheckBox2.setSelected(false);
     }
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
