@@ -1075,13 +1075,13 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     public final void miPanel(String[][] datos, int i){
         //int y = Integer.parseInt(str);
         ImageIcon img = new ImageIcon("./src/imagenes/User_36px.png");
-        ImageIcon img1 = new ImageIcon("./src/imagenes/Waste_24px.png");
-        ImageIcon img2 = new ImageIcon("./src/imagenes/Edit_24px.png");
+        ImageIcon img1 = new ImageIcon("./src/imagenes/trash-24.png");
+        ImageIcon img2 = new ImageIcon("./src/imagenes/pencil-24.png");
         JPanel anon = new JPanel();
             anon.setPreferredSize(new Dimension(210, 305));//190, 290 o era 195, 290
-            anon.setBackground(new Color(61, 177, 100));
+            anon.setBackground(new Color(26, 200, 160));
             
-            anon.setBorder(new LineBorder(new Color(100,115,238), 1, true));
+            anon.setBorder(new LineBorder(new Color(173, 173, 173), 2, true));
             anon.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
             c.anchor = GridBagConstraints.CENTER;
@@ -1139,13 +1139,13 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
 
             JLabel btnDelDep1 = new JLabel("Eliminar", SwingConstants.CENTER);
             btnDelDep1.setIcon(img1);
-            btnDelDep1.setForeground(Color.red);
+            btnDelDep1.setForeground(new Color(253, 216, 53));
             btnDelDep1.setFont(new Font("SansSerif", Font.BOLD,11));
             pnl1.add(btnDelDep1);
             
             JLabel btnEditDep1 = new JLabel("Editar", SwingConstants.CENTER);
             btnEditDep1.setIcon(img2);
-            btnEditDep1.setForeground(new Color(30,144,255));
+            btnEditDep1.setForeground(new Color(255, 255, 255));
             btnEditDep1.setFont(new Font("SansSerif", Font.BOLD,11));
             pnl1.add(btnEditDep1);
             

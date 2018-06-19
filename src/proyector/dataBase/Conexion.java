@@ -37,14 +37,19 @@ public class Conexion {
      * @throws SQLException 
      */
     public static void lanzarTriggers(Connection conn) throws SQLException {
-        String nombresTrigger[] = {"ACTUALIZAR_EN_DEPARTAMENTOS", "ACUTALIZAR_EN_PROFESORES", "ACUTALIZADO_EN_AULAS", "ACUTALIZADO_EN_USUARIOS", "ACUTALIZADO_EN_VIDEOPROYECTORES", "ACUTALIZADO_EN_PRESTAMOS", "ACUTALIZADO_EN_AVERIAS", "ACUTALIZADO_EN_REPORTES"};
-        String tablasTrigger[] = {"E_DEPARTAMENTOS", "E_PROFESORES", "E_AULAS", "E_USUARIOS", "E_VIDEOPROYECTORES", "E_PRESTAMOS", "EVR_AVERIAS", "EVR_REPORTES"};
+        String triggerNomTabla[][] = {{"E_DEPARTAMENTOS", "ACTUALIZAR_EN_DEPARTAMENTOS"}, 
+            {"E_PROFESORES", "ACUTALIZAR_EN_PROFESORES"},
+            {"E_AULAS","ACUTALIZADO_EN_AULAS"}, 
+            {"E_USUARIOS", "ACUTALIZADO_EN_USUARIOS"}, 
+            {"E_VIDEOPROYECTORES", "ACUTALIZADO_EN_VIDEOPROYECTORES"},
+            {"E_PRESTAMOS","ACUTALIZADO_EN_PRESTAMOS"},
+            {"E_REP_VIDEOPROYECTORES","ACUTALIZADO_EN_ACCESORIOS"}};
 
         /*insertando triggers*/
         Statement stat = conn.createStatement();
-        for (int i = 0; i < tablasTrigger.length; i++) {
-            stat.execute("CREATE TRIGGER " + nombresTrigger[i] + " BEFORE UPDATE "
-                    + "ON " + tablasTrigger[i] + " FOR EACH ROW "
+        for (int i = 0; i < triggerNomTabla.length; i++) {
+            stat.execute("CREATE TRIGGER " + triggerNomTabla[i][1] + " BEFORE UPDATE "
+                    + "ON " + triggerNomTabla[i][0] + " FOR EACH ROW "
                     + "CALL \"proyector.dataBase.TriggerActualizar\" ");
         }
     }

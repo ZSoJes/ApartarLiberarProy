@@ -7,22 +7,32 @@ package proyector;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultRowSorter;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.RowFilter.ComparisonType;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
@@ -58,11 +68,13 @@ public class ARegistro extends javax.swing.JFrame {
         lblFn.setVisible(false);
         panelOPC.setVisible(false);
         jScrollPane2.getVerticalScrollBar().setUnitIncrement(16);
+        txtBuscarTXT.setVisible(false);
         try {
-            getTable(0, "", "");
+            getTable(3, "", "");
         } catch (SQLException e) {
             System.out.println("Error al generar tabla constructor:" + e);
         }
+        jComboBox1.setSelectedIndex(3);
         jTable1.setFont(new java.awt.Font("SansSerif", 0, 11));
         jTable1.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 10));
         labelFecha.setText(date);                                   //coloca la fecha
@@ -116,101 +128,18 @@ public class ARegistro extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         String[] cols = {jTable1.getColumnName(0), jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3), jTable1.getColumnName(4), jTable1.getColumnName(5), jTable1.getColumnName(6), jTable1.getColumnName(7), jTable1.getColumnName(8)};
 
-        PrestamoDB reg = new PrestamoDB();
         Calendar c = Calendar.getInstance(); //calendar toma los meses del 0(enero) a 11(dic)
-        String[][] data = new String[0][8];
-
-        //definiciones
-        int today = 0;
-        int count = 0;
-        int month = 0;
-        int year = 0;
-        int day = 0;
-//        String miDate1 = "";
-//        String miDate2 = "";
-        //--------------------
-        switch (opc) {
-            case 0:
-                count = reg.getPrestamosCount(false);                               //prestamos que no(false) se encuentran activos
-                String[][] datamax = reg.getPrestamos(false, true);
-                data = datamax;
-                System.out.println("Registros existentes:" + count);
-                break;
-            case 1:
-                today = c.get(Calendar.DAY_OF_MONTH);
-                month = c.get(Calendar.MONTH) + 1;
-                year = c.get(Calendar.YEAR);
-                miDate1 = year + "-" + month + "-" + today;
-
-                int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                //RETORNA EL SIGUIENTE DIA
-                if (today < lastDay && today != lastDay) {
-                    int tmrw = today + 1;
-                    miDate2 = year + "-" + month + "-" + tmrw;
-                } else {
-                    int sigMes = month + 1;
-                    miDate2 = year + "-" + sigMes + "-01";
-                }
-
-                String[][] datamax1 = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
-                data = datamax1;
-                count = data.length;
-                break;
-            case 2:
-                c.set(Calendar.DAY_OF_MONTH, 1);
-                DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
-                day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                miDate1 = df.format(c.getTime());
-                miDate2 = miDate1.substring(0, 8) + day;
-
-                String[][] datamax2 = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
-                data = datamax2;
-                count = data.length;
-                break;
-            case 3:
-                int actualMes = c.get(Calendar.MONTH) + 1;
-                if (actualMes < 7) {
-                    year = c.get(Calendar.YEAR);
-                    c.set(Calendar.MONTH, 05);
-                    day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    miDate1 = year + "-01-01";
-                    miDate2 = year + "-06-" + day;
-                } else {
-                    year = c.get(Calendar.YEAR);
-                    c.set(Calendar.MONTH, 11);
-                    day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    miDate1 = year + "-07-01";
-                    miDate2 = year + "-12-" + day;
-                }
-
-                String[][] datamax3 = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
-                data = datamax3;
-                count = data.length;
-                break;
-            case 4:
-                year = c.get(Calendar.YEAR);
-                c.set(Calendar.MONTH, 11);
-                day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                miDate1 = year + "-01-01";
-                miDate2 = year + "-12-" + day;
-
-                String[][] datamax4 = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
-                data = datamax4;
-                count = data.length;
-                break;
-            case 5:
-                String[][] datamax5 = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
-                data = datamax5;
-                count = data.length;
-                break;
-        }
-        System.out.println("Datos total: " + count);
+        Calendar c1 = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        
+        String[][] data = datosRegistros(opc, miDate1, miDate2);//prestamos que estan entre fechas de dos dias especificos
+        
+        
+        int count = data.length;
         String[][] data2 = new String[count][9];
 
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < 9; j++) {
-                Calendar c1 = Calendar.getInstance();
-                Calendar c2 = Calendar.getInstance();
                 if (j == 0) {
                     data2[i][j] = data[i][0];
                 }
@@ -232,38 +161,24 @@ public class ARegistro extends javax.swing.JFrame {
                     data2[i][j] = aula.getAula(Integer.parseInt(data[i][5]));
                 }
                 if (j == 6) {
-
                     int[] arr = formatFecha(data[i][6]);
-                    c1.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
-
+                    c.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
+                    data2[i][6] = String.valueOf(dateFormat.format(c.getTime()));
                     arr = formatFecha(data[i][7]);
-                    c2.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
-
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-
-                    data2[i][6] = String.valueOf(dateFormat.format(c1.getTime())) + (c1.get(Calendar.AM_PM) == 0 ? "am" : "pm");
-                    data2[i][7] = String.valueOf(dateFormat.format(c2.getTime())) + (c2.get(Calendar.AM_PM) == 0 ? "am" : "pm");
+                    c.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
+                    data2[i][7] = String.valueOf(dateFormat.format(c.getTime()));
                 }
                 if (j == 8) {
                     int[] arr = formatFecha(data[i][6]);
-                    c1.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
-
+                    c.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
                     arr = formatFecha(data[i][7]);
-                    c2.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
-
-                    long end = c2.getTimeInMillis();
-                    long start = c1.getTimeInMillis();
-                    long diferencia = TimeUnit.MILLISECONDS.toSeconds(Math.abs(end - start));
-                    int horas = 0;
-                    int minutos = 0;
-                    if (diferencia > 3600) {
-                        horas = (int)Math.floor(diferencia/3600);
-                        diferencia = diferencia - (horas*3600);
-                        data2[i][8] = horas + "hrs ";
-                    } else if (diferencia > 60) {
-                        minutos = (int)Math.floor(diferencia/60);
-                        data2[i][8] = data2[i][8].concat(minutos + "min ");
-                    }
+                    c1.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
+                    long end = c1.getTimeInMillis();
+                    long start = c.getTimeInMillis();
+                    long diferencia = TimeUnit.MILLISECONDS.toMinutes(Math.abs(end - start));
+                    int horas =(int) (diferencia/60);
+                    int minutos =(int) (diferencia%60);
+                    data2[i][8] = (horas>0?horas+"hrs ":"0hrs ")+(minutos>0?minutos+"min ":"0min ");
                 }
             }
         }
@@ -272,14 +187,16 @@ public class ARegistro extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(178);
         jTable1.getColumnModel().getColumn(2).setPreferredWidth(178);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(110);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(98);
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(160);
         jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(6).setPreferredWidth(112);
-        jTable1.getColumnModel().getColumn(7).setPreferredWidth(112);
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(118);
+        jTable1.getColumnModel().getColumn(7).setPreferredWidth(118);
         jTable1.getColumnModel().getColumn(8).setPreferredWidth(94);
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model);
+        jTable1.setRowSorter(sorter);
     }
 
     public int[] formatFecha(String date) {
@@ -289,10 +206,48 @@ public class ARegistro extends javax.swing.JFrame {
         res[2] = Integer.parseInt(date.substring(8, 10));            //dia
         res[3] = Integer.parseInt(date.substring(11, 13));        //hora
         res[4] = Integer.parseInt(date.substring(14, 16));       //minuto
-
         return res;
     }
 
+    public String[][] datosRegistros(int opc, String miDate1, String miDate2) throws SQLException{
+        PrestamoDB reg = new PrestamoDB();
+        String[][] data = new String[0][8];
+        Calendar c = Calendar.getInstance();
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+        if(opc == 0){   //todos
+            data = reg.getPrestamos(false, true);
+        }if(opc == 1){  //hoy
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
+            miDate1 = dt.format(c.getTime()).concat(" 00:00:00");
+            miDate2 = dt.format(c.getTime()).concat(" 23:59:59");
+        }if(opc == 2){  //mes
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            miDate1 = df.format(c.getTime()) + " 00:00:00";
+            miDate2 = miDate1.substring(0, 8) + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";;
+        }if(opc == 3){  //semestre
+            if (month < 6) {
+                c.set(Calendar.MONTH, 05);
+                miDate1 = year + "-01-01 00:00:00";
+                miDate2 = year + "-06-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+            } else {
+                c.set(Calendar.MONTH, 11);
+                miDate1 = year + "-07-01 00:00:00";
+                miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+            }
+        }if(opc == 4){  //año
+            c.set(Calendar.MONTH, 11);
+            miDate1 = year + "-01-01 00:00:00";
+            miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+        }
+        if(opc >= 1 && opc <= 5){
+            data = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
+        }
+        System.out.println("Registros existentes:" + data.length + "\nEntre las fechas: " + miDate1 + miDate2);
+        return data;
+    }
+    
     public void graficas(){
         DefaultCategoryDataset dtsc = new DefaultCategoryDataset();
         String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
@@ -421,8 +376,11 @@ public class ARegistro extends javax.swing.JFrame {
         lblIni = new javax.swing.JLabel();
         jdtChooser1 = new com.toedter.calendar.JDateChooser();
         lblFn = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        cbEspecifico = new javax.swing.JComboBox<>();
+        txtBuscarTXT = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -477,6 +435,7 @@ public class ARegistro extends javax.swing.JFrame {
         rb2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         rb2.setForeground(new java.awt.Color(255, 255, 255));
         rb2.setText("Semana");
+        rb2.setToolTipText("Fechas entre Lunes y Domingo");
         rb2.setOpaque(false);
 
         btnGroupFecha.add(rb3);
@@ -933,7 +892,7 @@ public class ARegistro extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 3, 24)); // NOI18N
         lblTitulo.setText("Registros");
-        pnlBackground.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, -1, -1));
+        pnlBackground.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, -1, -1));
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(null);
@@ -954,7 +913,7 @@ public class ARegistro extends javax.swing.JFrame {
         jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 5, -1, -1));
 
         jComboBox1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- - - - - -", "Dia", "Mes", "Semestre", "Del Año en curso", "personalizado" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los registros", "Registros de Hoy", "Registros del Mes", "Registros del Semestre", "Registros del Año", "Personalizado" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -971,14 +930,14 @@ public class ARegistro extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "USR_ENTREGA", "USR_RECIBE", "PROYECTOR", "PROFESOR", "AULA", "FECHA_SALIDA", "FECHA_REGRESO", "TIEMPO_PRESTADO"
+                "ID", "USR_ENTREGA", "USR_RECIBE", "PROYECTOR", "PROFESOR", "AULA", "FECHA_SALIDA", "FECHA_REGRESO", "TIEMPO"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -992,7 +951,7 @@ public class ARegistro extends javax.swing.JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1010, 280));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 1010, 320));
 
         jMiLabel.setText("jMiLabel");
         jMiLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -1015,21 +974,48 @@ public class ARegistro extends javax.swing.JFrame {
         lblFn.setText("Fin:");
         jPanel1.add(lblFn, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 14, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel4.setText("Reportes:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
+        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel5.setText("Buscar especificamente con:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/report_28px.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        cbEspecifico.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cbEspecifico.setMaximumRowCount(6);
+        cbEspecifico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ninguno", "Nombre del usuario que entrego", "Nombre del usuario que recibio", "Nombre de VideoProyector", "ID del Profesor", "Aula" }));
+        cbEspecifico.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbEspecificoItemStateChanged(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, -1, -1));
+        jPanel1.add(cbEspecifico, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 46, 230, -1));
+
+        txtBuscarTXT.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtBuscarTXT.setMinimumSize(new java.awt.Dimension(300, 25));
+        txtBuscarTXT.setPreferredSize(new java.awt.Dimension(300, 25));
+        jPanel1.add(txtBuscarTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(465, 47, -1, -1));
 
         jScrollPane2.setViewportView(jPanel1);
 
         pnlBackground.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, -1, 430));
+
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Reportes");
+        jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
+        jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
+        jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
+        pnlBackground.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 150, -1, -1));
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafico-60.png"))); // NOI18N
+        jLabel12.setMaximumSize(new java.awt.Dimension(70, 60));
+        jLabel12.setMinimumSize(new java.awt.Dimension(70, 60));
+        jLabel12.setPreferredSize(new java.awt.Dimension(70, 60));
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
+        pnlBackground.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 90, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1161,17 +1147,6 @@ public class ARegistro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //inicializar
-        pnlFechasFiltro.setVisible(false);
-        rb1.setSelected(true);
-        dRb5.setSelected(true);
-        
-        //mostrar dialog
-        dlgReporte.setLocationRelativeTo(pnlBackground);
-        dlgReporte.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void btnCerrarRRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarRRActionPerformed
         dlgReporte.setVisible(false);
         jDateChooser1.setCalendar(null);
@@ -1188,23 +1163,108 @@ public class ARegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_rb6ItemStateChanged
 
     private void btnGenerarRRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarRRActionPerformed
+        String[] fch;
+        int opc = 1;
         if(rb6.isSelected()){
-            String[] fch = rbFechaEsp();
-            System.out.println("Arrays fehcas de rb6: " + Arrays.toString(fch));
-            if(fch.length > 0){
-                GenerarReportes gr = new GenerarReportes();
-                if(dRb5.isSelected()){
-                    gr.getRRTods(fch,1);
-                }else if(dRb2.isSelected()){
-                    gr.getRRTods(fch,2);
-                }else if(dRb1.isSelected()){
-                    gr.getRRTods(fch,3);
-                }
+            fch = rbFechaEsp();
+        }else{
+            if(rb1.isSelected()){ opc = 1;}
+            else if(rb2.isSelected()){ opc = 2;}
+            else if(rb3.isSelected()){ opc = 3;}
+            else if(rb4.isSelected()){ opc = 4;}
+            else if(rb5.isSelected()){ opc = 5;}
+            fch = rbFechasOpc(opc);
+        }    
+        if(fch.length > 0){
+            GenerarReportes gr = new GenerarReportes();
+            if(dRb5.isSelected()){
+                gr.getRRTods(fch,1);
+                gr.getRRTods(fch,2);
+                gr.getRRTods(fch,3);
+            }else if(dRb3.isSelected()){ //videoproyector
+                gr.getRRTods(fch,1);
+            }else if(dRb2.isSelected()){ //profesores
+                gr.getRRTods(fch,2);
+            }else if(dRb1.isSelected()){ //departamentos
+                gr.getRRTods(fch,3);
             }
         }
+        
         dlgReporte.setVisible(false);
         dlgReporte.dispose();
     }//GEN-LAST:event_btnGenerarRRActionPerformed
+
+    private void cbEspecificoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEspecificoItemStateChanged
+        int indice = cbEspecifico.getSelectedIndex();
+        if(indice > 0){
+            txtBuscarTXT.setVisible(true);
+        }else{
+            txtBuscarTXT.setVisible(false);
+            txtBuscarTXT.setText("");
+        }
+    }//GEN-LAST:event_cbEspecificoItemStateChanged
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        //inicializar
+        pnlFechasFiltro.setVisible(false);
+        rb1.setSelected(true);
+        dRb5.setSelected(true);
+        
+        //mostrar dialog
+        dlgReporte.setLocationRelativeTo(pnlBackground);
+        dlgReporte.setVisible(true);
+    }//GEN-LAST:event_jLabel12MouseClicked
+    
+    public String[] rbFechasOpc(int opc){
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        String[] fechas = new String[2];
+        String date1 = "", date2 = "";
+        int year = c.get(Calendar.YEAR);
+        switch(opc){
+            case 1: //hoy
+                date1 = dt.format(c.getTime());
+                date2 = date1;
+            break;
+            case 2: //semana
+                c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                Date d1Semana = c.getTime();
+                c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                Date d2Semana = c.getTime();
+                date1 = dt.format(d1Semana);
+                date2 = dt.format(d2Semana);
+            break;
+            case 3: //mes
+                c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
+                Date d1Mes = c.getTime();
+                date1 = dt.format(d1Mes);
+                c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date d2Mes = c.getTime();
+                date2 = dt.format(d2Mes);
+            break;
+            case 4: //semestre
+                if (c.get(Calendar.MONTH) < 6) { //si actual mes es inferior a julio
+                    c.set(Calendar.MONTH, 05);
+                    date1 = year + "-01-01";
+                    date2 = year + "-06-" + c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                } else {
+                    c.set(Calendar.MONTH, 11);
+                    date1 = year + "-07-01";
+                    date2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH);
+                }
+            break;
+            case 5: //año
+                c.set(Calendar.MONTH, 11);
+                date1 = year + "-01-01";
+                date2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            break;
+        }
+        
+        fechas[0] = date1.concat("T00:00:00Z");
+        fechas[1] = date2.concat("T23:59:59Z");
+        System.out.println("fechas: " + Arrays.toString(fechas));
+        return fechas;
+    }
     
     public String[] rbFechaEsp(){
         DateFormat dateJC = new SimpleDateFormat("yyyy-MM-dd");//DateFormat.getDateInstance();
@@ -1221,6 +1281,7 @@ public class ARegistro extends javax.swing.JFrame {
                 }else{ JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
             }else{ JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
         }else{ JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
+        System.out.println("Arrays fechas de rb6: " + Arrays.toString(fechas));
         return fechas;
     }
     /**
@@ -1260,6 +1321,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGroupFecha;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> cbEspecifico;
     private javax.swing.JRadioButton dRb1;
     private javax.swing.JRadioButton dRb2;
     private javax.swing.JRadioButton dRb3;
@@ -1272,16 +1334,17 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel ico6;
     private javax.swing.JLabel ico7;
     private javax.swing.JLabel ico8;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1316,5 +1379,6 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton rb4;
     private javax.swing.JRadioButton rb5;
     private javax.swing.JRadioButton rb6;
+    private javax.swing.JTextField txtBuscarTXT;
     // End of variables declaration//GEN-END:variables
 }

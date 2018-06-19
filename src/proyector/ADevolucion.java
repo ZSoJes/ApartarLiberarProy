@@ -15,9 +15,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
@@ -46,7 +50,7 @@ public class ADevolucion extends javax.swing.JFrame {
 
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
     String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
+    private static ArrayList<String> accesorios = new ArrayList<String>();
     /**
      * Creates new form ADevolucion
      */
@@ -63,6 +67,8 @@ public class ADevolucion extends javax.swing.JFrame {
         cargarComboProy();
         combPnl.setVisible(false);
 //        jComboBox1.setVisible(false);
+        hiddenProf.setVisible(false);
+        hiddenProf1.setVisible(false);
         txtProyNSerie.requestFocusInWindow();
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();                                                //coloca la hora
@@ -149,10 +155,27 @@ public class ADevolucion extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         lblNProy = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnReportarAcc = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jLabel8 = new javax.swing.JLabel();
+        hiddenProf = new javax.swing.JLabel();
+        dlgReporte = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        txtTitulo = new javax.swing.JTextField();
+        txtProf = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtDesc = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        lblListItems = new javax.swing.JLabel();
+        btnReportar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        hiddenProf1 = new javax.swing.JLabel();
         pnlBackground = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblIco1 = new javax.swing.JLabel();
@@ -381,14 +404,16 @@ public class ADevolucion extends javax.swing.JFrame {
 
         pryArt.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         pryArt.setTitle("[Articulos]");
-        pryArt.setMinimumSize(new java.awt.Dimension(320, 244));
+        pryArt.setMinimumSize(new java.awt.Dimension(320, 295));
         pryArt.setModal(true);
         pryArt.setUndecorated(true);
-        pryArt.setPreferredSize(new java.awt.Dimension(320, 244));
+        pryArt.setPreferredSize(new java.awt.Dimension(320, 295));
         pryArt.setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(195, 83, 93));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(250, 213, 217), 4));
+        jPanel1.setMinimumSize(new java.awt.Dimension(320, 295));
+        jPanel1.setPreferredSize(new java.awt.Dimension(320, 295));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -402,19 +427,23 @@ public class ADevolucion extends javax.swing.JFrame {
         lblNProy.setText("lblNombreProyector");
         jPanel1.add(lblNProy, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 320, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
-        jButton1.setText("Reportar!");
-        jButton1.setEnabled(false);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
-        jButton2.setText("Cerrar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnReportarAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
+        btnReportarAcc.setText("Reportar!");
+        btnReportarAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnReportarAccActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
+        jPanel1.add(btnReportarAcc, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+
+        btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -427,21 +456,136 @@ public class ADevolucion extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 170, 90));
 
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("<html><center>Para reportar más de un elemento mantenga<br>presionado la tecla CTRL y con clic izquierdo<br>seleccione los demas elementos</center></html>");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 300, 50));
+
+        hiddenProf.setText("SoyProfe");
+        jPanel1.add(hiddenProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, -1, -1));
+
         javax.swing.GroupLayout pryArtLayout = new javax.swing.GroupLayout(pryArt.getContentPane());
         pryArt.getContentPane().setLayout(pryArtLayout);
         pryArtLayout.setHorizontalGroup(
             pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 320, Short.MAX_VALUE)
             .addGroup(pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pryArtLayout.createSequentialGroup()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         pryArtLayout.setVerticalGroup(
             pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 244, Short.MAX_VALUE)
+            .addGap(0, 295, Short.MAX_VALUE)
             .addGroup(pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pryArtLayout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        dlgReporte.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgReporte.setTitle("[Reporte de Artículos]");
+        dlgReporte.setMinimumSize(new java.awt.Dimension(750, 420));
+        dlgReporte.setModal(true);
+        dlgReporte.setPreferredSize(new java.awt.Dimension(750, 420));
+
+        jPanel2.setBackground(new java.awt.Color(255, 138, 101));
+        jPanel2.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Reporte de Pérdida/Fallos sobre Artículo");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 13, 720, -1));
+
+        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Descripcion corta sobre el problema:");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Descripción de la falla o como fue perdido el artículo:");
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Profesor:");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
+
+        txtTitulo.setPreferredSize(new java.awt.Dimension(280, 30));
+        jPanel2.add(txtTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 390, 30));
+
+        txtProf.setEditable(false);
+        txtProf.setBackground(new java.awt.Color(255, 255, 255));
+        txtProf.setEnabled(false);
+        txtProf.setPreferredSize(new java.awt.Dimension(280, 30));
+        jPanel2.add(txtProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 390, -1));
+
+        txtDesc.setColumns(20);
+        txtDesc.setLineWrap(true);
+        txtDesc.setRows(5);
+        txtDesc.setWrapStyleWord(true);
+        jScrollPane3.setViewportView(txtDesc);
+
+        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 390, 110));
+
+        jPanel3.setBackground(new java.awt.Color(255, 183, 77));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray), "Artículo(s)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+
+        lblListItems.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        lblListItems.setForeground(new java.awt.Color(255, 255, 255));
+        lblListItems.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblListItems.setText("jLabel14");
+        lblListItems.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblListItems.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        lblListItems.setMinimumSize(new java.awt.Dimension(238, 218));
+        lblListItems.setPreferredSize(new java.awt.Dimension(238, 218));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblListItems, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblListItems, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 250, 270));
+
+        btnReportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
+        btnReportar.setText("Reportar");
+        btnReportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnReportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 345, -1, -1));
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnCancelar.setText("Limpiar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 345, -1, -1));
+
+        hiddenProf1.setText("SoyProfe");
+        jPanel2.add(hiddenProf1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
+
+        javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
+        dlgReporte.getContentPane().setLayout(dlgReporteLayout);
+        dlgReporteLayout.setHorizontalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgReporteLayout.setVerticalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1102,10 +1246,66 @@ public class ADevolucion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox1FocusLost
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         pryArt.setVisible(false);
         pryArt.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnReportarAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportarAccActionPerformed
+        accesorios.clear();
+        List<String> list = new ArrayList<String>();
+        list = jList1.getSelectedValuesList();
+        String[] arr = list.stream().toArray(String[]::new);
+        System.out.println("Arr: " + Arrays.toString(arr));
+        if(arr.length > 0){
+            String bulletList = "<html><ul>";
+            for(String i: arr){ bulletList += "<li>"+i+"</li><br>"; accesorios.add(i); }
+            bulletList += "</ul></html>";
+            lblListItems.setText(bulletList);
+
+            hiddenProf1.setText(hiddenProf.getText());
+            try{
+            String[] profe = new ProfesorDB().getProfesor(hiddenProf.getText());
+            txtProf.setText(profe[2] + " " + profe[3] + " " +profe[4]);
+            }catch(SQLException ex){ System.out.println("Error al recuperar nombre del profesor en reporte: " + ex); }
+
+            dlgReporte.setLocationRelativeTo(this);
+            dlgReporte.setVisible(true);
+            pryArt.setVisible(false);
+            pryArt.dispose();
+        }else{
+            JOptionPane.showMessageDialog(this, "Al menos debe seleccionar un articulo para generar el reporte");
+        }
+    }//GEN-LAST:event_btnReportarAccActionPerformed
+
+    private void btnReportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportarActionPerformed
+        String profe = hiddenProf1.getText();
+        String titulo = txtTitulo.getText().trim();
+        String detalles = txtDesc.getText().trim();
+        int i = 0;
+        if(!titulo.isEmpty() && !detalles.isEmpty()){
+            String[] acc = new String[accesorios.size()];
+            Iterator<String> iterar = accesorios.iterator();
+            while(iterar.hasNext()){ acc[i] = iterar.next(); i++; }
+            
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            String fecha = dateFormat.format(c.getTime());
+            System.out.println("Profe: " + profe + "\nDescCorta: " + titulo + "\nDetalles: " + detalles + "\nArticulos: " + Arrays.toString(acc)+ "\nFecha: " + fecha);
+            
+            JOptionPane.showMessageDialog(this, "Reporte Realizado!\nSe descartaran del inventario los artículos que ha indicado","Información", JOptionPane.INFORMATION_MESSAGE);
+            
+            dlgReporte.setVisible(false);
+            dlgReporte.dispose();
+        }else{
+            JOptionPane.showMessageDialog(this,"Recuerde completar todos los campos");
+        }
+    }//GEN-LAST:event_btnReportarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        txtTitulo.setText("");
+        txtDesc.setText("");
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     public void miPanel(String[] datos) throws SQLException{
         JPanel pnlVidDetalles = new JPanel();
@@ -1259,6 +1459,7 @@ public class ADevolucion extends javax.swing.JFrame {
                     }
                     jList1.setModel(listModel);
                     // mostrar dialog
+                    hiddenProf.setText(datos[4]);
                     pryArt.setLocationRelativeTo(pnlBackground);
                     pryArt.setVisible(true);
                 }
@@ -1320,13 +1521,20 @@ public class ADevolucion extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel barraSeparadora;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JPanel btnPnDevolver;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReportar;
+    private javax.swing.JButton btnReportarAcc;
     private javax.swing.JCheckBox chkBLista;
     private javax.swing.JPanel combPnl;
     private javax.swing.JDialog dialogUsuario;
     private javax.swing.JPanel dlgBk;
+    private javax.swing.JDialog dlgReporte;
+    private javax.swing.JLabel hiddenProf;
+    private javax.swing.JLabel hiddenProf1;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
@@ -1335,27 +1543,34 @@ public class ADevolucion extends javax.swing.JFrame {
     private javax.swing.JLabel ico8;
     private javax.swing.JLabel icoCerrar1;
     private javax.swing.JLabel icoGuardar1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel lblHiden;
     private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIco2;
     private javax.swing.JLabel lblIco3;
+    private javax.swing.JLabel lblListItems;
     private javax.swing.JLabel lblNProy;
     private javax.swing.JLabel lblTextoDev;
     private javax.swing.JLabel lblTitulo;
@@ -1372,7 +1587,10 @@ public class ADevolucion extends javax.swing.JFrame {
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JDialog pryArt;
+    private javax.swing.JTextArea txtDesc;
+    private javax.swing.JTextField txtProf;
     private javax.swing.JTextField txtProyNSerie;
+    private javax.swing.JTextField txtTitulo;
     private javax.swing.JTextField txtUsuarioVal;
     // End of variables declaration//GEN-END:variables
 }

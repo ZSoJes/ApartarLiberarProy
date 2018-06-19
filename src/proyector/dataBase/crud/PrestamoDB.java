@@ -385,43 +385,67 @@ public class PrestamoDB {
         return array;
     }
     
+    
+    public int getCantPrestamosSQLA(String date1, String date2){
+        int cuantosPres = 0;
+        try {
+            PreparedStatement prep;
+            String sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ?";
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, date1);//yyyy-mm-dd
+            prep.setString(2, date2);//yyyy-mm-dd
+            ResultSet rs = prep.executeQuery();
+            while (rs.next()) { cuantosPres = rs.getInt(1); }
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar la cantidad de registros existentes en prestamos entre una fecha definida getPrestamos date1Date2: " + e);
+        }
+        return cuantosPres;
+    }
+    
+    public int getCantPrestamosSQLB(String date1, String date2, int eleccion, String texto){
+        int cuantosPres = 0;
+        try {
+            PreparedStatement prep;
+            String sql = sqlCountForzada(eleccion);
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, "%%"+texto+"%%");
+            prep.setString(2, date1);//yyyy-mm-dd
+            prep.setString(3, date2);//yyyy-mm-dd
+            ResultSet rs = prep.executeQuery();
+            while (rs.next()) { cuantosPres = rs.getInt(1); }
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar la cantidad de registros existentes en prestamos entre una fecha definida getPrestamos date1Date2: " + e);
+        }
+        return cuantosPres;
+    }
+    
     /**
      * Recupera los prestamos que estan 
      * estatus = false >> inactivos
      * y los guarda en un arreglo bidimensional, usa order by 
      * ES IMPORTANTE INDICAR EL FILTRO
      * 1 - DIA, 2 - MES, 3 - SEMESTRE, 4 - AÑO
+     * ES IMPORTANTE INDICAR QUE DATOS
+     * 0 - TODOS, 1 - QUIEN ENTREGO, 2 - QUIEN RECIBIO, 3- NOMBRE VIDEOPROYECTOR, 4 - ID PROFESOR, 5 - AULA
+     * Y UN TEXTO EN CASO DE ELEGIR DEL 1 AL 5 DEL MENU ANTERIOR
      * 
      * @param date1
      * @param date2
+     * @param eleccion
+     * @param texto
      * @return
      */
     public String[][] getPrestamos(String date1, String date2) {
-        int cuantosPres = 0;
+        int count = getCantPrestamosSQLA(date1, date2);
+        String[][] array = new String[count][8];
         try {
             PreparedStatement prep;
-            //prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN \'"+ date1 + "\' AND \'" + date2 + "\' ORDER BY ID_PRESTAMO DESC ");
-            //prep = conn.prepareStatement("SELECT COUNT(ID_PRESTAMO) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN \'" +date1 +"\' AND \'"+ date2 +"\' GROUP BY ID_PRESTAMO ORDER BY ID_PRESTAMO DESC");
-            prep = conn.prepareStatement("SELECT COUNT(ID_PRESTAMO) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ? GROUP BY ID_PRESTAMO ORDER BY ID_PRESTAMO DESC");
-            prep.setString(1, date1);
-            prep.setString(2, date2);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                cuantosPres += rs.getInt(1);
-            }
-            prep.close();
-        } catch (SQLException e) {
-            System.out.println("Error al recuperar la cantidad de registros existentes en prestamos entre una fecha definida getPrestamos date1Date2: " + e);
-        }
-        System.out.println("Se encontraron : " + cuantosPres + " registros entre estas fechas: " + date1 + "  -  " + date2);
-        String[][] array = new String[cuantosPres][8];
-        try {
-            PreparedStatement prep;
-            //prep = conn.prepareStatement("SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN \'"+ date1 + "\' AND \'" + date2 + "\' ORDER BY ID_PRESTAMO DESC ");
-            prep = conn.prepareStatement("SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ? ORDER BY ID_PRESTAMO DESC ");
-            prep.setString(1, date1);
-            prep.setString(2, date2);
-            //yyyy-mm-dd
+            String sql = sqlForzada(0);
+            prep = conn.prepareStatement("SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ? ORDER BY CREADO DESC");
+            prep.setString(1, date1);//yyyy-mm-dd
+            prep.setString(2, date2);//yyyy-mm-dd
             ResultSet rs = prep.executeQuery();
             int i = 0;
             while (rs.next()) {
@@ -443,6 +467,67 @@ public class PrestamoDB {
         return array;
     }
     
+    public String sqlCountForzada(int eleccion){
+        String sql = "SELECT * FROM E_PRESTAMOS";
+        switch(eleccion){
+            case 0:
+                sql = "SELECT COUNT(ID_PRESTAMO) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ?";
+            break;
+            case 1: //Nombre del usuario que entrego   >>>indicar texto nombre usuario
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN " +
+                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+            break;
+            case 2: //Nombre del usuario que recibio   >>>indicar texto nombre usuario
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN " +
+                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+            break;
+            case 3: //Nombre de VideoProyector   >>>indicar texto nombre proyector
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN " +
+                "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES " +
+                "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+            break;
+            case 4:  //ID del Profesor   >>>indicar texto credencial
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN " +
+                "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ?";
+            break;
+            case 5:  //Aula   >>>indicar texto nombre aula
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN " +
+                "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+            break;
+        }
+        return sql;
+    }
+    
+    public String sqlForzada(int eleccion){
+        String sql = "SELECT COUNT(*) FROM E_PRESTAMOS";
+        switch(eleccion){
+            case 0:
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ? ORDER BY CREADO DESC ";
+            break;
+            case 1: //Nombre del usuario que entrego   >>>indicar texto nombre usuario
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN " +
+                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+            break;
+            case 2: //Nombre del usuario que recibio   >>>indicar texto nombre usuario
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN " +
+                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+            break;
+            case 3: //Nombre de VideoProyector   >>>indicar texto nombre proyector
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN " +
+                "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES " +
+                "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+            break;
+            case 4:  //ID del Profesor   >>>indicar texto credencial
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN " +
+                "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+            break;
+            case 5:  //Aula   >>>indicar texto nombre aula
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN " +
+                "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+            break;
+        }
+        return sql;
+    }
     /**
      * Recupera cuantos prestamos se encuentran 
      * estatusPrestamo = true >> activos

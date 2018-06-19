@@ -6,8 +6,11 @@
 package proyector;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -15,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ToolTipManager;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.Conexion;
 import proyector.dataBase.crud.CrearInicio;
@@ -43,6 +47,7 @@ public final class Inicio extends javax.swing.JFrame {
         lanzarRegistro();
         dialogAcceso.setVisible(false);
 
+        ToolTipManager.sharedInstance().setInitialDelay(0);
         txtNom.setTransferHandler(null);
         txtAPat.setTransferHandler(null);
         txtAMat.setTransferHandler(null);
@@ -120,6 +125,25 @@ public final class Inicio extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        dlgManualContacto = new javax.swing.JDialog();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        btnContacto = new javax.swing.JPanel();
+        lblIco = new javax.swing.JLabel();
+        lblContacto = new javax.swing.JLabel();
+        btnManual = new javax.swing.JPanel();
+        lblIco1 = new javax.swing.JLabel();
+        lblManual = new javax.swing.JLabel();
+        dlgContacto = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         frameBackground = new javax.swing.JPanel();
         login = new javax.swing.JPanel();
         txtUsuario = new javax.swing.JTextField();
@@ -136,6 +160,7 @@ public final class Inicio extends javax.swing.JFrame {
         lblRegistrarse = new javax.swing.JLabel();
         lblTexto = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
 
         dialogUsuario.setLocation(new java.awt.Point(0, 0));
         dialogUsuario.setMinimumSize(new java.awt.Dimension(560, 628));
@@ -556,6 +581,222 @@ public final class Inicio extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        dlgManualContacto.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgManualContacto.setMinimumSize(new java.awt.Dimension(570, 250));
+        dlgManualContacto.setModal(true);
+
+        jPanel3.setBackground(new java.awt.Color(0, 153, 255));
+
+        jLabel6.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Eliga una opción:");
+
+        btnContacto.setBackground(new java.awt.Color(239, 239, 239));
+        btnContacto.setMinimumSize(new java.awt.Dimension(105, 101));
+        btnContacto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnContactoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnContactoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnContactoMouseExited(evt);
+            }
+        });
+
+        lblIco.setForeground(new java.awt.Color(255, 255, 255));
+        lblIco.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/contact-70.png"))); // NOI18N
+        lblIco.setToolTipText("da clic sobre mi");
+        lblIco.setPreferredSize(new java.awt.Dimension(85, 70));
+        lblIco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblIcoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblIcoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblIcoMouseExited(evt);
+            }
+        });
+
+        lblContacto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblContacto.setText("Contacto");
+
+        javax.swing.GroupLayout btnContactoLayout = new javax.swing.GroupLayout(btnContacto);
+        btnContacto.setLayout(btnContactoLayout);
+        btnContactoLayout.setHorizontalGroup(
+            btnContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblContacto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblIco, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+        );
+        btnContactoLayout.setVerticalGroup(
+            btnContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnContactoLayout.createSequentialGroup()
+                .addComponent(lblIco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblContacto)
+                .addGap(11, 11, 11))
+        );
+
+        btnManual.setBackground(new java.awt.Color(239, 239, 239));
+        btnManual.setMinimumSize(new java.awt.Dimension(105, 101));
+        btnManual.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnManualMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnManualMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnManualMouseExited(evt);
+            }
+        });
+
+        lblIco1.setForeground(new java.awt.Color(255, 255, 255));
+        lblIco1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIco1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/manual-70.png"))); // NOI18N
+        lblIco1.setToolTipText("da clic sobre mi");
+        lblIco1.setPreferredSize(new java.awt.Dimension(85, 70));
+        lblIco1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblIco1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblIco1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblIco1MouseExited(evt);
+            }
+        });
+
+        lblManual.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblManual.setText("Manual");
+
+        javax.swing.GroupLayout btnManualLayout = new javax.swing.GroupLayout(btnManual);
+        btnManual.setLayout(btnManualLayout);
+        btnManualLayout.setHorizontalGroup(
+            btnManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblManual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblIco1, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+        );
+        btnManualLayout.setVerticalGroup(
+            btnManualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnManualLayout.createSequentialGroup()
+                .addComponent(lblIco1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblManual)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jLabel6)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(88, 88, 88)
+                .addComponent(btnManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                .addComponent(btnContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(88, 88, 88))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout dlgManualContactoLayout = new javax.swing.GroupLayout(dlgManualContacto.getContentPane());
+        dlgManualContacto.getContentPane().setLayout(dlgManualContactoLayout);
+        dlgManualContactoLayout.setHorizontalGroup(
+            dlgManualContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgManualContactoLayout.setVerticalGroup(
+            dlgManualContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        dlgContacto.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgContacto.setTitle("[Contacto]");
+        dlgContacto.setMinimumSize(new java.awt.Dimension(450, 350));
+        dlgContacto.setModal(true);
+
+        jPanel4.setBackground(new java.awt.Color(255, 152, 0));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
+        jPanel4.setMinimumSize(new java.awt.Dimension(400, 300));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel28.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel28.setText("Creado por:");
+        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, 33));
+
+        jLabel29.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setText("Gómez Sotelo Juan Jesús");
+        jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, -1, -1));
+
+        jLabel30.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel30.setText("Correos:");
+        jPanel4.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(255, 152, 0));
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField1.setText("GomezSoteloJuan@gmail.com");
+        jTextField1.setBorder(null);
+        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, -1, 30));
+
+        jTextField2.setEditable(false);
+        jTextField2.setBackground(new java.awt.Color(255, 152, 0));
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField2.setText("10orangeblue@gmail.com");
+        jTextField2.setBorder(null);
+        jPanel4.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, -1, 30));
+
+        jLabel33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/email-60.png"))); // NOI18N
+        jPanel4.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 60, 60));
+
+        jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+        jPanel4.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("<html>GitHub:<br><a href=\"https://github.com/ZSoJes/ApartarLiberarProy\">Link del Proyecto</a>");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 180, 40));
+
+        javax.swing.GroupLayout dlgContactoLayout = new javax.swing.GroupLayout(dlgContacto.getContentPane());
+        dlgContacto.getContentPane().setLayout(dlgContactoLayout);
+        dlgContactoLayout.setHorizontalGroup(
+            dlgContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+        );
+        dlgContactoLayout.setVerticalGroup(
+            dlgContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Administrador de Video Proyectores");
         setIconImage(img.getImage());
@@ -764,6 +1005,15 @@ public final class Inicio extends javax.swing.JFrame {
         );
 
         frameBackground.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 500, 20, 20));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/question-28.png"))); // NOI18N
+        jLabel5.setToolTipText("da clic sobre mi");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        frameBackground.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 350, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1041,6 +1291,90 @@ public final class Inicio extends javax.swing.JFrame {
         jPasswordField2.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        dlgManualContacto.setLocationRelativeTo(frameBackground);
+        dlgManualContacto.setVisible(true);
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void btnContactoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactoMouseClicked
+        btnContacto.setBackground(new Color(239,239,239));
+        dlgContacto.setLocationRelativeTo(this);
+        dlgContacto.setVisible(true);
+    }//GEN-LAST:event_btnContactoMouseClicked
+
+    private void btnContactoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactoMouseEntered
+        btnContacto.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_btnContactoMouseEntered
+
+    private void btnContactoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactoMouseExited
+        btnContacto.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_btnContactoMouseExited
+
+    private void btnManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnManualMouseClicked
+        btnManual.setBackground(new Color(239,239,239));
+        dlgManualContacto.setVisible(false);
+        dlgManualContacto.dispose();
+        abrirManual();
+    }//GEN-LAST:event_btnManualMouseClicked
+
+    private void btnManualMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnManualMouseEntered
+        btnManual.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_btnManualMouseEntered
+
+    private void btnManualMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnManualMouseExited
+        btnManual.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_btnManualMouseExited
+
+    private void lblIco1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIco1MouseClicked
+        btnManual.setBackground(new Color(239,239,239));
+        dlgManualContacto.setVisible(false);
+        dlgManualContacto.dispose();
+        abrirManual();
+    }//GEN-LAST:event_lblIco1MouseClicked
+
+    private void lblIco1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIco1MouseEntered
+        btnManual.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_lblIco1MouseEntered
+
+    private void lblIco1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIco1MouseExited
+        btnManual.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_lblIco1MouseExited
+
+    private void lblIcoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIcoMouseClicked
+        btnContacto.setBackground(new Color(239,239,239));
+        dlgContacto.setLocationRelativeTo(this);
+        dlgContacto.setVisible(true);
+    }//GEN-LAST:event_lblIcoMouseClicked
+
+    private void lblIcoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIcoMouseEntered
+        btnContacto.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_lblIcoMouseEntered
+
+    private void lblIcoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblIcoMouseExited
+        btnContacto.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_lblIcoMouseExited
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(new URI("https://github.com/ZSoJes/ApartarLiberarProy"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    public void abrirManual(){
+        try {
+            File path = new File ("./src/manual.pdf");
+            Desktop.getDesktop().open(path);
+       }catch (IOException ex) {
+            ex.printStackTrace();
+       }
+    }
     public void darAcceso(){
         String usuario = txtUsuario.getText().trim();
         try {
@@ -1130,8 +1464,10 @@ public final class Inicio extends javax.swing.JFrame {
     private javax.swing.JPanel barraSeparadora6;
     private javax.swing.JPanel barraSeparadora7;
     private javax.swing.JLabel btnCerrar;
+    private javax.swing.JPanel btnContacto;
     private javax.swing.JPanel btnCrearUsuario;
     private javax.swing.JPanel btnIniciar;
+    private javax.swing.JPanel btnManual;
     private javax.swing.JButton btnRecov;
     private javax.swing.JPanel dialogAcceso;
     private javax.swing.JPanel dialogBackground;
@@ -1141,28 +1477,46 @@ public final class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel dlgApPat;
     private javax.swing.JLabel dlgConfCont;
     private javax.swing.JLabel dlgCont;
+    private javax.swing.JDialog dlgContacto;
     private javax.swing.JLabel dlgInstrucciones;
+    private javax.swing.JDialog dlgManualContacto;
     private javax.swing.JLabel dlgNombre;
     private javax.swing.JPanel frameBackground;
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBoxAcceso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPasswordField jPass;
     private javax.swing.JPasswordField jPassAcceso;
     private javax.swing.JPasswordField jPassConfirm;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jPasswordField2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblBtnCrear;
     private javax.swing.JLabel lblBtnIniciar;
+    private javax.swing.JLabel lblContacto;
+    private javax.swing.JLabel lblIco;
+    private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIcoIniciar;
     private javax.swing.JLabel lblIcoInstruccion;
     private javax.swing.JLabel lblInstrucciones;
     private javax.swing.JLabel lblInstruccionesAcceso;
+    private javax.swing.JLabel lblManual;
     private javax.swing.JLabel lblRegistrarse;
     private javax.swing.JLabel lblTexto;
     private javax.swing.JPanel login;

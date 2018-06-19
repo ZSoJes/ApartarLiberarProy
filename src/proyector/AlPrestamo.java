@@ -1461,7 +1461,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                     pres.setPrestamo(datos, accArr);    //HACE PRESTAMO
                     scrollPaneAccesorios();                 //ACTUALIZA LOS ACCESORIOS DISPONIBLES
                     ImageIcon iconJPane = new ImageIcon("./src/imagenes/Ok.png");
-                    JOptionPane.showMessageDialog(null, "Se ha creado el registro.\n\nPresione enter.", "Info", JOptionPane.INFORMATION_MESSAGE, iconJPane);  //+ "\n\nAccesorios "+ Arrays.toString(accArr)+"\n\nDatos "+Arrays.toString(datos)
+                    JOptionPane.showMessageDialog(null, "Se ha creado el registro.Presione enter.", "Información", JOptionPane.INFORMATION_MESSAGE, iconJPane);
                     
                     //
                     chkVid.setSelected(false);

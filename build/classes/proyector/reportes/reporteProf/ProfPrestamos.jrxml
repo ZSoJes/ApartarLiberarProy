@@ -59,9 +59,9 @@
 		</parameter>
 		<queryString>
 			<![CDATA[SELECT
-    TO_CHAR(CREADO, 'DD MM YYYY') AS FECHA, 
-    TO_CHAR(CREADO, 'HH:MM') AS SALIDA, 
-    TO_CHAR(ACTUALIZADO, 'HH:MM') AS REGRESO, 
+    TO_CHAR(CREADO, 'DD/MM/YYYY') AS FECHA, 
+    TO_CHAR(CREADO, 'HH:MM AM') AS SALIDA, 
+    TO_CHAR(ACTUALIZADO, 'HH:MM AM') AS REGRESO, 
     SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_PRESTAMOS.ID_VIDEOPROYECTOR AS VIDEOPROYECTOR
 FROM
      E_PRESTAMOS
@@ -110,7 +110,9 @@ AND
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT * FROM E_PROFESORES WHERE E_PROFESORES.ID_PROFESOR IN (select E_PRESTAMOS.ID_PROFESOR from E_PRESTAMOS where CREADO BETWEEN 
+		<![CDATA[SELECT * 
+FROM E_PROFESORES 
+WHERE E_PROFESORES.ID_PROFESOR IN (select E_PRESTAMOS.ID_PROFESOR from E_PRESTAMOS where CREADO BETWEEN 
 TO_DATE($P{date1}, 'YYYY-MM-DDTHH24:MI:SS"Z"') AND
 TO_DATE($P{date2}, 'YYYY-MM-DDTHH24:MI:SS"Z"'))
 ORDER BY E_PROFESORES.ID_PROFESOR]]>
@@ -209,7 +211,7 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 					</datasetRun>
 					<jr:column width="90" uuid="85b57b04-b9ab-4e95-a6d9-71b444083e9d">
 						<jr:tableFooter style="table_CH" height="15" rowSpan="1"/>
-						<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+						<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="90" height="23" uuid="01e20442-a7ee-45e1-a904-345d991009d6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -218,9 +220,9 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 								<text><![CDATA[FECHA]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="19" rowSpan="1">
+						<jr:detailCell style="table_TD" height="18" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="90" height="19" uuid="5ca91f0e-822b-4e1b-97e9-da9762201703"/>
+								<reportElement x="0" y="0" width="90" height="18" uuid="5ca91f0e-822b-4e1b-97e9-da9762201703"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
 							</textField>
@@ -258,7 +260,7 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 							</componentElement>
 						</jr:tableFooter>
 						<jr:column width="90" uuid="9ba7a2c9-e0d6-4165-94eb-db5fd68e47c4">
-							<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="90" height="23" uuid="954bf705-8ea1-4e0d-b7c7-48a0ad94c4eb"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -267,16 +269,16 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 									<text><![CDATA[SALIDA]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="90" height="19" uuid="41c2de8f-d4f2-41ea-8516-3ae777db75f4"/>
+									<reportElement x="0" y="0" width="90" height="18" uuid="41c2de8f-d4f2-41ea-8516-3ae777db75f4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{SALIDA}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="90" uuid="665b3906-fb2a-4176-8742-7963051bcba1">
-							<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
 									<reportElement x="0" y="0" width="90" height="23" uuid="6356cc02-3998-4fdc-88de-2e88975060ff"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -285,27 +287,27 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 									<text><![CDATA[REGRESO]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="90" height="19" uuid="a1cb087d-0ae9-4ebe-a96e-b9b8063f7081"/>
+									<reportElement x="0" y="0" width="90" height="18" uuid="a1cb087d-0ae9-4ebe-a96e-b9b8063f7081"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{REGRESO}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="111" uuid="bec0a024-eca1-4bd3-bc09-b1b62586ab59">
-							<jr:columnHeader style="table_CH" height="25" rowSpan="1">
+							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="111" height="25" uuid="8f128490-53ac-4025-978e-7374cef053af"/>
+									<reportElement x="0" y="0" width="111" height="23" uuid="8f128490-53ac-4025-978e-7374cef053af"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font isBold="false"/>
 									</textElement>
 									<text><![CDATA[VIDEOPROYECTOR]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="table_TD" height="19" rowSpan="1">
+							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="111" height="19" uuid="02065a08-d58c-4c28-bd0d-e26bf8d0ddc1"/>
+									<reportElement x="0" y="0" width="111" height="18" uuid="02065a08-d58c-4c28-bd0d-e26bf8d0ddc1"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{VIDEOPROYECTOR}]]></textFieldExpression>
 								</textField>

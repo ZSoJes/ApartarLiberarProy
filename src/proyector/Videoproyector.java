@@ -12,10 +12,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -28,11 +32,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AccesorioDB;
-import proyector.dataBase.crud.DepartamentoDB;
+import proyector.dataBase.crud.LeerInicio;
 import proyector.dataBase.crud.PrestamoDB;
-import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
 import proyector.reportes.GenerarReportes;
 
@@ -49,6 +54,8 @@ public final class Videoproyector extends javax.swing.JFrame {
 
     ImageIcon art = new ImageIcon("./src/imagenes/Electrical_36px.png");
     ImageIcon artW = new ImageIcon("./src/imagenes/Electrical_36pxW.png");
+    private static Boolean valido = false;
+    
     /**
      * Creates new form Videoproyector
      * @throws java.sql.SQLException
@@ -61,6 +68,8 @@ public final class Videoproyector extends javax.swing.JFrame {
         dibujarProye();//enlista los videoproyectores
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(16);
         //LABELS CON INFO OCULTA
+        hiddenNSerie.setVisible(false);
+        btnMant.setVisible(false);
         hidenData.setVisible(false);
         hidenData2.setVisible(false);
 
@@ -74,6 +83,9 @@ public final class Videoproyector extends javax.swing.JFrame {
         txtMarc2.setTransferHandler(null);
         txtMod2.setTransferHandler(null);
         txtSer2.setTransferHandler(null);
+        
+        txtUsuario.setTransferHandler(null);
+        txtPass.setTransferHandler(null);
         
         jTabbedPane1.setEnabledAt(3, false);
         jTabbedPane1.setEnabledAt(4, false);
@@ -241,6 +253,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         btnEliminarVid1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        btnMant = new javax.swing.JButton();
         pnlActualizar = new javax.swing.JPanel();
         lblTitulo3 = new javax.swing.JLabel();
         hidenData2 = new javax.swing.JLabel();
@@ -258,8 +271,31 @@ public final class Videoproyector extends javax.swing.JFrame {
         btnCerrar2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         fallosReporte = new javax.swing.JDialog();
+        jPanel5 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel31 = new javax.swing.JLabel();
+        lblIcoInfo = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        txtArea = new javax.swing.JTextField();
+        txtSolicitante = new javax.swing.JTextField();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        txtInforme = new javax.swing.JTextArea();
+        jLabel36 = new javax.swing.JLabel();
+        cb1 = new javax.swing.JCheckBox();
+        cb2 = new javax.swing.JCheckBox();
+        cb3 = new javax.swing.JCheckBox();
+        jLabel37 = new javax.swing.JLabel();
+        txtFolio = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        txtTitulo = new javax.swing.JTextField();
+        btnReporte = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        hiddenNSerie = new javax.swing.JLabel();
         articulos = new javax.swing.JDialog();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pnlAllArt = new javax.swing.JPanel();
@@ -310,6 +346,16 @@ public final class Videoproyector extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
+        btnGrSolicitudPara = new javax.swing.ButtonGroup();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel41 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         pnlBkVid = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -610,7 +656,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                             .addGroup(pnlBackground1Layout.createSequentialGroup()
                                 .addGap(67, 67, 67)
                                 .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(150, Short.MAX_VALUE))
+                        .addContainerGap(161, Short.MAX_VALUE))
                     .addGroup(pnlBackground1Layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addComponent(btnGuardar1)
@@ -851,7 +897,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                 btnCerrar3ActionPerformed(evt);
             }
         });
-        pnlDetalles.add(btnCerrar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 289, -1, -1));
+        pnlDetalles.add(btnCerrar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, -1, -1));
 
         btnActualizar1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnActualizar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Pencil_22px.png"))); // NOI18N
@@ -861,7 +907,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                 btnActualizar1ActionPerformed(evt);
             }
         });
-        pnlDetalles.add(btnActualizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(296, 289, -1, -1));
+        pnlDetalles.add(btnActualizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, -1, -1));
 
         btnEliminarVid1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnEliminarVid1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Waste_24px.png"))); // NOI18N
@@ -871,7 +917,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                 btnEliminarVid1ActionPerformed(evt);
             }
         });
-        pnlDetalles.add(btnEliminarVid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(503, 288, -1, -1));
+        pnlDetalles.add(btnEliminarVid1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 270, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -882,6 +928,14 @@ public final class Videoproyector extends javax.swing.JFrame {
         lblStatus.setForeground(new java.awt.Color(255, 255, 255));
         lblStatus.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         pnlDetalles.add(lblStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 250, 20));
+
+        btnMant.setText("Retirar del Mantenimiento");
+        btnMant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantActionPerformed(evt);
+            }
+        });
+        pnlDetalles.add(btnMant, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 320, -1, -1));
 
         tabbedPane.addTab("Detalles", pnlDetalles);
 
@@ -1059,41 +1113,237 @@ public final class Videoproyector extends javax.swing.JFrame {
         );
         descVidLayout.setVerticalGroup(
             descVidLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
         );
 
         descVid.getAccessibleContext().setAccessibleParent(this);
 
+        fallosReporte.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        fallosReporte.setTitle("[Reportar VideoProyector]");
+        fallosReporte.setMinimumSize(new java.awt.Dimension(975, 535));
         fallosReporte.setModal(true);
+        fallosReporte.setPreferredSize(new java.awt.Dimension(975, 535));
+
+        jPanel5.setBackground(new java.awt.Color(255, 138, 101));
+        jPanel5.setMinimumSize(new java.awt.Dimension(965, 500));
+        jPanel5.setPreferredSize(new java.awt.Dimension(965, 500));
+        jPanel5.setRequestFocusEnabled(false);
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+
             },
             new String [] {
-
+                "Nombre", "Marca", "No Serie", "Fecha Agregado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
+
+        jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 64, 409, 330));
+
+        jLabel31.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
+        jLabel31.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel31.setText("Reporte de Fallos");
+        jPanel5.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 950, -1));
+
+        lblIcoInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/More Info_22px.png"))); // NOI18N
+        jPanel5.add(lblIcoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, 30));
+
+        jLabel32.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel32.setText("<html><center>Para iniciar el reporte de mantenimiento<br>debe dar doble clic sobre algún VideoProyector</center></html>");
+        jPanel5.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, -1, -1));
+
+        jPanel6.setBackground(new java.awt.Color(255, 183, 77));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.lightGray), "Formulario de Reporte", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+
+        jLabel33.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel33.setText("Área Solicitante:");
+
+        jLabel34.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel34.setText("Nombre del Solicitante:");
+
+        jLabel35.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel35.setText("Descripción del servicio solicitado o falla a reparar");
+        jLabel35.setToolTipText("");
+
+        txtArea.setEditable(false);
+
+        txtSolicitante.setEditable(false);
+
+        txtInforme.setEditable(false);
+        txtInforme.setBackground(new java.awt.Color(240, 240, 240));
+        txtInforme.setColumns(20);
+        txtInforme.setLineWrap(true);
+        txtInforme.setRows(5);
+        txtInforme.setWrapStyleWord(true);
+        jScrollPane9.setViewportView(txtInforme);
+
+        jLabel36.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel36.setText("Departamento a quien se dirige la solicitud:");
+
+        btnGrSolicitudPara.add(cb1);
+        cb1.setText("Recursos Materiales y Servicios");
+
+        btnGrSolicitudPara.add(cb2);
+        cb2.setText("Mantenimiento de Equipo");
+
+        btnGrSolicitudPara.add(cb3);
+        cb3.setText("Centro de Cómputo");
+
+        jLabel37.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel37.setText("Folio:");
+
+        txtFolio.setEditable(false);
+        txtFolio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFolioActionPerformed(evt);
+            }
+        });
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Descripción corta de la falla:");
+
+        txtTitulo.setEditable(false);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane9)
+                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel33)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtArea))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtSolicitante))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel36)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cb1)
+                                    .addComponent(cb2))
+                                .addGap(18, 18, 18)
+                                .addComponent(cb3)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel37)
+                            .addComponent(jLabel42))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTitulo)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 147, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel33)
+                    .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSolicitante, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel37)
+                    .addComponent(txtFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addComponent(jLabel36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cb1)
+                    .addComponent(cb3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cb2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(427, 64, 520, 420));
+
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
+        btnReporte.setText("Generar Reporte");
+        btnReporte.setEnabled(false);
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, -1, -1));
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, -1, -1));
+
+        hiddenNSerie.setText("NSeriePry");
+        jPanel5.add(hiddenNSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 420, -1, -1));
 
         javax.swing.GroupLayout fallosReporteLayout = new javax.swing.GroupLayout(fallosReporte.getContentPane());
         fallosReporte.getContentPane().setLayout(fallosReporteLayout);
         fallosReporteLayout.setHorizontalGroup(
             fallosReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(fallosReporteLayout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         fallosReporteLayout.setVerticalGroup(
             fallosReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(fallosReporteLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         fallosReporte.getAccessibleContext().setAccessibleParent(this);
@@ -1706,6 +1956,110 @@ public final class Videoproyector extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel7.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel38.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel38.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel39.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel39.setText("Usuario:");
+
+        jLabel40.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel41.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel38, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel41)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel39)
+                    .addComponent(jLabel40))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel41))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel39)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel40)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Video proyectores]");
         setIconImage(img.getImage());
@@ -1940,6 +2294,17 @@ public final class Videoproyector extends javax.swing.JFrame {
 
         btnPnlReportar.setBackground(new java.awt.Color(239, 239, 239));
         btnPnlReportar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
+        btnPnlReportar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPnlReportarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnPnlReportarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnPnlReportarMouseExited(evt);
+            }
+        });
         btnPnlReportar.setLayout(new java.awt.GridBagLayout());
 
         lblIco3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inform-36.png"))); // NOI18N
@@ -2210,8 +2575,6 @@ public final class Videoproyector extends javax.swing.JFrame {
                     crearVid.setVisible(false);
                     crearVid.dispose();
 
-                    pnlContenedor.removeAll();
-                    pnlContenedor.repaint();
                     dibujarProye();
                     }else { JOptionPane.showMessageDialog(null, "Pruebe a utilizar un nombre distinto", "Advertencia", JOptionPane.WARNING_MESSAGE); }
                 }else { JOptionPane.showMessageDialog(null, "Al parecer el numero de serie ya ha sido registrado en el sistema", "Advertencia", JOptionPane.WARNING_MESSAGE); }
@@ -2244,8 +2607,6 @@ public final class Videoproyector extends javax.swing.JFrame {
                     descVid.setVisible(false);
                     descVid.dispose();
 
-                    pnlContenedor.removeAll();
-                    pnlContenedor.repaint();
                     dibujarProye();
                     JOptionPane.showMessageDialog(null, "El registro fue borrado!!!");
                 }else{
@@ -2298,8 +2659,6 @@ public final class Videoproyector extends javax.swing.JFrame {
                 descVid.setVisible(false);
                 descVid.dispose();
 
-                pnlContenedor.removeAll();
-                pnlContenedor.repaint();
                 dibujarProye();
 
                 tabbedPane.setSelectedIndex(0);
@@ -2626,9 +2985,235 @@ public final class Videoproyector extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void btnPnlReportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlReportarMouseClicked
+        try {    
+            DefaultTableModel modelPryRprt = (DefaultTableModel) jTable1.getModel();
+            VideoproyectorDB pryR = new VideoproyectorDB();
+            String[] cols = {jTable1.getColumnName(0),jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3)};
+            DateFormat dtFm = new SimpleDateFormat("dd/MM/yyyy HH:mm a", Locale.ENGLISH);
+            String[][] datos = pryR.getProyectores(true);
+            int count = datos.length;
+            System.out.println("\nRegistros accesorios existentes: " + count);
+
+            String[][] datoFrmt = new String[count][4];
+            Calendar c = Calendar.getInstance();
+            for(int i = 0; i < count; i++){
+                int[] arr = formatFecha(datos[i][5]);
+                c.set(arr[0], arr[1], arr[2], arr[3], arr[4]);
+                datoFrmt[i][0] = datos[i][1];
+                datoFrmt[i][1] = datos[i][2];
+                datoFrmt[i][2] = datos[i][4];
+                datoFrmt[i][3] = dtFm.format(c.getTime());
+            }
+            
+            modelPryRprt.setDataVector(datoFrmt, cols);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(90);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(87);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(99);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(133);
+            
+            jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        } catch (SQLException ex) {
+            System.out.println("Error al escribir datos en tabla videoproyector Report: " + ex);
+        }
+        
+        clearReport();
+        
+        fallosReporte.setLocationRelativeTo(this);
+        fallosReporte.setVisible(true);
+    }//GEN-LAST:event_btnPnlReportarMouseClicked
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if(evt.getClickCount() == 2 && jTable1.getSelectedRow() != -1){
+            int row = jTable1.getSelectedRow();
+            String nombre = jTable1.getValueAt(row, 0).toString();
+            jLabel31.setText("Reporte de Fallos de "+nombre);
+            hiddenNSerie.setText(jTable1.getValueAt(row, 2).toString());
+            btnReporte.setEnabled(true);
+            
+            cb1.setSelected(false);
+            cb2.setSelected(false);
+            cb3.setSelected(false);
+
+            cb1.setEnabled(true);
+            cb2.setEnabled(true);
+            cb3.setEnabled(true);
+            
+            txtArea.setEditable(true);
+            txtSolicitante.setEditable(true);
+            txtInforme.setEditable(true);
+            txtFolio.setEditable(true);
+            txtTitulo.setEditable(true);
+            
+            txtArea.setBackground(new Color(255,255,255));
+            txtSolicitante.setBackground(new Color(255,255,255));
+            txtFolio.setBackground(new Color(255,255,255));
+            txtInforme.setBackground(new Color(255,255,255));
+            txtTitulo.setBackground(new Color(255,255,255));
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        clearReport();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    public void clearReport(){
+        txtArea.setText("");
+        txtSolicitante.setText("");
+        txtInforme.setText("");
+        txtFolio.setText("");
+        txtTitulo.setText("");
+        jLabel31.setText("Reporte de Fallos");
+        btnReporte.setEnabled(false);
+        
+        cb1.setSelected(false);
+        cb2.setSelected(false);
+        cb3.setSelected(false);
+        
+        cb1.setEnabled(false);
+        cb2.setEnabled(false);
+        cb3.setEnabled(false);
+        
+        txtArea.setEditable(false);
+        txtSolicitante.setEditable(false);
+        txtFolio.setEditable(false);
+        txtInforme.setEditable(false);
+        txtTitulo.setEditable(false);
+        
+        txtArea.setBackground(new Color(204,204,204));
+        txtSolicitante.setBackground(new Color(204,204,204));
+        txtFolio.setBackground(new Color(204,204,204));
+        txtInforme.setBackground(new Color(204,204,204));
+        txtTitulo.setBackground(new Color(204,204,204));
+    }
+    private void txtFolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFolioActionPerformed
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        Calendar c = Calendar.getInstance();
+        DateFormat dtFm = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        
+        String opc = "a";
+        String area = txtArea.getText().trim();
+        String solicitante = txtSolicitante.getText().trim();
+        String date = dtFm.format(c.getTime());
+        String informe = txtInforme.getText().trim();
+        String folio  = txtFolio.getText().trim();
+        String titulo = txtTitulo.getText().trim();
+        
+        if(!area.isEmpty() && !solicitante.isEmpty() && !informe.isEmpty() && !folio.isEmpty() && !titulo.isEmpty()){
+            if(cb1.isSelected() || cb2.isSelected() || cb3.isSelected()){
+                if(cb1.isSelected()){ opc = "a";} 
+                else if(cb2.isSelected()){ opc = "b";} 
+                else if(cb3.isSelected()){ opc = "c";}
+                String[] datos = {area, solicitante, date, informe, opc, folio, hiddenNSerie.getText()};
+                GenerarReportes genR = new GenerarReportes();
+                genR.getReporteFalloPry(datos);
+                try {
+                    VideoproyectorDB pry = new VideoproyectorDB();
+                    pry.setReparacionPry(hiddenNSerie.getText());
+                    dibujarProye();
+                    fallosReporte.setVisible(false);
+                    fallosReporte.dispose();
+                } catch (SQLException ex) {
+                    System.out.println("Error al crear registro de prestamo en videoproyector btnReporte: " + ex);
+                }
+            }else{JOptionPane.showMessageDialog(null, "Recuerde llenar todo el formulario"); clearReport();}
+        }else{
+            JOptionPane.showMessageDialog(null, "Recuerde llenar todo el formulario"); clearReport();
+        }
+    }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnPnlReportarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlReportarMouseEntered
+        btnPnlReportar.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_btnPnlReportarMouseEntered
+
+    private void btnPnlReportarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlReportarMouseExited
+        btnPnlReportar.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_btnPnlReportarMouseExited
+
+    private void btnMantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantActionPerformed
+        dlgConfirm.setLocationRelativeTo(this);
+        dlgConfirm.setVisible(true);
+        
+        if(valido){
+            JOptionPane.showMessageDialog(null, "Videoproyector habilitado para su uso", "Información", JOptionPane.INFORMATION_MESSAGE, new ImageIcon("./src/imagenes/Ok.png"));
+            try {
+                VideoproyectorDB pry = new VideoproyectorDB();
+                pry.updReparacionPryFree(Integer.parseInt(hidenData.getText()));
+                dibujarProye();
+                descVid.setVisible(false);
+                descVid.dispose();
+            } catch (SQLException ex) {
+                System.out.println("Error al liberar videoproyector: " + ex);
+            }
+            valido = false;
+        }
+    }//GEN-LAST:event_btnMantActionPerformed
+
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String usuario = txtUsuario.getText().trim();
+        try {
+            LeerInicio leer = new LeerInicio();
+            if (leer.getExisteUsuario(usuario)) {
+                String hashed = leer.getPass(usuario);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    valido = true;
+                    txtUsuario.setText("");
+                    txtPass.setText("");
+                    dlgConfirm.setVisible(false);
+                    dlgConfirm.dispose();
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
+
+    public int[] formatFecha(String date) {
+        int[] res = new int[5];
+        res[0] = Integer.parseInt(date.substring(0, 4));              //año
+        res[1] = Integer.parseInt(date.substring(5, 7)) - 1;         //mes
+        res[2] = Integer.parseInt(date.substring(8, 10));            //dia
+        res[3] = Integer.parseInt(date.substring(11, 13));        //hora
+        res[4] = Integer.parseInt(date.substring(14, 16));       //minuto
+        return res;
+    }
+    
     public void dibujarProye() throws SQLException {
         VideoproyectorDB proy = new VideoproyectorDB();
         String[][] datos = proy.getProyectores();
+        
+        pnlContenedor.removeAll();
+        pnlContenedor.repaint();
         
         for (String[] dato : datos) {
             miPanel(dato);
@@ -2693,8 +3278,19 @@ public final class Videoproyector extends javax.swing.JFrame {
         c.gridy = 4;
         c.insets = new Insets(11, 0, 0, 0);
         anon.add(lblExis, c);
-
-        nomVid.setBackground(new Color(255, 140, 0));
+        try {
+            VideoproyectorDB vid = new VideoproyectorDB();
+            String[] arr = vid.showMeEvStatus(datos[0]);
+            if(arr[2].equals("MANTENIMIENTO") && !Boolean.valueOf(arr[3])){
+                nomVid.setBackground(new Color(153, 151, 149));
+            }else if(arr[2].equals("EN PRESTAMO") && !Boolean.valueOf(arr[3])){
+                nomVid.setBackground(new Color(38, 198, 218));
+            }else{
+                nomVid.setBackground(new Color(255, 140, 0));              
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al colorear cabecera de acuerdo a disponibilidad"+ ex);
+        }
         nomVid.setMinimumSize(new Dimension(200, 40));
         nomVid.setPreferredSize(new Dimension(200, 40));
         nomVid.setLayout(new GridBagLayout());
@@ -2769,6 +3365,12 @@ public final class Videoproyector extends javax.swing.JFrame {
                 lblServSem.setText(servicioFormat(servicio[4]));
                 }catch(SQLException ex){ System.out.println("Error al generar datos de prestamoDB sobre videoproyector btn bot jpanel generado dinamicamente:" + ex);}
                 
+                if((lblStatus.getText()).equals("MANTENIMIENTO")){
+                    btnMant.setVisible(true);
+                }else{
+                    btnMant.setVisible(false);
+                }
+                
                 descVid.setLocationRelativeTo(pnlBkVid);
                 descVid.setVisible(true);
             } catch (SQLException ex) {
@@ -2841,11 +3443,15 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JPanel barraSeparadora3;
     private javax.swing.JButton btnActualizar1;
     private javax.swing.JButton btnActualizar2;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
     private javax.swing.JButton btnCerrar3;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnEliminarVid1;
+    private javax.swing.ButtonGroup btnGrSolicitudPara;
     private javax.swing.JButton btnGuardar1;
+    private javax.swing.JButton btnMant;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JPanel btnPnlArticulos;
     private javax.swing.JPanel btnPnlCodebar;
@@ -2853,11 +3459,17 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JPanel btnPnlGaf;
     private javax.swing.JPanel btnPnlReportar;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.JCheckBox cb1;
+    private javax.swing.JCheckBox cb2;
+    private javax.swing.JCheckBox cb3;
     private javax.swing.JDialog crearVid;
     private javax.swing.JDialog descVid;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgServicio;
     private javax.swing.JDialog fallosReporte;
     private javax.swing.JLabel hiddenLabelArt;
+    private javax.swing.JLabel hiddenNSerie;
     private javax.swing.JLabel hidenData;
     private javax.swing.JLabel hidenData2;
     private javax.swing.JLabel ico3;
@@ -2891,7 +3503,19 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2902,6 +3526,9 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2910,6 +3537,7 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
@@ -2937,6 +3565,7 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JLabel lblIco7;
     private javax.swing.JLabel lblIco8;
     private javax.swing.JLabel lblIco9;
+    private javax.swing.JLabel lblIcoInfo;
     private javax.swing.JLabel lblNomHead;
     private javax.swing.JLabel lblPanelTitulo;
     private javax.swing.JLabel lblSerieHead;
@@ -2975,10 +3604,13 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JPanel pnlRptArt;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JToggleButton tglReg;
+    private javax.swing.JTextField txtArea;
     private javax.swing.JTextArea txtDesc;
     private javax.swing.JTextArea txtDesc1;
     private javax.swing.JTextField txtExist;
     private javax.swing.JTextField txtExist1;
+    private javax.swing.JTextField txtFolio;
+    private javax.swing.JTextArea txtInforme;
     private javax.swing.JTextField txtMarc1;
     private javax.swing.JTextField txtMarc2;
     private javax.swing.JTextField txtMod1;
@@ -2987,7 +3619,11 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JTextField txtNom1;
     private javax.swing.JTextField txtNom2;
     private javax.swing.JTextField txtNom3;
+    private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtSer1;
     private javax.swing.JTextField txtSer2;
+    private javax.swing.JTextField txtSolicitante;
+    private javax.swing.JTextField txtTitulo;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

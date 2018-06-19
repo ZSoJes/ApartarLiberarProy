@@ -237,8 +237,8 @@ public class ProfesorDB {
         }
     }
     
-    public boolean bulkLoadProfe(String ruta){
-        boolean correcto = false;
+    public void bulkLoadProfe(String ruta){
+        //boolean correcto = false;
         try {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
@@ -253,6 +253,6 @@ public class ProfesorDB {
         } catch (SQLException e) {
             System.out.println("Error al insertar multiples registros a la db Profesores: " + e);
         }
-        return correcto;
+        //return correcto;
     }
 }

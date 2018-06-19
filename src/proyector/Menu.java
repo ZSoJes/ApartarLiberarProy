@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -80,7 +81,9 @@ public class Menu extends javax.swing.JFrame {
         pnlUsuariosList.setVisible(false);
         txtIDNew.setEnabled(false);
         txtCredencialN.setEnabled(false);
-
+        
+        pnlMenuBK.setVisible(false);
+        
         //no copiar ni pegar
         txtNomN.setTransferHandler(null);
         txtAPatN.setTransferHandler(null);
@@ -209,9 +212,9 @@ public class Menu extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLayeredPane3 = new javax.swing.JLayeredPane();
-        pnlAccesoMiUsuario = new javax.swing.JPanel();
+        pnlUsrVerif1 = new javax.swing.JPanel();
         txtUsuarioCred = new javax.swing.JTextField();
-        barraSeparadora = new javax.swing.JPanel();
+        pnlBarraSeparadora1 = new javax.swing.JPanel();
         btnGetUsuario = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         pnlUsuarioMod = new javax.swing.JPanel();
@@ -282,10 +285,10 @@ public class Menu extends javax.swing.JFrame {
         lblIcoInfo = new javax.swing.JLabel();
         lblIcoInfo1 = new javax.swing.JLabel();
         jLayeredPane4 = new javax.swing.JLayeredPane();
-        chkUser = new javax.swing.JPanel();
+        pnlUsrVerif2 = new javax.swing.JPanel();
         txtCheckUser = new javax.swing.JTextField();
         btnCheckUser = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        pnlBarraSeparadora = new javax.swing.JPanel();
         pnlUsuariosList = new javax.swing.JPanel();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -297,6 +300,36 @@ public class Menu extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
+        pnlBackup = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        pnlUsrVerif3 = new javax.swing.JPanel();
+        pnlBarraSeparadora2 = new javax.swing.JPanel();
+        btnValidarUsr = new javax.swing.JButton();
+        txtCredUsr = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        pnlMenuBK = new javax.swing.JPanel();
+        jLabel37 = new javax.swing.JLabel();
+        cb1 = new javax.swing.JCheckBox();
+        cb2 = new javax.swing.JCheckBox();
+        cb3 = new javax.swing.JCheckBox();
+        cb4 = new javax.swing.JCheckBox();
+        cb5 = new javax.swing.JCheckBox();
+        jButton5 = new javax.swing.JButton();
+        jLabel39 = new javax.swing.JLabel();
+        cb6 = new javax.swing.JCheckBox();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        contacto = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
         bkMenu = new javax.swing.JPanel();
         menuBar = new javax.swing.JPanel();
         lblHora = new javax.swing.JLabel();
@@ -340,11 +373,11 @@ public class Menu extends javax.swing.JFrame {
         dlgUsuario.setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
         dlgUsuario.setResizable(false);
         dlgUsuario.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                dlgUsuarioWindowClosing(evt);
-            }
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 dlgUsuarioWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                dlgUsuarioWindowClosing(evt);
             }
         });
 
@@ -366,7 +399,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel1.setText("Información de Mi Usuario");
-        pnlMiUsuario.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 21, -1, -1));
+        pnlMiUsuario.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 20, -1, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Info_36px.png"))); // NOI18N
         pnlMiUsuario.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 550, -1, -1));
@@ -376,12 +409,16 @@ public class Menu extends javax.swing.JFrame {
         jLabel6.setText("<html><center>Aquí es posible imprimir su credencial nuevamente<br>y actualizar los datos de su usuario</center></html>");
         pnlMiUsuario.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 550, -1, -1));
 
-        jLayeredPane3.setMinimumSize(new java.awt.Dimension(853, 392));
+        jLayeredPane3.setMinimumSize(new java.awt.Dimension(910, 440));
+        jLayeredPane3.setPreferredSize(new java.awt.Dimension(910, 440));
+        jLayeredPane3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pnlAccesoMiUsuario.setOpaque(false);
-        pnlAccesoMiUsuario.setLayout(new java.awt.GridBagLayout());
+        pnlUsrVerif1.setBackground(new java.awt.Color(255, 167, 38));
+        pnlUsrVerif1.setLayout(new java.awt.GridBagLayout());
 
+        txtUsuarioCred.setBackground(new java.awt.Color(255, 167, 38));
         txtUsuarioCred.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        txtUsuarioCred.setForeground(new java.awt.Color(255, 255, 255));
         txtUsuarioCred.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtUsuarioCred.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 5, 2, 1));
         txtUsuarioCred.setMinimumSize(new java.awt.Dimension(250, 30));
@@ -395,20 +432,20 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 30);
-        pnlAccesoMiUsuario.add(txtUsuarioCred, gridBagConstraints);
+        pnlUsrVerif1.add(txtUsuarioCred, gridBagConstraints);
 
-        barraSeparadora.setBackground(new java.awt.Color(100, 100, 100));
-        barraSeparadora.setMinimumSize(new java.awt.Dimension(250, 3));
-        barraSeparadora.setPreferredSize(new java.awt.Dimension(250, 3));
+        pnlBarraSeparadora1.setBackground(new java.awt.Color(100, 100, 100));
+        pnlBarraSeparadora1.setMinimumSize(new java.awt.Dimension(250, 3));
+        pnlBarraSeparadora1.setPreferredSize(new java.awt.Dimension(250, 3));
 
-        javax.swing.GroupLayout barraSeparadoraLayout = new javax.swing.GroupLayout(barraSeparadora);
-        barraSeparadora.setLayout(barraSeparadoraLayout);
-        barraSeparadoraLayout.setHorizontalGroup(
-            barraSeparadoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlBarraSeparadora1Layout = new javax.swing.GroupLayout(pnlBarraSeparadora1);
+        pnlBarraSeparadora1.setLayout(pnlBarraSeparadora1Layout);
+        pnlBarraSeparadora1Layout.setHorizontalGroup(
+            pnlBarraSeparadora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 250, Short.MAX_VALUE)
         );
-        barraSeparadoraLayout.setVerticalGroup(
-            barraSeparadoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlBarraSeparadora1Layout.setVerticalGroup(
+            pnlBarraSeparadora1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
@@ -416,9 +453,11 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        pnlAccesoMiUsuario.add(barraSeparadora, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 0, 0);
+        pnlUsrVerif1.add(pnlBarraSeparadora1, gridBagConstraints);
 
         btnGetUsuario.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnGetUsuario.setForeground(new java.awt.Color(100, 100, 100));
         btnGetUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FindUser_36px.png"))); // NOI18N
         btnGetUsuario.setText("<html>Buscar<br> Usuario<html>");
         btnGetUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -430,15 +469,18 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(18, 0, 11, 0);
-        pnlAccesoMiUsuario.add(btnGetUsuario, gridBagConstraints);
+        pnlUsrVerif1.add(btnGetUsuario, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Debe escanear su credencial para esta caracteristica");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        pnlAccesoMiUsuario.add(jLabel16, gridBagConstraints);
+        pnlUsrVerif1.add(jLabel16, gridBagConstraints);
+
+        jLayeredPane3.add(pnlUsrVerif1, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 175, -1, -1));
 
         pnlUsuarioMod.setBackground(new java.awt.Color(94, 200, 130));
 
@@ -715,6 +757,8 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLayeredPane3.add(pnlUsuarioMod, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, -1, -1));
+
         pnlUsuarioCont.setBackground(new java.awt.Color(135, 96, 85));
         pnlUsuarioCont.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlUsuarioCont.setMinimumSize(new java.awt.Dimension(740, 314));
@@ -804,6 +848,11 @@ public class Menu extends javax.swing.JFrame {
         txtAutorizarDlg.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 153, 102), 1, true));
         txtAutorizarDlg.setMinimumSize(new java.awt.Dimension(250, 30));
         txtAutorizarDlg.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtAutorizarDlg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAutorizarDlgKeyTyped(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(136, 141, 148));
@@ -935,52 +984,9 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 11, 12, 0);
         pnlUsuarioCont.add(jButton1, gridBagConstraints);
 
-        jLayeredPane3.setLayer(pnlAccesoMiUsuario, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jLayeredPane3.setLayer(pnlUsuarioMod, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jLayeredPane3.setLayer(pnlUsuarioCont, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane3.add(pnlUsuarioCont, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
 
-        javax.swing.GroupLayout jLayeredPane3Layout = new javax.swing.GroupLayout(jLayeredPane3);
-        jLayeredPane3.setLayout(jLayeredPane3Layout);
-        jLayeredPane3Layout.setHorizontalGroup(
-            jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1193, Short.MAX_VALUE)
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addGap(18, 18, 18)
-                    .addComponent(pnlUsuarioMod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(358, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addGap(64, 64, 64)
-                    .addComponent(pnlUsuarioCont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(389, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addGap(289, 289, 289)
-                    .addComponent(pnlAccesoMiUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(605, Short.MAX_VALUE)))
-        );
-        jLayeredPane3Layout.setVerticalGroup(
-            jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addGap(37, 37, 37)
-                    .addComponent(pnlUsuarioMod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(33, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(pnlUsuarioCont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane3Layout.createSequentialGroup()
-                    .addGap(139, 139, 139)
-                    .addComponent(pnlAccesoMiUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(114, Short.MAX_VALUE)))
-        );
-
-        pnlMiUsuario.add(jLayeredPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 95, -1, 410));
+        pnlMiUsuario.add(jLayeredPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jTabbedPane1.addTab("<html><b>Mi Usuario</b></html>", pnlMiUsuario);
 
@@ -1163,6 +1169,11 @@ public class Menu extends javax.swing.JFrame {
         txtAutorizaNuevo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(15, 126, 155)));
         txtAutorizaNuevo.setMinimumSize(new java.awt.Dimension(270, 40));
         txtAutorizaNuevo.setPreferredSize(new java.awt.Dimension(270, 40));
+        txtAutorizaNuevo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAutorizaNuevoKeyTyped(evt);
+            }
+        });
 
         jLabel18.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1205,7 +1216,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         pnlControlUsuarios.add(lblCabecera, gridBagConstraints);
 
         lblIcoInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Info_36px.png"))); // NOI18N
@@ -1217,7 +1228,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 180, 0, 0);
         pnlControlUsuarios.add(lblIcoInfo, gridBagConstraints);
 
-        lblIcoInfo1.setBackground(new java.awt.Color(0, 191, 255));
+        lblIcoInfo1.setBackground(new java.awt.Color(255, 255, 255));
         lblIcoInfo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lblIcoInfo1.setForeground(new java.awt.Color(0, 191, 255));
         lblIcoInfo1.setText("Solo los usuarios administradores pueden acceder a esta caracteristica");
@@ -1230,10 +1241,12 @@ public class Menu extends javax.swing.JFrame {
 
         jLayeredPane4.setMinimumSize(new java.awt.Dimension(900, 450));
 
-        chkUser.setBackground(new java.awt.Color(94, 200, 130));
-        chkUser.setLayout(new java.awt.GridBagLayout());
+        pnlUsrVerif2.setBackground(new java.awt.Color(94, 200, 130));
+        pnlUsrVerif2.setLayout(new java.awt.GridBagLayout());
 
-        txtCheckUser.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        txtCheckUser.setBackground(new java.awt.Color(94, 200, 130));
+        txtCheckUser.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
+        txtCheckUser.setForeground(new java.awt.Color(255, 255, 255));
         txtCheckUser.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCheckUser.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 1, 0, 1));
         txtCheckUser.setMinimumSize(new java.awt.Dimension(250, 30));
@@ -1248,7 +1261,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(30, 35, 0, 35);
-        chkUser.add(txtCheckUser, gridBagConstraints);
+        pnlUsrVerif2.add(txtCheckUser, gridBagConstraints);
 
         btnCheckUser.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnCheckUser.setForeground(new java.awt.Color(128, 128, 128));
@@ -1263,20 +1276,20 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(15, 0, 20, 0);
-        chkUser.add(btnCheckUser, gridBagConstraints);
+        pnlUsrVerif2.add(btnCheckUser, gridBagConstraints);
 
-        jPanel4.setBackground(new java.awt.Color(100, 100, 100));
-        jPanel4.setMinimumSize(new java.awt.Dimension(250, 3));
-        jPanel4.setPreferredSize(new java.awt.Dimension(250, 3));
+        pnlBarraSeparadora.setBackground(new java.awt.Color(100, 100, 100));
+        pnlBarraSeparadora.setMinimumSize(new java.awt.Dimension(250, 3));
+        pnlBarraSeparadora.setPreferredSize(new java.awt.Dimension(250, 3));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlBarraSeparadoraLayout = new javax.swing.GroupLayout(pnlBarraSeparadora);
+        pnlBarraSeparadora.setLayout(pnlBarraSeparadoraLayout);
+        pnlBarraSeparadoraLayout.setHorizontalGroup(
+            pnlBarraSeparadoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 250, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlBarraSeparadoraLayout.setVerticalGroup(
+            pnlBarraSeparadoraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
@@ -1284,7 +1297,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        chkUser.add(jPanel4, gridBagConstraints);
+        pnlUsrVerif2.add(pnlBarraSeparadora, gridBagConstraints);
 
         pnlUsuariosList.setBackground(new java.awt.Color(94, 200, 130));
         pnlUsuariosList.setMinimumSize(new java.awt.Dimension(900, 510));
@@ -1463,7 +1476,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 180, 0, 0);
         pnlUsuariosList.add(jLabel27, gridBagConstraints);
 
-        jLayeredPane4.setLayer(chkUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane4.setLayer(pnlUsrVerif2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane4.setLayer(pnlUsuariosList, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane4Layout = new javax.swing.GroupLayout(jLayeredPane4);
@@ -1474,7 +1487,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(jLayeredPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane4Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(chkUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlUsrVerif2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(jLayeredPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane4Layout.createSequentialGroup()
@@ -1484,11 +1497,11 @@ public class Menu extends javax.swing.JFrame {
         );
         jLayeredPane4Layout.setVerticalGroup(
             jLayeredPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 451, Short.MAX_VALUE)
+            .addGap(0, 461, Short.MAX_VALUE)
             .addGroup(jLayeredPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane4Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(chkUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlUsrVerif2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(jLayeredPane4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane4Layout.createSequentialGroup()
@@ -1506,6 +1519,162 @@ public class Menu extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("<html><center><b>Administrar<br>Usuarios</b></center><html>", pnlControlUsuarios);
 
+        pnlBackup.setBackground(new java.awt.Color(255, 255, 255));
+        pnlBackup.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel32.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel32.setText("Backup y Restauracion de BD");
+        pnlBackup.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 20, -1, -1));
+
+        jLayeredPane1.setMinimumSize(new java.awt.Dimension(910, 440));
+        jLayeredPane1.setPreferredSize(new java.awt.Dimension(910, 440));
+        jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        pnlUsrVerif3.setBackground(new java.awt.Color(92, 107, 192));
+        pnlUsrVerif3.setMinimumSize(new java.awt.Dimension(310, 157));
+        pnlUsrVerif3.setPreferredSize(new java.awt.Dimension(310, 157));
+        pnlUsrVerif3.setLayout(new java.awt.GridBagLayout());
+
+        pnlBarraSeparadora2.setBackground(new java.awt.Color(204, 204, 204));
+        pnlBarraSeparadora2.setMinimumSize(new java.awt.Dimension(250, 3));
+
+        javax.swing.GroupLayout pnlBarraSeparadora2Layout = new javax.swing.GroupLayout(pnlBarraSeparadora2);
+        pnlBarraSeparadora2.setLayout(pnlBarraSeparadora2Layout);
+        pnlBarraSeparadora2Layout.setHorizontalGroup(
+            pnlBarraSeparadora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 250, Short.MAX_VALUE)
+        );
+        pnlBarraSeparadora2Layout.setVerticalGroup(
+            pnlBarraSeparadora2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 0, 0);
+        pnlUsrVerif3.add(pnlBarraSeparadora2, gridBagConstraints);
+
+        btnValidarUsr.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnValidarUsr.setForeground(new java.awt.Color(102, 102, 102));
+        btnValidarUsr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/report_28px.png"))); // NOI18N
+        btnValidarUsr.setText("Validar Usuario");
+        btnValidarUsr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValidarUsrActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(18, 0, 11, 0);
+        pnlUsrVerif3.add(btnValidarUsr, gridBagConstraints);
+
+        txtCredUsr.setBackground(new java.awt.Color(92, 107, 192));
+        txtCredUsr.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
+        txtCredUsr.setForeground(new java.awt.Color(255, 255, 255));
+        txtCredUsr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCredUsr.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        txtCredUsr.setMinimumSize(new java.awt.Dimension(250, 30));
+        txtCredUsr.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtCredUsr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCredUsrKeyTyped(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 30);
+        pnlUsrVerif3.add(txtCredUsr, gridBagConstraints);
+
+        jLabel36.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel36.setText("Ingrese su credencial de administrador");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 2, 0);
+        pnlUsrVerif3.add(jLabel36, gridBagConstraints);
+
+        jLayeredPane1.add(pnlUsrVerif3, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 175, -1, -1));
+
+        pnlMenuBK.setBackground(new java.awt.Color(92, 107, 192));
+        pnlMenuBK.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel37.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel37.setText("Indicar cuales tablas seran generadas en formato csv");
+        pnlMenuBK.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 23, -1, -1));
+
+        cb1.setBackground(new java.awt.Color(245, 245, 245));
+        cb1.setForeground(new java.awt.Color(255, 255, 255));
+        cb1.setText("Departamentos");
+        cb1.setOpaque(false);
+        pnlMenuBK.add(cb1, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 77, -1, -1));
+
+        cb2.setBackground(new java.awt.Color(245, 245, 245));
+        cb2.setForeground(new java.awt.Color(255, 255, 255));
+        cb2.setText("Profesores");
+        cb2.setOpaque(false);
+        pnlMenuBK.add(cb2, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 77, -1, -1));
+
+        cb3.setBackground(new java.awt.Color(245, 245, 245));
+        cb3.setForeground(new java.awt.Color(255, 255, 255));
+        cb3.setText("VideoProyectores");
+        cb3.setOpaque(false);
+        pnlMenuBK.add(cb3, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 77, -1, -1));
+
+        cb4.setBackground(new java.awt.Color(245, 245, 245));
+        cb4.setForeground(new java.awt.Color(255, 255, 255));
+        cb4.setText("Aulas");
+        cb4.setOpaque(false);
+        pnlMenuBK.add(cb4, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 116, -1, -1));
+
+        cb5.setBackground(new java.awt.Color(245, 245, 245));
+        cb5.setForeground(new java.awt.Color(255, 255, 255));
+        cb5.setText("Articulos");
+        cb5.setOpaque(false);
+        pnlMenuBK.add(cb5, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 116, -1, -1));
+
+        jButton5.setText("Generar Respaldo");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        pnlMenuBK.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 157, -1, -1));
+
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel39.setText("Los archivos seran generados en la ubicacion indicada al presionar el boton");
+        pnlMenuBK.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 212, -1, -1));
+
+        cb6.setForeground(new java.awt.Color(255, 255, 255));
+        cb6.setText("Usuarios");
+        cb6.setOpaque(false);
+        pnlMenuBK.add(cb6, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 116, -1, -1));
+
+        jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/files-90.png"))); // NOI18N
+        jLabel38.setMaximumSize(new java.awt.Dimension(90, 90));
+        jLabel38.setMinimumSize(new java.awt.Dimension(90, 90));
+        jLabel38.setPreferredSize(new java.awt.Dimension(90, 90));
+        pnlMenuBK.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 90, 90));
+
+        jLayeredPane1.add(pnlMenuBK, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 550, 250));
+
+        pnlBackup.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        jLabel34.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(0, 191, 255));
+        jLabel34.setText("Solo los usuarios administradores pueden acceder a esta caracteristica");
+        pnlBackup.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 530, -1, -1));
+
+        jLabel35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Info_36px.png"))); // NOI18N
+        pnlBackup.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 520, -1, -1));
+
+        jTabbedPane1.addTab("<html><center><b>Backup<br>de BD</b></center><html>", pnlBackup);
+
         javax.swing.GroupLayout dlgUsuarioLayout = new javax.swing.GroupLayout(dlgUsuario.getContentPane());
         dlgUsuario.getContentPane().setLayout(dlgUsuarioLayout);
         dlgUsuarioLayout.setHorizontalGroup(
@@ -1518,6 +1687,64 @@ public class Menu extends javax.swing.JFrame {
         );
 
         dlgUsuario.getAccessibleContext().setAccessibleParent(this);
+
+        contacto.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        contacto.setTitle("[CONTACTO]");
+        contacto.setMinimumSize(new java.awt.Dimension(450, 350));
+        contacto.setModal(true);
+
+        jPanel2.setBackground(new java.awt.Color(102, 153, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
+        jPanel2.setMinimumSize(new java.awt.Dimension(400, 300));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel28.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel28.setText("Creado por:");
+        jPanel2.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, 33));
+
+        jLabel29.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setText("Gómez Sotelo Juan Jesús");
+        jPanel2.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, -1, -1));
+
+        jLabel30.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel30.setText("Correos:");
+        jPanel2.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(102, 153, 255));
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField1.setText("GomezSoteloJuan@gmail.com");
+        jTextField1.setBorder(null);
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, -1, 30));
+
+        jTextField2.setEditable(false);
+        jTextField2.setBackground(new java.awt.Color(102, 153, 255));
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField2.setText("10orangeblue@gmail.com");
+        jTextField2.setBorder(null);
+        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, -1, 30));
+
+        jLabel33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/email-60.png"))); // NOI18N
+        jPanel2.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 60, 60));
+
+        jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+        jPanel2.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
+
+        javax.swing.GroupLayout contactoLayout = new javax.swing.GroupLayout(contacto.getContentPane());
+        contacto.getContentPane().setLayout(contactoLayout);
+        contactoLayout.setHorizontalGroup(
+            contactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        contactoLayout.setVerticalGroup(
+            contactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Administrador de Video Proyectores");
@@ -1779,6 +2006,11 @@ public class Menu extends javax.swing.JFrame {
         lblLogo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tecnm2.png"))); // NOI18N
 
         lblLogo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/itt.png"))); // NOI18N
+        lblLogo3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLogo3MouseClicked(evt);
+            }
+        });
 
         lblDep.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
         lblDep.setText("Departamento de Desarrollo Académico");
@@ -2198,7 +2430,7 @@ public class Menu extends javax.swing.JFrame {
                     setDatosPnlContenido(datos);
 
                     //visibilidad
-                    pnlAccesoMiUsuario.setVisible(false);
+                    pnlUsrVerif1.setVisible(false);
                     pnlUsuarioCont.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "No se reconocio al usuario\nPruebe a usar nuevamente el escaner", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -2275,7 +2507,7 @@ public class Menu extends javax.swing.JFrame {
                                 genU.setUsuarioAdmin(lblUsuarioHidenID.getText().trim(), true);
                             }
                             JOptionPane.showMessageDialog(null, "Listo", "", JOptionPane.INFORMATION_MESSAGE);
-                            pnlAccesoMiUsuario.setVisible(true);
+                            pnlUsrVerif1.setVisible(true);
                             pnlUsuarioCont.setVisible(false);
                         } else {
                             JOptionPane.showMessageDialog(null, "No se puede permitir esta acción\n\nNo debe usar su misma credencial para esta acción", "Peligro", JOptionPane.ERROR_MESSAGE);
@@ -2307,10 +2539,10 @@ public class Menu extends javax.swing.JFrame {
         //revisar usuario
         pnlUsuarioCont.setVisible(false);
         pnlUsuarioMod.setVisible(false);
-        pnlAccesoMiUsuario.setVisible(true);
+        pnlUsrVerif1.setVisible(true);
 
         //crear usuario
-        chkUser.setVisible(true);
+        pnlUsrVerif2.setVisible(true);
         pnlUsuariosList.setVisible(false);
 
         //otros labels
@@ -2449,7 +2681,7 @@ public class Menu extends javax.swing.JFrame {
             String credencial = txtCheckUser.getText().trim();
             LeerInicio leer = new LeerInicio();
             if (leer.getUsuarioNvl(credencial)) {
-                chkUser.setVisible(false);
+                pnlUsrVerif2.setVisible(false);
                 pnlUsuariosList.setVisible(true);
                 getTabla();
             } else {
@@ -2462,7 +2694,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCheckUserActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        pnlAccesoMiUsuario.setVisible(true);
+        pnlUsrVerif1.setVisible(true);
         pnlUsuarioCont.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -2599,14 +2831,19 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
-        if (jTabbedPane1.getSelectedIndex() == 1 || jTabbedPane1.getSelectedIndex() == 0) {
-            chkUser.setVisible(true);
+        int index = jTabbedPane1.getSelectedIndex();
+        if (index == 1 || index == 0) {
+            pnlUsrVerif2.setVisible(true);
             pnlUsuariosList.setVisible(false);
         }
-        if (jTabbedPane1.getSelectedIndex() == 1 || jTabbedPane1.getSelectedIndex() == 2) {
-            pnlAccesoMiUsuario.setVisible(true);
+        if (index == 1 || index == 2) {
+            pnlUsrVerif1.setVisible(true);
             pnlUsuarioMod.setVisible(false);
             pnlUsuarioCont.setVisible(false);
+        }
+        if(index != 3){
+            pnlMenuBK.setVisible(false);
+            pnlUsrVerif3.setVisible(true);
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
@@ -2704,6 +2941,76 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCheckUserKeyTyped
 
+    private void lblLogo3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogo3MouseClicked
+        if(evt.getClickCount() == 3){
+            contacto.setLocationRelativeTo(bkMenu);
+            contacto.setVisible(true);
+        }
+    }//GEN-LAST:event_lblLogo3MouseClicked
+
+    private void txtAutorizarDlgKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutorizarDlgKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnAutorizar.doClick();
+        }
+    }//GEN-LAST:event_txtAutorizarDlgKeyTyped
+
+    private void txtCredUsrKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCredUsrKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnValidarUsr.doClick();
+        }
+    }//GEN-LAST:event_txtCredUsrKeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        
+        if(cb1.isSelected() || cb2.isSelected() || cb3.isSelected() || cb4.isSelected() || cb5.isSelected() || cb6.isSelected()){
+            JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardados los archivos");
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+            int option = f.showSaveDialog(jTabbedPane1);
+            //File path = f.getCurrentDirectory();
+            if (option == JFileChooser.APPROVE_OPTION){
+                String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
+                try{
+                    LeerInicio leer = new LeerInicio();
+                    if(cb1.isSelected()){ leer.bulkData(path, 1); }
+                    if(cb2.isSelected()){ leer.bulkData(path, 2); }
+                    if(cb3.isSelected()){ leer.bulkData(path, 3); }
+                    if(cb4.isSelected()){ leer.bulkData(path, 4); }
+                    if(cb5.isSelected()){ leer.bulkData(path, 5); }
+                    if(cb6.isSelected()){ leer.bulkData(path, 6); }
+                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
+            }else{ System.out.println("No se eligio una ruta"); }
+        }else{ JOptionPane.showMessageDialog(jTabbedPane1, "Seleccione al menos una opción"); }
+        cb1.setSelected(false);
+        cb2.setSelected(false);
+        cb3.setSelected(false);
+        cb4.setSelected(false);
+        cb5.setSelected(false);
+        cb6.setSelected(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void btnValidarUsrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarUsrActionPerformed
+        try {
+            String credencial = txtCredUsr.getText().trim();
+            LeerInicio leer = new LeerInicio();
+            if (leer.getUsuarioNvl(credencial)) {
+                pnlUsrVerif3.setVisible(false);
+                pnlMenuBK.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Su usuario no tiene acceso a esta caracteristica\n\nNo es administrador", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al cargar datos de usuario: " + ex);
+        }
+        txtCredUsr.setText("");
+    }//GEN-LAST:event_btnValidarUsrActionPerformed
+
+    private void txtAutorizaNuevoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutorizaNuevoKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnCrearUsuario.doClick();
+        }
+    }//GEN-LAST:event_txtAutorizaNuevoKeyTyped
+
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
         if (!(Character.isAlphabetic(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
@@ -2750,7 +3057,6 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel barraSeparadora;
     private javax.swing.JPanel bkMenu;
     private javax.swing.JPanel btnActUpd;
     private javax.swing.JLabel btnActUpd1;
@@ -2766,9 +3072,16 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel btnGenerar;
     private javax.swing.JButton btnGetUsuario;
     private javax.swing.JPanel btnProf;
+    private javax.swing.JButton btnValidarUsr;
     private javax.swing.JPanel btnVid;
+    private javax.swing.JCheckBox cb1;
+    private javax.swing.JCheckBox cb2;
+    private javax.swing.JCheckBox cb3;
+    private javax.swing.JCheckBox cb4;
+    private javax.swing.JCheckBox cb5;
+    private javax.swing.JCheckBox cb6;
     private javax.swing.JCheckBox chkBNewID;
-    private javax.swing.JPanel chkUser;
+    private javax.swing.JDialog contacto;
     private javax.swing.JDialog dlgUsuario;
     private javax.swing.JLabel hdnIDCopy;
     private javax.swing.JLabel hiddenLbl;
@@ -2786,6 +3099,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2807,18 +3121,31 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JLayeredPane jLayeredPane3;
     private javax.swing.JLayeredPane jLayeredPane4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -2827,6 +3154,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel lbl1;
@@ -2858,11 +3187,18 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPasswordField passConfUpd;
     private javax.swing.JPasswordField passN;
     private javax.swing.JPasswordField passUpd;
-    private javax.swing.JPanel pnlAccesoMiUsuario;
+    private javax.swing.JPanel pnlBackup;
+    private javax.swing.JPanel pnlBarraSeparadora;
+    private javax.swing.JPanel pnlBarraSeparadora1;
+    private javax.swing.JPanel pnlBarraSeparadora2;
     private javax.swing.JPanel pnlControlUsuarios;
     private javax.swing.JPanel pnlInfoUsuario;
+    private javax.swing.JPanel pnlMenuBK;
     private javax.swing.JPanel pnlMiUsuario;
     private javax.swing.JPanel pnlNUsuario;
+    private javax.swing.JPanel pnlUsrVerif1;
+    private javax.swing.JPanel pnlUsrVerif2;
+    private javax.swing.JPanel pnlUsrVerif3;
     private javax.swing.JPanel pnlUsuarioCont;
     private javax.swing.JPanel pnlUsuarioMod;
     private javax.swing.JPanel pnlUsuariosList;
@@ -2875,6 +3211,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtAutorizaNuevo;
     private javax.swing.JTextField txtAutorizarDlg;
     private javax.swing.JTextField txtCheckUser;
+    private javax.swing.JTextField txtCredUsr;
     private javax.swing.JTextField txtCredencialN;
     private javax.swing.JTextField txtIDNew;
     private javax.swing.JTextField txtNomN;

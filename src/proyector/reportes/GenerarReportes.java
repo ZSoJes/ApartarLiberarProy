@@ -189,4 +189,40 @@ public class GenerarReportes {
             System.out.println("Error al generar reporte TODO: " + e);
         }
     }
+    
+    
+    
+    public void getReporteFalloPry(String[] datos) {
+        try {
+            Conexion conn = new Conexion();
+            JasperReport report = null;
+            String ruta = "";
+            try {
+                ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosProyector.jasper";
+                
+                InputStream f = new FileInputStream(ruta);
+                System.out.println("Current dir:" + ruta);
+                report = (JasperReport) JRLoader.loadObject(f);
+            } catch (JRException | IOException e) {
+                System.out.println("Error cargando plantilla del reporte " + e);
+            }
+            
+            Map parameter = new HashMap();
+            parameter.put("area",datos[0]);
+            parameter.put("solicitante",datos[1]);
+            parameter.put("fecha",datos[2]);
+            parameter.put("desc",datos[3]);
+            parameter.put("opc",datos[4]);
+            parameter.put("folio",datos[5]);
+            parameter.put("nomPry",datos[6]);
+            JasperPrint j = JasperFillManager.fillReport(report, parameter, conn.getConexion());
+
+            JasperViewer jv = new JasperViewer(j, false);
+            jv.setTitle("Reporte Videoproyectores");
+            jv.setVisible(true);
+            jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        } catch (JRException | SQLException e) {
+            System.out.println("Error al generar reporte TODO: " + e);
+        }
+    }
 }

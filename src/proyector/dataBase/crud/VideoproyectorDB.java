@@ -162,6 +162,55 @@ public class VideoproyectorDB {
         return datos;
     }
 
+    public int getProyectoresCount(boolean estatus) {
+        int cantidad = 0;
+        try {
+            PreparedStatement prep;
+            prep = conn.prepareStatement("SELECT COUNT(*) "
+                    + "FROM E_VIDEOPROYECTORES WHERE ID_VIDEOPROYECTOR IN (SELECT ID_VIDEOPROYECTOR FROM EV_ESTATUS WHERE DISPONIBILIDAD = ?)");
+            prep.setBoolean(1, estatus);
+            ResultSet rs = prep.executeQuery();
+            while (rs.next()) { cantidad = rs.getInt(1); }
+            rs.close();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al recuperar CANTIDAD DE LOS REGISTROS DE PROYECTORES getProyectores BOOLEAN videoproyectorDB: " + ex);
+        }
+        return cantidad;
+    }
+    /**
+     * Recupera los registros de los videoproyectores con estatus disponible/no disponible > true false
+     * ID * Nombre * Marca * Modelo * No_serie * Creado
+     * @param estatus
+     * @return 
+     */
+    public String[][] getProyectores(boolean estatus) {
+        String[][] datos = new String[getProyectoresCount(estatus)][6];
+        int i = 0;
+        try {
+            PreparedStatement prep;
+            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO "
+                    + "FROM E_VIDEOPROYECTORES WHERE ID_VIDEOPROYECTOR IN (SELECT ID_VIDEOPROYECTOR FROM EV_ESTATUS WHERE DISPONIBILIDAD = ?)");
+            prep.setBoolean(1, estatus);
+            ResultSet rs = prep.executeQuery();
+            
+            while (rs.next()) {
+                datos[i][0] = rs.getString("ID_VIDEOPROYECTOR");
+                datos[i][1] = rs.getString("NOMBRE");
+                datos[i][2] = rs.getString("MARCA");
+                datos[i][3] = rs.getString("MODELO");
+                datos[i][4] = rs.getString("NO_SERIE");
+                datos[i][5] = rs.getString("CREADO");
+                i++;
+            }
+            rs.close();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al recuperar LOS REGISTROS DE PROYECTORES getProyectores BOOLEAN videoproyectorDB: " + ex);
+        }
+        return datos;
+    }
+    
     /**
      * Permite recuperar el numero de serie con el que escanea un proyetor a
      * partir de su id este debe ser tipo cadena
@@ -422,4 +471,38 @@ public class VideoproyectorDB {
         }
         return datos;
     } 
+    
+    /**
+     * A partir de indicar el id del proyector 
+     * este termina su estado a reparación
+     * @param proye 
+     */
+    public void setReparacionPry(String proye){
+        try{
+            PreparedStatement prep;
+            prep = conn.prepareStatement("UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = ? WHERE ID_VIDEOPROYECTOR = "
+                    + "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE = ?)");
+            prep.setString(1, "MANTENIMIENTO");
+            prep.setBoolean(2, false);
+            prep.setString(3, proye);
+            prep.executeUpdate();
+            prep.close();
+        }catch(SQLException ex){
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
+        }
+    }
+    
+    public void updReparacionPryFree(int proye){
+        try{
+            PreparedStatement prep;
+            prep = conn.prepareStatement("UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = ? WHERE ID_VIDEOPROYECTOR = ?");
+            prep.setString(1, "DISPONIBLE");
+            prep.setBoolean(2, true);
+            prep.setInt(3, proye);
+            prep.executeUpdate();
+            prep.close();
+        }catch(SQLException ex){
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
+        }
+    }
 }

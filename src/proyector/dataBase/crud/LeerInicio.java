@@ -9,6 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import proyector.dataBase.Conexion;
 
@@ -277,5 +281,54 @@ public class LeerInicio {
         } catch (SQLException e) {
             System.out.println("Error al actualizar datos del usuario verifique:" + e);
         }
+    }
+    
+    public void bulkData(String ruta, int tabla){
+        try {
+            PreparedStatement prep;
+            System.out.println("ruta: " + ruta.replace('\\', '/'));
+            String[] tablaNombre = tablaSeleccionada(tabla);
+            String sql = "CALL CSVWRITE('" + ruta.replace('\\', '/').concat("/"+tablaNombre[0]) + "', 'SELECT * FROM " + tablaNombre[1] + "',STRINGDECODE('charset=windows-1252'))";
+            prep = conn.prepareStatement(sql);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar multiples registros a la db Profesores: " + e);
+        }
+    }
+    
+    
+    public String[] tablaSeleccionada(int tabla){
+        String[] tablaNombre = new String[2];
+        Calendar c = Calendar.getInstance();
+        DateFormat fm = new SimpleDateFormat("yyyyMMdd_hhmma", Locale.ENGLISH);
+        switch(tabla){
+            case 1:
+                tablaNombre[0] = "departamentos";
+                tablaNombre[1] = "E_DEPARTAMENTOS";
+            break;
+            case 2:
+                tablaNombre[0] = "profesores";
+                tablaNombre[1] = "E_PROFESORES";
+            break;
+            case 3:
+                tablaNombre[0] = "videoproyectores";
+                tablaNombre[1] = "E_VIDEOPROYECTORES";
+            break;
+            case 4:
+                tablaNombre[0] = "aulas";
+                tablaNombre[1] = "E_AULAS";
+            break;
+            case 5:
+                tablaNombre[0] = "articulos";
+                tablaNombre[1] = "E_ACCESORIOS";
+            break;
+            case 6:
+                tablaNombre[0] = "usuarios";
+                tablaNombre[1] = "E_USUARIOS";
+            break;
+        }
+        tablaNombre[0] = tablaNombre[0].concat(fm.format(c.getTime()) + ".csv");
+        return tablaNombre;
     }
 }
