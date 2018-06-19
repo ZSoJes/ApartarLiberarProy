@@ -68,7 +68,6 @@ public class ARegistro extends javax.swing.JFrame {
         lblFn.setVisible(false);
         panelOPC.setVisible(false);
         jScrollPane2.getVerticalScrollBar().setUnitIncrement(16);
-        txtBuscarTXT.setVisible(false);
         try {
             getTable(3, "", "");
         } catch (SQLException e) {
@@ -376,9 +375,6 @@ public class ARegistro extends javax.swing.JFrame {
         lblIni = new javax.swing.JLabel();
         jdtChooser1 = new com.toedter.calendar.JDateChooser();
         lblFn = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        cbEspecifico = new javax.swing.JComboBox<>();
-        txtBuscarTXT = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
@@ -409,7 +405,6 @@ public class ARegistro extends javax.swing.JFrame {
         dlgReporte.setTitle("[Reportes Generador]");
         dlgReporte.setMinimumSize(new java.awt.Dimension(520, 610));
         dlgReporte.setModal(true);
-        dlgReporte.setPreferredSize(new java.awt.Dimension(520, 610));
 
         pblBkReporte.setBackground(new java.awt.Color(255, 193, 7));
         pblBkReporte.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
@@ -951,7 +946,7 @@ public class ARegistro extends javax.swing.JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 1010, 320));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1010, 360));
 
         jMiLabel.setText("jMiLabel");
         jMiLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -974,30 +969,11 @@ public class ARegistro extends javax.swing.JFrame {
         lblFn.setText("Fin:");
         jPanel1.add(lblFn, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 14, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel5.setText("Buscar especificamente con:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
-
-        cbEspecifico.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        cbEspecifico.setMaximumRowCount(6);
-        cbEspecifico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ninguno", "Nombre del usuario que entrego", "Nombre del usuario que recibio", "Nombre de VideoProyector", "ID del Profesor", "Aula" }));
-        cbEspecifico.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbEspecificoItemStateChanged(evt);
-            }
-        });
-        jPanel1.add(cbEspecifico, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 46, 230, -1));
-
-        txtBuscarTXT.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtBuscarTXT.setMinimumSize(new java.awt.Dimension(300, 25));
-        txtBuscarTXT.setPreferredSize(new java.awt.Dimension(300, 25));
-        jPanel1.add(txtBuscarTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(465, 47, -1, -1));
-
         jScrollPane2.setViewportView(jPanel1);
 
         pnlBackground.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, -1, 430));
 
-        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Reportes");
         jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
@@ -1194,16 +1170,6 @@ public class ARegistro extends javax.swing.JFrame {
         dlgReporte.dispose();
     }//GEN-LAST:event_btnGenerarRRActionPerformed
 
-    private void cbEspecificoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEspecificoItemStateChanged
-        int indice = cbEspecifico.getSelectedIndex();
-        if(indice > 0){
-            txtBuscarTXT.setVisible(true);
-        }else{
-            txtBuscarTXT.setVisible(false);
-            txtBuscarTXT.setText("");
-        }
-    }//GEN-LAST:event_cbEspecificoItemStateChanged
-
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
         //inicializar
         pnlFechasFiltro.setVisible(false);
@@ -1321,7 +1287,6 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGroupFecha;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> cbEspecifico;
     private javax.swing.JRadioButton dRb1;
     private javax.swing.JRadioButton dRb2;
     private javax.swing.JRadioButton dRb3;
@@ -1344,7 +1309,6 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1379,6 +1343,5 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton rb4;
     private javax.swing.JRadioButton rb5;
     private javax.swing.JRadioButton rb6;
-    private javax.swing.JTextField txtBuscarTXT;
     // End of variables declaration//GEN-END:variables
 }

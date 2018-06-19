@@ -264,7 +264,7 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:columnGroup width="362" uuid="107137d5-91d5-475b-8677-d0e205f99f7d">
+					<jr:columnGroup width="436" uuid="107137d5-91d5-475b-8677-d0e205f99f7d">
 						<jr:column width="90" uuid="9a7195c0-a29c-46d4-a5cb-2cc0a69a4833">
 							<jr:columnHeader style="border" height="23" rowSpan="1">
 								<staticText>
@@ -297,17 +297,17 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="182" uuid="7ce00d27-fa74-485f-9016-c5ad411d2713">
+						<jr:column width="256" uuid="7ce00d27-fa74-485f-9016-c5ad411d2713">
 							<jr:columnHeader style="border" height="23" rowSpan="1">
 								<staticText>
-									<reportElement mode="Opaque" x="0" y="0" width="182" height="23" backcolor="#CFDBE6" uuid="22ccb88e-6fe0-4b3c-908d-f6a9aa42245c"/>
+									<reportElement mode="Opaque" x="0" y="0" width="256" height="23" backcolor="#CFDBE6" uuid="22ccb88e-6fe0-4b3c-908d-f6a9aa42245c"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<text><![CDATA[PROFESOR]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="border" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="182" height="18" uuid="689fce04-9a90-4365-85ce-cafa15963867"/>
+									<reportElement x="0" y="0" width="256" height="18" uuid="689fce04-9a90-4365-85ce-cafa15963867"/>
 									<textElement verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[" "+$F{PROFESOR}]]></textFieldExpression>
 								</textField>

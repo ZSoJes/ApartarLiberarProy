@@ -201,10 +201,10 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:columnGroup width="443" uuid="e7f992aa-7430-4502-bd64-ac8e8dd16fa7">
+					<jr:columnGroup width="449" uuid="e7f992aa-7430-4502-bd64-ac8e8dd16fa7">
 						<jr:columnFooter height="15" rowSpan="1">
 							<componentElement>
-								<reportElement key="table 1" x="0" y="0" width="443" height="15" uuid="3c1d093c-2262-404b-a962-222384603af0"/>
+								<reportElement key="table 1" x="0" y="0" width="449" height="15" uuid="3c1d093c-2262-404b-a962-222384603af0"/>
 								<jr:table>
 									<datasetRun subDataset="ProfSolicitaProyCont" uuid="18bb50e5-c47a-40e6-9f3d-e0458a063a80">
 										<datasetParameter name="idDepto">
@@ -229,55 +229,49 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 								</jr:table>
 							</componentElement>
 						</jr:columnFooter>
-						<jr:column width="90" uuid="de8842e2-928f-47d5-b2ed-3f8c392cabcf">
+						<jr:column width="85" uuid="de8842e2-928f-47d5-b2ed-3f8c392cabcf">
 							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="90" height="23" uuid="0538bfde-8dee-4bdb-b179-382ee2b38de5"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12"/>
-									</textElement>
+									<reportElement x="0" y="0" width="85" height="23" uuid="0538bfde-8dee-4bdb-b179-382ee2b38de5"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<text><![CDATA[SALIDA]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="90" height="18" uuid="6ec7759c-1c57-48d0-a4a2-ae53dab0ea9a"/>
+									<reportElement x="0" y="0" width="85" height="18" uuid="6ec7759c-1c57-48d0-a4a2-ae53dab0ea9a"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{SALIDA}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="90" uuid="6bdad65f-e5e2-489a-bb5a-cf2b7a23ff17">
+						<jr:column width="86" uuid="6bdad65f-e5e2-489a-bb5a-cf2b7a23ff17">
 							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="90" height="23" uuid="3c3f6955-60b3-4d0f-b609-c6fd28527e1a"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12"/>
-									</textElement>
+									<reportElement x="0" y="0" width="86" height="23" uuid="3c3f6955-60b3-4d0f-b609-c6fd28527e1a"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<text><![CDATA[REGRESO]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="90" height="18" uuid="b3238f50-1ce9-472e-ba22-9d8349b656dc"/>
+									<reportElement x="0" y="0" width="86" height="18" uuid="b3238f50-1ce9-472e-ba22-9d8349b656dc"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{REGRESO}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="152" uuid="4d21d7f2-746a-4b61-a302-1e77d3ec0131">
+						<jr:column width="167" uuid="4d21d7f2-746a-4b61-a302-1e77d3ec0131">
 							<jr:columnHeader style="table_CH" height="23" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="152" height="23" uuid="6ad94f87-0a3a-4f7a-8738-c27ad0726730"/>
-									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font size="12"/>
-									</textElement>
+									<reportElement x="0" y="0" width="167" height="23" uuid="6ad94f87-0a3a-4f7a-8738-c27ad0726730"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<text><![CDATA[PROFESOR]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table_TD" height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="152" height="18" uuid="2a0fbc44-6ac4-425c-8a72-eb54825ca9f8"/>
+									<reportElement x="0" y="0" width="167" height="18" uuid="2a0fbc44-6ac4-425c-8a72-eb54825ca9f8"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{PROFESOR}]]></textFieldExpression>
 								</textField>
