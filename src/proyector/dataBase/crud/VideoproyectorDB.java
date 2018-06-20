@@ -505,4 +505,19 @@ public class VideoproyectorDB {
             System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
         }
     }
+    
+    public void reportePry(int proye, String titulo, String folio, String detalles){
+        try{
+            PreparedStatement prep;
+            prep = conn.prepareStatement("INSERT INTO E_REP_VIDEOPROYECTORES(ID_VIDEOPROYECTOR, TITULO, FOLIO, DETALLES) VALUES(?, ?, ?, ?)");
+            prep.setInt(1, proye);
+            prep.setString(2, titulo);
+            prep.setString(3, folio);
+            prep.setString(4, detalles);
+            prep.executeUpdate();
+            prep.close();
+        }catch(SQLException ex){
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
+        }
+    }
 }

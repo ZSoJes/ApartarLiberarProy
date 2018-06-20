@@ -159,7 +159,7 @@ public final class Inicio extends javax.swing.JFrame {
         lblIcoInstruccion = new javax.swing.JLabel();
         lblRegistrarse = new javax.swing.JLabel();
         lblTexto = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        recuperaPass = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
 
         dialogUsuario.setLocation(new java.awt.Point(0, 0));
@@ -986,25 +986,25 @@ public final class Inicio extends javax.swing.JFrame {
         frameBackground.add(lblTexto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, -1, -1));
         lblTexto.getAccessibleContext().setAccessibleName("Iniciar Sesion");
 
-        jPanel1.setBackground(new java.awt.Color(18, 182, 18));
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        recuperaPass.setBackground(new java.awt.Color(18, 182, 18));
+        recuperaPass.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel1MouseClicked(evt);
+                recuperaPassMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout recuperaPassLayout = new javax.swing.GroupLayout(recuperaPass);
+        recuperaPass.setLayout(recuperaPassLayout);
+        recuperaPassLayout.setHorizontalGroup(
+            recuperaPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        recuperaPassLayout.setVerticalGroup(
+            recuperaPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 20, Short.MAX_VALUE)
         );
 
-        frameBackground.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 500, 20, 20));
+        frameBackground.add(recuperaPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 500, 20, 20));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/question-28.png"))); // NOI18N
         jLabel5.setToolTipText("da clic sobre mi");
@@ -1212,7 +1212,7 @@ public final class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jPassConfirmKeyTyped
 
-    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+    private void recuperaPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recuperaPassMouseClicked
         if (evt.getClickCount() == 3) {
             String usuario = txtUsuario.getText().trim();
             try{
@@ -1230,7 +1230,7 @@ public final class Inicio extends javax.swing.JFrame {
                     System.out.println("Error usuario recuperar pass: " + ex);
             }
         }    
-    }//GEN-LAST:event_jPanel1MouseClicked
+    }//GEN-LAST:event_recuperaPassMouseClicked
 
     private void jPasswordField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField2KeyTyped
         char c = evt.getKeyChar();
@@ -1496,7 +1496,6 @@ public final class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1523,6 +1522,7 @@ public final class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel pnlCabeceraVentana;
     private javax.swing.JPanel pnlUsuario;
     private javax.swing.JDialog recovery;
+    private javax.swing.JPanel recuperaPass;
     private javax.swing.JTextField txtAMat;
     private javax.swing.JTextField txtAPat;
     private javax.swing.JTextField txtAcceso;

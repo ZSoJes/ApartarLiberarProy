@@ -1157,12 +1157,15 @@ public class ARegistro extends javax.swing.JFrame {
                 gr.getRRTods(fch,1);
                 gr.getRRTods(fch,2);
                 gr.getRRTods(fch,3);
+                gr.getRRTods(fch,4);
             }else if(dRb3.isSelected()){ //videoproyector
                 gr.getRRTods(fch,1);
             }else if(dRb2.isSelected()){ //profesores
                 gr.getRRTods(fch,2);
             }else if(dRb1.isSelected()){ //departamentos
                 gr.getRRTods(fch,3);
+            }else if(dRb4.isSelected()){ //departamentos
+                gr.getRRTods(fch,4);
             }
         }
         

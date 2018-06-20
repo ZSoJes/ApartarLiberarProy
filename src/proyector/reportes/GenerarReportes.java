@@ -166,6 +166,9 @@ public class GenerarReportes {
                     case 3:
                         ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteDep" + File.separator + "DepPrestamos.jasper";
                     break;
+                    case 4:
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reporteAccesoriosYPry.jasper";
+                    break;
                 }
                 
                 InputStream f = new FileInputStream(ruta);

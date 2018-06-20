@@ -63,6 +63,8 @@ public class ADevolucion extends javax.swing.JFrame {
         //ocultar info desde jcrollpane
         lblHiden.setVisible(false);
         txtProyNSerie.setTransferHandler(null);
+        txtTitulo.setTransferHandler(null);
+        txtDesc.setTransferHandler(null);
         dibujarDevoluciones();
         cargarComboProy();
         combPnl.setVisible(false);
@@ -515,6 +517,11 @@ public class ADevolucion extends javax.swing.JFrame {
         jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
 
         txtTitulo.setPreferredSize(new java.awt.Dimension(280, 30));
+        txtTitulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTituloKeyTyped(evt);
+            }
+        });
         jPanel2.add(txtTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 390, 30));
 
         txtProf.setEditable(false);
@@ -527,6 +534,11 @@ public class ADevolucion extends javax.swing.JFrame {
         txtDesc.setLineWrap(true);
         txtDesc.setRows(5);
         txtDesc.setWrapStyleWord(true);
+        txtDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescKeyTyped(evt);
+            }
+        });
         jScrollPane3.setViewportView(txtDesc);
 
         jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 390, 110));
@@ -1294,6 +1306,18 @@ public class ADevolucion extends javax.swing.JFrame {
             System.out.println("Profe: " + profe + "\nDescCorta: " + titulo + "\nDetalles: " + detalles + "\nArticulos: " + Arrays.toString(acc)+ "\nFecha: " + fecha);
             
             JOptionPane.showMessageDialog(this, "Reporte Realizado!\nSe descartaran del inventario los artículos que ha indicado","Información", JOptionPane.INFORMATION_MESSAGE);
+            try{
+            AccesorioDB accDB = new AccesorioDB();
+            int[] accesorioID = new int[acc.length];
+            int j = 0;
+            for(String ac : acc){
+                accesorioID[j] = accDB.getAccesorioID(ac);
+                j++;
+            }
+            accDB.reporteAcc(profe, titulo, detalles, accesorioID);
+            
+            }catch(SQLException ex){ System.out.println("Error de tabla accesorio como reporte: " + ex); }
+                    
             
             dlgReporte.setVisible(false);
             dlgReporte.dispose();
@@ -1306,6 +1330,18 @@ public class ADevolucion extends javax.swing.JFrame {
         txtTitulo.setText("");
         txtDesc.setText("");
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtTituloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTituloKeyTyped
+        if (txtTitulo.getText().length() >= 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTituloKeyTyped
+
+    private void txtDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescKeyTyped
+        if (txtDesc.getText().length() >= 600) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDescKeyTyped
 
     public void miPanel(String[] datos) throws SQLException{
         JPanel pnlVidDetalles = new JPanel();

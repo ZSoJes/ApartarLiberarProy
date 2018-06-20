@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteAccesoriosYPry_Acc" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="09f6ef89-b99b-432a-abe4-9bf4bfa5a096">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="bkBorder" mode="Opaque" backcolor="#CCCCFF">
+		<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1">
+			<topPen lineWidth="0.75"/>
+			<leftPen lineWidth="0.75"/>
+			<bottomPen lineWidth="0.75"/>
+			<rightPen lineWidth="0.75"/>
+		</box>
+	</style>
+	<style name="border">
+		<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1">
+			<topPen lineWidth="0.75"/>
+			<leftPen lineWidth="0.75"/>
+			<bottomPen lineWidth="0.75"/>
+			<rightPen lineWidth="0.75"/>
+		</box>
+	</style>
+	<parameter name="date1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 
+    ID_REPORTE_ACCESORIO,
+    (SELECT CONCAT(NOMBRE, ' ', A_PATERNO, ' ', A_MATERNO) FROM E_PROFESORES WHERE E_REP_ACCESORIOS.ID_PROFESOR = E_PROFESORES.ID_PROFESOR) AS PROFESOR,
+    TITULO,
+    DETALLES,
+    CREADO
+from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
+	</queryString>
+	<field name="ID_REPORTE_ACCESORIO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PROFESOR" class="java.lang.String"/>
+	<field name="TITULO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DETALLES" class="java.sql.Clob">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CREADO" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="24" uuid="a9715d70-5276-4388-ac65-ba50dd061b59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reportes de Accesorios]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="235" splitType="Stretch">
+			<staticText>
+				<reportElement style="bkBorder" x="17" y="2" width="100" height="20" uuid="4d1ce7a6-822a-488d-b2c3-2deddbfdc917"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[PROFESOR]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="border" x="117" y="2" width="408" height="20" uuid="e2ae6e01-1975-4b3a-84c4-82357f577ac0"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PROFESOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="bkBorder" x="17" y="22" width="100" height="20" uuid="60a46031-f408-49ce-b355-1fd42b833de1"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[TITULO]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="border" x="117" y="22" width="408" height="20" uuid="59926658-5211-46e8-ba7b-71581f51fc54"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TITULO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="bkBorder" x="17" y="42" width="100" height="20" uuid="8aab61d1-9667-43e9-8953-ddb0c1c5ba8b"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[DETALLES]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="border" x="17" y="62" width="508" height="150" uuid="0eea8135-2efd-47b3-a855-252c2910bb12"/>
+				<textFieldExpression><![CDATA[""+$F{DETALLES}.getSubString( 1l, ( new Long( $F{DETALLES}.length() ) ).intValue() )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

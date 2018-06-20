@@ -328,15 +328,63 @@ public class AccesorioDB {
         return misAcc;
     }
     
-    public void destroyAcc(String id) {
+    public void destroyAcc(int id) {
         try {
             PreparedStatement prep;
             prep = conn.prepareStatement("DELETE FROM E_ACCESORIOS WHERE ID_ACCESORIO = ?");
-            prep.setString(1, id);
+            prep.setInt(1, id);
             prep.executeUpdate();
             prep.close();
         } catch (SQLException ex) {
             System.out.println("Error al borrar proyector destroyVideoproy VideoproyectorDB: " + ex);
+        }
+    }
+    
+    public void reporteAcc(String profe, String titulo, String detalles, int[] acc){
+        try{
+            PreparedStatement prep;
+            prep = conn.prepareStatement("INSERT INTO E_REP_ACCESORIOS(ID_PROFESOR, TITULO, DETALLES) VALUES(?, ?, ?)");
+            prep.setString(1, profe);
+            prep.setString(2, titulo);
+            prep.setString(3, detalles);
+            prep.executeUpdate();
+            prep.close();
+        }catch(SQLException ex){
+            System.out.println("\nError al REPORTAR reporteACC AccesorioDB:" + ex + "\n\n");
+        }
+        int id = 0;
+        try{
+            PreparedStatement prep;
+            prep = conn.prepareStatement("SELECT ID_REPORTE_ACCESORIO FROM E_REP_ACCESORIOS ORDER BY ID_REPORTE_ACCESORIO DESC LIMIT 1");
+            ResultSet rs = prep.executeQuery();
+            while(rs.next()){
+                id = rs.getInt(1);
+            }
+            prep.close();
+            rs.close();
+        }catch(SQLException ex){
+            System.out.println("\nError al REPORTAR reporteACC AccesorioDB:" + ex + "\n\n");
+        }
+        for(int ac : acc){
+            try{
+                PreparedStatement prep;
+                prep = conn.prepareStatement("INSERT INTO EREPA_ACCESORIOS(ID_ACCESORIO, ID_REPORTE_ACCESORIO) VALUES(?, ?)");
+                prep.setInt(1, ac);//accesorios
+                prep.setInt(2, id);
+                prep.executeUpdate();
+                prep.close();
+            }catch(SQLException ex){
+                System.out.println("\nError al REPORTAR reporteACC AccesorioDB:" + ex + "\n\n");
+            }
+            try{
+                PreparedStatement prep;
+                prep = conn.prepareStatement("UPDATE E_ACCESORIOS SET EXISTENCIAS=EXISTENCIAS-1,DISPONIBLE=DISPONIBLE-1 WHERE ID_ACCESORIO = ?");
+                prep.setInt(1, ac);//accesorios
+                prep.executeUpdate();
+                prep.close();
+            }catch(SQLException ex){
+                System.out.println("\nError al REPORTAR reporteACC AccesorioDB:" + ex + "\n\n");
+            }
         }
     }
 }

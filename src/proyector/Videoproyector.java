@@ -74,6 +74,10 @@ public final class Videoproyector extends javax.swing.JFrame {
         hidenData2.setVisible(false);
 
         //block ctrl c v
+        txtInforme.setTransferHandler(null);
+        txtFolio.setTransferHandler(null);
+        txtTitulo.setTransferHandler(null);
+        
         txtNom1.setTransferHandler(null);
         txtMarc1.setTransferHandler(null);
         txtMod1.setTransferHandler(null);
@@ -1204,6 +1208,11 @@ public final class Videoproyector extends javax.swing.JFrame {
         txtInforme.setLineWrap(true);
         txtInforme.setRows(5);
         txtInforme.setWrapStyleWord(true);
+        txtInforme.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtInformeKeyTyped(evt);
+            }
+        });
         jScrollPane9.setViewportView(txtInforme);
 
         jLabel36.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
@@ -1229,12 +1238,22 @@ public final class Videoproyector extends javax.swing.JFrame {
                 txtFolioActionPerformed(evt);
             }
         });
+        txtFolio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFolioKeyTyped(evt);
+            }
+        });
 
         jLabel42.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
         jLabel42.setForeground(new java.awt.Color(255, 255, 255));
         jLabel42.setText("Descripción corta de la falla:");
 
         txtTitulo.setEditable(false);
+        txtTitulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTituloKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -2976,7 +2995,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         if(opc == JOptionPane.OK_OPTION){
             try {
                 AccesorioDB acc = new AccesorioDB();
-                acc.destroyAcc(hiddenLabelArt.getText().trim());
+                acc.destroyAcc(Integer.parseInt(hiddenLabelArt.getText().trim()));
                 jTabbedPane1.setSelectedIndex(1);
                 JOptionPane.showMessageDialog(null, "Elemento eliminado!!! ya no existiran registros");
             } catch (SQLException e) {
@@ -3113,6 +3132,9 @@ public final class Videoproyector extends javax.swing.JFrame {
                 try {
                     VideoproyectorDB pry = new VideoproyectorDB();
                     pry.setReparacionPry(hiddenNSerie.getText());
+                    
+                    pry.reportePry(Integer.parseInt(pry.getProyectorID(hiddenNSerie.getText())), titulo, folio, informe);
+                    
                     dibujarProye();
                     fallosReporte.setVisible(false);
                     fallosReporte.dispose();
@@ -3197,6 +3219,24 @@ public final class Videoproyector extends javax.swing.JFrame {
             btnComprobar.doClick();
         }
     }//GEN-LAST:event_txtPassKeyTyped
+
+    private void txtTituloKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTituloKeyTyped
+        if (txtTitulo.getText().length() >= 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTituloKeyTyped
+
+    private void txtInformeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInformeKeyTyped
+        if (txtInforme.getText().length() >= 600) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtInformeKeyTyped
+
+    private void txtFolioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFolioKeyTyped
+        if (txtFolio.getText().length() >= 20) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtFolioKeyTyped
 
     public int[] formatFecha(String date) {
         int[] res = new int[5];
