@@ -240,7 +240,6 @@ public class Profesor extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtBusqueda = new javax.swing.JTextField();
-        btnAddCSV = new javax.swing.JButton();
 
         dlgNuevo.setMinimumSize(new java.awt.Dimension(700, 370));
         dlgNuevo.setModal(true);
@@ -1146,6 +1145,11 @@ public class Profesor extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTitulo.setText("Profesores");
+        lblTitulo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTituloMouseClicked(evt);
+            }
+        });
         pnlBkProfesor.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 109, -1, -1));
 
         pnlBtnNuevo.setBackground(new java.awt.Color(239, 239, 239));
@@ -1372,14 +1376,6 @@ public class Profesor extends javax.swing.JFrame {
         );
 
         pnlBkProfesor.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
-
-        btnAddCSV.setText("<html>Agregar<br>Muchos<br>Muchisimos<br>profesores</html>");
-        btnAddCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddCSVActionPerformed(evt);
-            }
-        });
-        pnlBkProfesor.add(btnAddCSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1876,8 +1872,8 @@ public class Profesor extends javax.swing.JFrame {
         jTable1.setRowSorter(trsFiltro);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btnAddCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCSVActionPerformed
-        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
+    private void lblTituloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTituloMouseClicked
+                int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
                                                           + "\n-Los datos deben ser separados por coma(,)"
                                                           + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
                                                           + "\n-La informacion debe tener el siguiente orden"
@@ -1907,7 +1903,7 @@ public class Profesor extends javax.swing.JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_btnAddCSVActionPerformed
+    }//GEN-LAST:event_lblTituloMouseClicked
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -1960,7 +1956,6 @@ public class Profesor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnAddCSV;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBusqueda;
     private javax.swing.JButton btnCerrar;

@@ -149,7 +149,7 @@ public class Menu extends javax.swing.JFrame {
         try {
             DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
 
-            String[] cols = {jTable2.getColumnName(0), jTable2.getColumnName(1), jTable2.getColumnName(2), jTable2.getColumnName(3), jTable2.getColumnName(4), jTable2.getColumnName(5), jTable2.getColumnName(6), jTable2.getColumnName(7)};
+            String[] cols = {jTable2.getColumnName(0), jTable2.getColumnName(1), jTable2.getColumnName(2), jTable2.getColumnName(3), jTable2.getColumnName(4), jTable2.getColumnName(5), jTable2.getColumnName(6)};
 
             PrestamoDB prestamos = new PrestamoDB();
             int count = prestamos.getCantPrestamosUsuario(usuario, presActivInact);
@@ -158,34 +158,34 @@ public class Menu extends javax.swing.JFrame {
 
             for (int i = 0; i < count; i++) {
                 for (int j = 0; j < 8; j++) {
+//                    if (j == 0) {
+//                        dataTabla[i][j] = usuario;
+//                    }
                     if (j == 0) {
-                        dataTabla[i][j] = usuario;
-                    }
-                    if (j == 1) {
                         LeerInicio leer = new LeerInicio();
                         String[] arrUsu = leer.getUsuario(usuario);
                         dataTabla[i][j] = arrUsu[1] + " " + arrUsu[2] + " " + arrUsu[3];
                     }
-                    if (j == 2) {
+                    if (j == 1) {
                         VideoproyectorDB vidProy = new VideoproyectorDB();
                         dataTabla[i][j] = vidProy.getProyector(vidProy.getProyectorNoSerie(dataDB[i][3]))[1];
                     }
-                    if (j == 3) {
+                    if (j == 2) {
                         ProfesorDB profe = new ProfesorDB();
                         String[] arrProfe = profe.getProfesor(dataDB[i][4]);
                         dataTabla[i][j] = arrProfe[2] + " " + arrProfe[3] + " " + arrProfe[4];
                     }
-                    if (j == 4) {
+                    if (j == 3) {
                         dataTabla[i][j] = new AulaDB().getAula(Integer.parseInt(dataDB[i][5]));
                     }
-                    if (j == 5) {
+                    if (j == 4) {
                         dataTabla[i][j] = dataDB[i][6].substring(0, 10);
                     }
-                    if (j == 6) {
+                    if (j == 5) {
                         dataTabla[i][j] = dataDB[i][6].substring(11, 16);
                     }
-                    if (j == 7) {
-                        dataTabla[i][j] = ((dataDB[i][1].equals(dataDB[i][2])) ? "ambos" : ((dataDB[i][1].equals(usuario)) ? "PRESTO" : "RECIBIÓ"));
+                    if (j == 6) {
+                        dataTabla[i][j] = ((dataDB[i][1].equals(dataDB[i][2])) ? "AMBOS" : ((dataDB[i][1].equals(usuario)) ? "PRESTO" : "RECIBIÓ"));
                     }
                 }
             }
@@ -319,6 +319,8 @@ public class Menu extends javax.swing.JFrame {
         jLabel39 = new javax.swing.JLabel();
         cb6 = new javax.swing.JCheckBox();
         jLabel38 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         contacto = new javax.swing.JDialog();
@@ -410,7 +412,6 @@ public class Menu extends javax.swing.JFrame {
         pnlMiUsuario.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 550, -1, -1));
 
         jLayeredPane3.setMinimumSize(new java.awt.Dimension(910, 440));
-        jLayeredPane3.setPreferredSize(new java.awt.Dimension(910, 440));
         jLayeredPane3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlUsrVerif1.setBackground(new java.awt.Color(255, 167, 38));
@@ -1314,14 +1315,14 @@ public class Menu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID_USUARIO", "USUARIO_NOM", "VIDEOPROYECTOR", "PROFESOR", "AULA", "FECHA_DE_PRESTAMO", "HORA", "PRESTO / RECIBIÓ"
+                "USUARIO_NOM", "VIDEOPROYECTOR", "PROFESOR", "AULA", "FECHA", "HORA", "PRESTO / RECIBIÓ"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1332,6 +1333,7 @@ public class Menu extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable2.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable2);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(820, 300));
@@ -1527,7 +1529,6 @@ public class Menu extends javax.swing.JFrame {
         pnlBackup.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 20, -1, -1));
 
         jLayeredPane1.setMinimumSize(new java.awt.Dimension(910, 440));
-        jLayeredPane1.setPreferredSize(new java.awt.Dimension(910, 440));
         jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlUsrVerif3.setBackground(new java.awt.Color(92, 107, 192));
@@ -1638,13 +1639,13 @@ public class Menu extends javax.swing.JFrame {
         cb5.setOpaque(false);
         pnlMenuBK.add(cb5, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 116, -1, -1));
 
-        jButton5.setText("Generar Respaldo");
+        jButton5.setText("Generar Respaldo CSV");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
-        pnlMenuBK.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 157, -1, -1));
+        pnlMenuBK.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, -1, -1));
 
         jLabel39.setForeground(new java.awt.Color(255, 255, 255));
         jLabel39.setText("Los archivos seran generados en la ubicacion indicada al presionar el boton");
@@ -1656,10 +1657,13 @@ public class Menu extends javax.swing.JFrame {
         pnlMenuBK.add(cb6, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 116, -1, -1));
 
         jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/files-90.png"))); // NOI18N
-        jLabel38.setMaximumSize(new java.awt.Dimension(90, 90));
-        jLabel38.setMinimumSize(new java.awt.Dimension(90, 90));
-        jLabel38.setPreferredSize(new java.awt.Dimension(90, 90));
         pnlMenuBK.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 90, 90));
+
+        jButton6.setText("Respaldo DB Completo");
+        pnlMenuBK.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+
+        jButton7.setText("Recuperar DB Completo");
+        pnlMenuBK.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, -1, -1));
 
         jLayeredPane1.add(pnlMenuBK, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 550, 250));
 
@@ -3100,6 +3104,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
