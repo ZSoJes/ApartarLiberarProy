@@ -21,8 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.Conexion;
-import proyector.dataBase.crud.CrearInicio;
-import proyector.dataBase.crud.LeerInicio;
+import proyector.dataBase.crud.UsuarioCreateDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.reportes.GenerarReportes;
 
 /**
@@ -67,7 +67,7 @@ public final class Inicio extends javax.swing.JFrame {
      */
     public void lanzarRegistro() {
         try {
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             if (leer.getUsuariosAdmin()) {
                 lblRegistrarse.setVisible(false);
             } else {
@@ -1071,7 +1071,7 @@ public final class Inicio extends javax.swing.JFrame {
                 //revisar los cuadros de texto no esten en blanco
                 if (!nom.isEmpty() && !(apat.length() < 2) && !amat.isEmpty()) {
                     try {
-                        CrearInicio crear = new CrearInicio();
+                        UsuarioCreateDB crear = new UsuarioCreateDB();
                         String hashed = BCrypt.hashpw(String.valueOf(pass).trim(), BCrypt.gensalt(12));  //cifrado
                         String datos[] = {nom, apat, amat, hashed};      // asigna para el metodo setUsuario
                         //revisar si el checkbox fue seleccionado
@@ -1216,7 +1216,7 @@ public final class Inicio extends javax.swing.JFrame {
         if (evt.getClickCount() == 3) {
             String usuario = txtUsuario.getText().trim();
             try{
-                LeerInicio leer = new LeerInicio();    
+                UsuarioReadDB leer = new UsuarioReadDB();    
                 System.out.println("es admin:" + leer.getEsAdminUsuario(usuario));
                 String[] usr = leer.getUsuario(usuario);
                 if(usr[0] != null && leer.getEsAdminUsuario(usuario)){
@@ -1262,7 +1262,7 @@ public final class Inicio extends javax.swing.JFrame {
                     String usuario = txtUsuario.getText().trim();
                     String hashed = BCrypt.hashpw(String.valueOf(pass2).trim(), BCrypt.gensalt(12)); //cifrado
                     try {
-                        LeerInicio leer = new LeerInicio();
+                        UsuarioReadDB leer = new UsuarioReadDB();
                         leer.updUsuarioPass(usuario, hashed);
                         JOptionPane.showMessageDialog(null, "La contraseña se ha actualizado!!!", "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE);
                         recovery.setVisible(false);
@@ -1378,7 +1378,7 @@ public final class Inicio extends javax.swing.JFrame {
     public void darAcceso(){
         String usuario = txtUsuario.getText().trim();
         try {
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             try {
                 if (leer.getExisteUsuario(usuario)) {
                     String hashed = leer.getPass(usuario);

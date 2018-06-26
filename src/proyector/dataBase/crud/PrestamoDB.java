@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package proyector.dataBase.crud;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import proyector.dataBase.Conexion;
 
@@ -662,6 +657,99 @@ public class PrestamoDB {
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error generando total, semestre, mes en tabla EV_HORASSERVICIO setProyectorServicio PrestamoDB: " + e);
+        }
+    }
+    
+    
+    public String[][] getReportejTable(){
+        int rowSize = 0;
+        String[][] miArr = null;
+        try {
+            PreparedStatement prep;
+            String sql ="SELECT " +
+                        "ID_REPORTE_VIDEOPROYECTOR, " +
+                        "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_REP_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR ) AS VIDEOPROYECTOR, " +
+                        "TITULO, " +
+                        "IMPREVISTO, " +
+                        "TO_CHAR(CREADO, 'dd/MM/yyyy HH:MI AM') as CREADO " +
+                        "FROM E_REP_VIDEOPROYECTORES " +
+                        "ORDER BY CREADO DESC";
+            prep = conn.prepareStatement(sql,
+                ResultSet.TYPE_SCROLL_INSENSITIVE, 
+                ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = prep.executeQuery();
+            
+            try {
+                rs.last();
+                rowSize = rs.getRow();
+                rs.beforeFirst();
+            } catch (SQLException e) {
+                System.out.println("Error al intentar obtener cuantos registros se encuentran:" + e);
+            }
+            miArr = new String[rowSize][5];
+            int i = 0;
+            while (rs.next() && (i < rowSize)){
+                for(int j = 0; j < 5; j++){
+                    miArr[i][j] = rs.getString(j+1);
+                    if(j == 3){
+                        miArr[i][j] = (miArr[i][j]==null?"":(miArr[i][j].equals("a")?"Reparación":(miArr[i][j].equals("b")?"Mantenimiento":(miArr[i][j].equals("c")?"en Garantía":"De baja"))));
+                    }
+                }
+                System.out.println("Array: " + Arrays.toString(miArr[i]));
+                i++;
+            }
+            prep.close();
+            rs.close();
+            
+        } catch (SQLException e) {
+            System.out.println("Error al crear arreglo de datos de reportes videoproyector: " +e);
+        }
+        return miArr;
+    }
+    
+    public String[] getReporte(int id){
+        String[] miArr = new String[10];
+        try {
+            PreparedStatement prep;
+            String sql ="SELECT * " +
+                        "FROM E_REP_VIDEOPROYECTORES " +
+                        "WHERE ID_REPORTE_VIDEOPROYECTOR = ?";
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, id);
+            ResultSet rs = prep.executeQuery();
+            while (rs.next()){
+                for (int i = 0; i < 10; i++) {
+                    miArr[i] = rs.getString(i+1);
+                }
+            }
+            prep.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error al crear arreglo de datos de reportes videoproyector getReporte: " +e);
+        }
+        return miArr;
+    }
+    
+    public void updReporte(int id, String[] datos){
+        try {
+            PreparedStatement prep;
+            String sql ="UPDATE E_REP_VIDEOPROYECTORES " +
+                        "SET TITULO = ?, " +
+                        "NOMBRE_ENCARGADO = ?, " +
+                        "AREA = ?, " +
+                        "DEPTO_REPARADOR = ?, " +
+                        "IMPREVISTO = ?, " +
+                        "DETALLES = ? " +
+                        "WHERE ID_REPORTE_VIDEOPROYECTOR = ?";
+            prep = conn.prepareStatement(sql);
+            for (int i = 0; i < datos.length; i++) {
+                prep.setString(i+1, datos[i]);
+            }
+            prep.setInt(7, id);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar datos de reportes videoproyector updReporte: " +e);
         }
     }
 }

@@ -29,7 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import proyector.dataBase.Conexion;
-
+import javax.swing.JDialog;
 /**
  *
  * @author Juan
@@ -58,7 +58,8 @@ public class GenerarReportes {
             jv.setTitle("Credencial Usuario");
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
-
+            jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            jv.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
             //generar archivo en vista
             int opc = JOptionPane.showConfirmDialog(jv, "Guardar la credencial?", "Informacíón", JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
             if (opc == JOptionPane.OK_OPTION) {
@@ -121,6 +122,8 @@ public class GenerarReportes {
             jv.setTitle("Codigos de barra para Videoproyectores");
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+            jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            jv.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         } catch (JRException | SQLException e) {
             System.out.println("Error al generar los codigos de barra: " + e);
         }
@@ -145,12 +148,14 @@ public class GenerarReportes {
             jv.setTitle("Gafetes para Videoproyectores");
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+            jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            jv.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         } catch (JRException | SQLException e) {
             System.out.println("Error al generar los codigos de barra: " + e);
         }
     }
     
-    public void getRRTods(String[] date, int opc) {
+    public void getRRTods(String[] date, int opc, int dateOPC) {
         try {
             Conexion conn = new Conexion();
             JasperReport report = null;
@@ -181,6 +186,7 @@ public class GenerarReportes {
             Map parameter = new HashMap();
             parameter.put("date1",date[0]);
             parameter.put("date2",date[1]);
+            parameter.put("opc",dateOPC);
             
             JasperPrint j = JasperFillManager.fillReport(report, parameter, conn.getConexion());
 
@@ -188,6 +194,8 @@ public class GenerarReportes {
             jv.setTitle("Reporte Videoproyectores");
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+            jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            jv.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         } catch (JRException | SQLException e) {
             System.out.println("Error al generar reporte TODO: " + e);
         }
@@ -211,19 +219,19 @@ public class GenerarReportes {
             }
             
             Map parameter = new HashMap();
-            parameter.put("area",datos[0]);
-            parameter.put("solicitante",datos[1]);
-            parameter.put("fecha",datos[2]);
-            parameter.put("desc",datos[3]);
-            parameter.put("opc",datos[4]);
-            parameter.put("folio",datos[5]);
-            parameter.put("nomPry",datos[6]);
+            parameter.put("area",datos[0]);                     //desarrollo academico
+            parameter.put("nombreEncargado",datos[1]);
+            parameter.put("desc",datos[2]);
+            parameter.put("deptoReparador",datos[3]);           //a, b, c
+            parameter.put("noSeriePry",datos[4]);               //no_serie
             JasperPrint j = JasperFillManager.fillReport(report, parameter, conn.getConexion());
 
             JasperViewer jv = new JasperViewer(j, false);
-            jv.setTitle("Reporte Videoproyectores");
+            jv.setTitle("Reporte de Videoproyector");
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+            jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            jv.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         } catch (JRException | SQLException e) {
             System.out.println("Error al generar reporte TODO: " + e);
         }

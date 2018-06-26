@@ -5,7 +5,6 @@
  */
 package proyector.dataBase;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -54,6 +53,12 @@ public class Conexion {
         }
     }
     
+    public static void crearProcedure(Connection conn) throws SQLException {
+        Statement stat = conn.createStatement();
+        stat.execute("CREATE ALIAS IF NOT EXISTS E_LOG FOR \"proyector.dataBase.StoredProcedure.insertarLog\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS E_SHOW_LOG FOR \"proyector.dataBase.StoredProcedure.consultarLog\" ");
+    }
+    
     /**
      * Metodo encargado de crear la conexion a la base de datos
      * tambien se encarga de la creacion de la base de datos en caso de no existir
@@ -64,12 +69,12 @@ public class Conexion {
             Class.forName(JDBC_NAME).newInstance();
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("CONEXION A LA BASE DE DATOS...");
-            
+            //crearProcedure(conn);
         } catch (SQLException ex) {
             conn = DriverManager.getConnection(NEW_DB_URL, USER, PASS);
             System.out.println("CREANDO Y CONECTANDO A LA BASE DE DATOS...");
             lanzarTriggers(conn);
-            
+            crearProcedure(conn);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             System.out.println("\n\nError al crear base de datos o al ingresar sql o al conectar: " + ex + "\n\n");
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);

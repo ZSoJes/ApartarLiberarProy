@@ -25,13 +25,14 @@ import javax.swing.Timer;
 import proyector.dataBase.crud.AccesorioDB;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.DepartamentoDB;
-import proyector.dataBase.crud.LeerInicio;
+import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JLabel;
+import proyector.dataBase.crud.LogDB;
 
 /**
  *
@@ -50,8 +51,6 @@ public class AlPrestamo extends javax.swing.JFrame {
      */
     public AlPrestamo() {// throws SQLException {
         initComponents();
-       // chkBText.clear();               //arraylist del texto checkbox seleccionados
-        //chkBID.clear();                 //arrayList de ID de los checkbox seleccionados
         
         panelOPC.setVisible(false);
         pnlProfeLoad.setVisible(false);
@@ -1428,7 +1427,7 @@ public class AlPrestamo extends javax.swing.JFrame {
             String vid = txtVid.getText().trim();
             String prof = txtProf.getText().trim();
             if (!usuario.isEmpty()) {                               //comprobar no este en blanco el usuario
-                LeerInicio leer = new LeerInicio();
+                UsuarioReadDB leer = new UsuarioReadDB();
                 if (leer.getExisteUsuario(usuario)) {       //comprobar existe el usuario
                     AulaDB aula = new AulaDB();
                     HashMap<String, Integer> map = aula.primerCombo();      //recuperar hash de aulas para tener el id del aula seleccionada
@@ -1460,6 +1459,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                     PrestamoDB pres = new PrestamoDB();
                     pres.setPrestamo(datos, accArr);    //HACE PRESTAMO
                     scrollPaneAccesorios();                 //ACTUALIZA LOS ACCESORIOS DISPONIBLES
+                    new LogDB().log(usuario, "E_PRESTAMOS", 6);
                     ImageIcon iconJPane = new ImageIcon("./src/imagenes/Ok.png");
                     JOptionPane.showMessageDialog(null, "Se ha creado el registro.Presione enter.", "Información", JOptionPane.INFORMATION_MESSAGE, iconJPane);
                     

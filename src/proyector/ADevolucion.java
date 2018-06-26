@@ -37,7 +37,8 @@ import javax.swing.ToolTipManager;
 import proyector.dataBase.crud.AccesorioDB;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.DepartamentoDB;
-import proyector.dataBase.crud.LeerInicio;
+import proyector.dataBase.crud.LogDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
@@ -1105,14 +1106,15 @@ public class ADevolucion extends javax.swing.JFrame {
             if(profe.getExisteProyector(proyector)){
                 //revisar que no este en blanco el dato de txtUsuarioVal
                 if(!credencial.isEmpty()){
-                    LeerInicio leer = new LeerInicio();
+                    UsuarioReadDB leer = new UsuarioReadDB();
                     if (leer.getExisteUsuario(credencial)){
                         //comprobar que exisa un prestamo
                         PrestamoDB dev = new PrestamoDB();
                         if (dev.getExistePrestamoProy(proyector)){
                             // generar actualizacion
                             // liberar distintos articulos
-                            dev.updPrestamo(proyector, credencial);    
+                            dev.updPrestamo(proyector, credencial);
+                            new LogDB().log(credencial, "E_PRESTAMOS", 7);
                             System.out.println("El prestamo se libero!: \n-Proyector:" + proyector + "\n-Credencial: " + credencial);
                             pnlContenedor.removeAll();
                             pnlContenedor.repaint();
@@ -1338,7 +1340,7 @@ public class ADevolucion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTituloKeyTyped
 
     private void txtDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescKeyTyped
-        if (txtDesc.getText().length() >= 600) {
+        if (txtDesc.getText().length() >= 450) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDescKeyTyped

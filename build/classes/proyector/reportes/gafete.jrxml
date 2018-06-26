@@ -3,7 +3,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<scriptlet name="Imagen" class="com.rutas.Imagenes"/>
+	<style name="centerCodeBar" hAlign="Center"/>
+	<scriptlet name="Imagen" class="com.rutas.PathRelativo"/>
 	<parameter name="idUsuario" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -64,7 +65,7 @@
 					<textFieldExpression><![CDATA[$F{ID_USUARIO}]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement stretchType="RelativeToBandHeight" x="294" y="246" width="214" height="43" uuid="eac5b1d9-6764-47d2-935f-e789bc6c4f8b"/>
+					<reportElement style="centerCodeBar" stretchType="RelativeToBandHeight" x="294" y="246" width="214" height="43" uuid="eac5b1d9-6764-47d2-935f-e789bc6c4f8b"/>
 					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false" barHeight="65">
 						<jr:codeExpression><![CDATA[$F{ID_USUARIO}]]></jr:codeExpression>
 					</jr:barbecue>

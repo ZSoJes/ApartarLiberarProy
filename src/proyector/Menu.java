@@ -1,38 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package proyector;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
-import proyector.dataBase.crud.CrearInicio;
-import proyector.dataBase.crud.LeerInicio;
+import proyector.dataBase.crud.LogDB;
+import proyector.dataBase.crud.UsuarioCreateDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
@@ -54,16 +45,15 @@ public class Menu extends javax.swing.JFrame {
     ImageIcon reg = new ImageIcon(("./src/imagenes/registr_32px.png").replace('/', File.separatorChar));
     ImageIcon regW = new ImageIcon(("./src/imagenes/registr_32px_lavanda.png").replace('/', File.separatorChar));
 
+    private static Boolean valido = false;
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        labelFecha.setText(date);
+        labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         lblAjustes.setToolTipText("Ajustes");
 
-        //dlgUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         //visibilidad
         lblUsuarioHidenID.setVisible(false);
         hdnIDCopy.setVisible(false);
@@ -105,8 +95,7 @@ public class Menu extends javax.swing.JFrame {
         timer.setRepeats(true);
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
-        timer.start();
-        
+        timer.start();        
     }
 
     public void reloj() {
@@ -119,7 +108,7 @@ public class Menu extends javax.swing.JFrame {
 
             String[] cols = {jTable1.getColumnName(0), jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3), jTable1.getColumnName(4), jTable1.getColumnName(5)};
 
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             int count = leer.getRegistros();
             String[][] data = new String[count][6];
             data = leer.getUsuarios();
@@ -162,7 +151,7 @@ public class Menu extends javax.swing.JFrame {
 //                        dataTabla[i][j] = usuario;
 //                    }
                     if (j == 0) {
-                        LeerInicio leer = new LeerInicio();
+                        UsuarioReadDB leer = new UsuarioReadDB();
                         String[] arrUsu = leer.getUsuario(usuario);
                         dataTabla[i][j] = arrUsu[1] + " " + arrUsu[2] + " " + arrUsu[3];
                     }
@@ -332,6 +321,19 @@ public class Menu extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
+        dlgLog = new javax.swing.JDialog();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         bkMenu = new javax.swing.JPanel();
         menuBar = new javax.swing.JPanel();
         lblHora = new javax.swing.JLabel();
@@ -1750,6 +1752,168 @@ public class Menu extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
+        dlgLog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgLog.setTitle("[Log]");
+        dlgLog.setMinimumSize(new java.awt.Dimension(550, 570));
+        dlgLog.setModal(true);
+        dlgLog.setPreferredSize(new java.awt.Dimension(550, 570));
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setMinimumSize(new java.awt.Dimension(541, 550));
+        jPanel3.setPreferredSize(new java.awt.Dimension(541, 550));
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable3.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(jTable3);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout dlgLogLayout = new javax.swing.GroupLayout(dlgLog.getContentPane());
+        dlgLog.getContentPane().setLayout(dlgLogLayout);
+        dlgLogLayout.setHorizontalGroup(
+            dlgLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgLogLayout.setVerticalGroup(
+            dlgLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel8.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel40.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel41.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel41.setText("Usuario:");
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel43)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel41)
+                    .addComponent(jLabel42))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel41)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Administrador de Video Proyectores");
         setIconImage(img.getImage());
@@ -2008,6 +2172,11 @@ public class Menu extends javax.swing.JFrame {
         lblLogo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sep.png"))); // NOI18N
 
         lblLogo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tecnm2.png"))); // NOI18N
+        lblLogo2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLogo2MouseClicked(evt);
+            }
+        });
 
         lblLogo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/itt.png"))); // NOI18N
         lblLogo3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2423,7 +2592,7 @@ public class Menu extends javax.swing.JFrame {
         if (!usuario.isEmpty()) {
             System.out.println("Credencial a comprobar:" + usuario);
             try {
-                LeerInicio leer = new LeerInicio();
+                UsuarioReadDB leer = new UsuarioReadDB();
                 //leer usuario
                 boolean existe = leer.getExisteUsuario(usuario);
                 //comprobar que existe
@@ -2468,7 +2637,7 @@ public class Menu extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
             String reg = lblUsuarioHidenID.getText().trim();
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             String datos[] = new String[6];
             datos = leer.getUsuario(reg);
             txtNomUpd.setText(datos[1]);
@@ -2491,7 +2660,7 @@ public class Menu extends javax.swing.JFrame {
         String autorizar = txtAutorizarDlg.getText().trim();
         if (!autorizar.isEmpty()) {
             try {
-                LeerInicio leer = new LeerInicio();
+                UsuarioReadDB leer = new UsuarioReadDB();
                 if (leer.getUsuarioNvl(autorizar)) {
 
                     String idUsuarioActual = lblUsuarioHidenID.getText().trim();
@@ -2502,12 +2671,12 @@ public class Menu extends javax.swing.JFrame {
                             if (leer.getUsuarioNvl(idUsuarioActual)) {
                                 int opc = JOptionPane.showConfirmDialog(null, "Esta seguro de cambiar el usuario al acceso normal?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
                                 if (opc == JOptionPane.OK_OPTION) {
-                                    CrearInicio genU = new CrearInicio();
+                                    UsuarioCreateDB genU = new UsuarioCreateDB();
                                     genU.setUsuarioAdmin(lblUsuarioHidenID.getText().trim(), false);
                                 }
                             } else {
                                 int opc = JOptionPane.showConfirmDialog(null, "Esta seguro de ascender el usuario al acceso Administrador?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-                                CrearInicio genU = new CrearInicio();
+                                UsuarioCreateDB genU = new UsuarioCreateDB();
                                 genU.setUsuarioAdmin(lblUsuarioHidenID.getText().trim(), true);
                             }
                             JOptionPane.showMessageDialog(null, "Listo", "", JOptionPane.INFORMATION_MESSAGE);
@@ -2572,8 +2741,8 @@ public class Menu extends javax.swing.JFrame {
                 //estan en blanco los demas campos
                 if (!nom.isEmpty() && !aPat.isEmpty() && !aMat.isEmpty()) {
                     try {
-                        LeerInicio leer = new LeerInicio();
-                        CrearInicio crear = new CrearInicio();
+                        UsuarioReadDB leer = new UsuarioReadDB();
+                        UsuarioCreateDB crear = new UsuarioCreateDB();
                         String hashed = BCrypt.hashpw(String.valueOf(pass1).trim(), BCrypt.gensalt(12)); //cifrado
                         String datos[] = {nom, aPat, aMat, hashed};
                         if (!txtAutorizaNuevo.getText().trim().isEmpty()) {
@@ -2683,7 +2852,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnCheckUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckUserActionPerformed
         try {
             String credencial = txtCheckUser.getText().trim();
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             if (leer.getUsuarioNvl(credencial)) {
                 pnlUsrVerif2.setVisible(false);
                 pnlUsuariosList.setVisible(true);
@@ -2716,7 +2885,7 @@ public class Menu extends javax.swing.JFrame {
         String usuario = JOptionPane.showInputDialog(null, "Introduzca la credencial de acceso de un usuario(que no sea su credencial)\npara validar esta acción", "Advertencia", JOptionPane.WARNING_MESSAGE);
         try {
             if(!usuario.trim().isEmpty()){
-                LeerInicio leer = new LeerInicio();
+                UsuarioReadDB leer = new UsuarioReadDB();
                 if(!idOrig.equals(usuario) && leer.getExisteUsuario(usuario.trim())){//si el usuario no es el mismo y existe 
                     if(updNomCompleto(idOrig, nom, apat, amat)){
                         updPass(idOrig, pass, passC);
@@ -2745,7 +2914,7 @@ public class Menu extends javax.swing.JFrame {
     public void updPass(String idOrig, char[] pass, char[] passC){
         //modificar contraseña
         try{
-            CrearInicio usr = new CrearInicio();
+            UsuarioCreateDB usr = new UsuarioCreateDB();
             if((pass.length > 0 && pass.length < 8) ){
                 JOptionPane.showMessageDialog(null,"-LOS CAMBIOS NO FUERON REALIZADOS-\nSi desea modificar la contraseña debe ser: \n-al menos de 8 caracteres\n-puede contener numeros y letras\n-puede contener mayusculas y minusculas");
             }else if(pass.length >=8){
@@ -2764,7 +2933,7 @@ public class Menu extends javax.swing.JFrame {
     public void updId(String idOrig, String idNew){
         //modificar credencial
         try{
-            CrearInicio usr = new CrearInicio();
+            UsuarioCreateDB usr = new UsuarioCreateDB();
             if(chkBNewID.isSelected()){
                 if(!idNew.isEmpty()){
                         String[] id = {idNew, idOrig};
@@ -2782,7 +2951,7 @@ public class Menu extends javax.swing.JFrame {
         boolean estatus = true;
         //modificar nombre y apellidos
         try{
-            CrearInicio usr = new CrearInicio();
+            UsuarioCreateDB usr = new UsuarioCreateDB();
             if(!nom.isEmpty() && !apat.isEmpty() && !amat.isEmpty()){
                     //JOptionPane.showMessageDialog(null,"Si desea hacer algún cambio debe por lo menos llenar los campos referentes al nombre");
                     String data[] = {nom, apat, amat};
@@ -2801,7 +2970,7 @@ public class Menu extends javax.swing.JFrame {
         //actualiza el pnlUsuarioCont contenido
         try {
             String[] datos = new String[6];
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             if (chkBNewID.isSelected()) {
                 if (!idNew.isEmpty()) {
                     datos = leer.getUsuario(idNew);
@@ -2975,7 +3144,7 @@ public class Menu extends javax.swing.JFrame {
             if (option == JFileChooser.APPROVE_OPTION){
                 String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
                 try{
-                    LeerInicio leer = new LeerInicio();
+                    UsuarioReadDB leer = new UsuarioReadDB();
                     if(cb1.isSelected()){ leer.bulkData(path, 1); }
                     if(cb2.isSelected()){ leer.bulkData(path, 2); }
                     if(cb3.isSelected()){ leer.bulkData(path, 3); }
@@ -2996,7 +3165,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnValidarUsrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarUsrActionPerformed
         try {
             String credencial = txtCredUsr.getText().trim();
-            LeerInicio leer = new LeerInicio();
+            UsuarioReadDB leer = new UsuarioReadDB();
             if (leer.getUsuarioNvl(credencial)) {
                 pnlUsrVerif3.setVisible(false);
                 pnlMenuBK.setVisible(true);
@@ -3014,6 +3183,85 @@ public class Menu extends javax.swing.JFrame {
             btnCrearUsuario.doClick();
         }
     }//GEN-LAST:event_txtAutorizaNuevoKeyTyped
+
+    private void lblLogo2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogo2MouseClicked
+        if(evt.getClickCount() == 2){
+            dlgConfirm.setLocationRelativeTo(bkMenu);
+            dlgConfirm.setVisible(true);
+
+            if(valido){
+                valido = false;
+                try{loadLog();}catch(Exception e){System.out.println("Error al cargar log:"+e);}
+                dlgLog.setLocationRelativeTo(bkMenu);
+                dlgLog.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_lblLogo2MouseClicked
+
+    public void loadLog() throws ParseException{
+        System.out.println("Llenando log");
+        try {
+            LogDB log = new LogDB();
+            DefaultTableModel modelLog = (DefaultTableModel) jTable3.getModel();
+            String[] cols = {"ID", "ID DEL USUARIO", "ACCION", "TABLA", "FECHA"};
+            String[][] datos = log.showLog();
+            modelLog.setDataVector(datos, cols);
+            jTable3.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable3.getColumnModel().getColumn(1).setPreferredWidth(112);
+            jTable3.getColumnModel().getColumn(2).setPreferredWidth(64);
+            jTable3.getColumnModel().getColumn(3).setPreferredWidth(195);
+            jTable3.getColumnModel().getColumn(4).setPreferredWidth(140);
+
+            jTable3.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        } catch (SQLException ex) {
+            System.out.println("Error al llenar tabla con log: " + ex);
+        }
+    }
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    valido = true;
+                    txtUsuario.setText("");
+                    txtPass.setText("");
+                    dlgConfirm.setVisible(false);
+                    dlgConfirm.dispose();
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -3068,6 +3316,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel btnAul;
     private javax.swing.JButton btnAutorizar;
     private javax.swing.JButton btnCheckUser;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnCrearUsuario;
     private javax.swing.JPanel btnDep;
     private javax.swing.JPanel btnExt1;
@@ -3086,6 +3335,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JCheckBox cb6;
     private javax.swing.JCheckBox chkBNewID;
     private javax.swing.JDialog contacto;
+    private javax.swing.JDialog dlgConfirm;
+    private javax.swing.JDialog dlgLog;
     private javax.swing.JDialog dlgUsuario;
     private javax.swing.JLabel hdnIDCopy;
     private javax.swing.JLabel hiddenLbl;
@@ -3141,6 +3392,10 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3152,14 +3407,18 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelFecha;
@@ -3222,6 +3481,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDNew;
     private javax.swing.JTextField txtNomN;
     private javax.swing.JTextField txtNomUpd;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     private javax.swing.JTextField txtUsuarioCred;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,31 +7,23 @@ package proyector;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.List;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultRowSorter;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.RowFilter;
-import javax.swing.RowFilter.ComparisonType;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -41,8 +33,10 @@ import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
-import proyector.dataBase.crud.LeerInicio;
+import proyector.dataBase.crud.LogDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
@@ -57,6 +51,8 @@ public class ARegistro extends javax.swing.JFrame {
     String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     //DateFormat fecha = DateFormat.getDateInstance();
     SimpleDateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
+    private static Boolean valido = false;
+    private static String usuario = "";
     /**
      * Creates new form ARegistro
      */
@@ -86,7 +82,7 @@ public class ARegistro extends javax.swing.JFrame {
         timer.start();
         graficas();
 //        try{
-//        LeerInicio ini = new LeerInicio();
+//        UsuarioReadDB ini = new UsuarioReadDB();
 //        int[] meses = ini.leerMeses(2018);
 //        System.out.println("meses resultado: " + Arrays.toString(meses));
 //        }catch(SQLException ex){
@@ -143,7 +139,7 @@ public class ARegistro extends javax.swing.JFrame {
                     data2[i][j] = data[i][0];
                 }
                 if (j == 1 || j == 2) {
-                    String[] arrUsu = new LeerInicio().getUsuario(data[i][j]);
+                    String[] arrUsu = new UsuarioReadDB().getUsuario(data[i][j]);
                     data2[i][j] = arrUsu[1] + " " + arrUsu[2] + " " + arrUsu[3];
                 }
                 if (j == 3) {
@@ -251,7 +247,7 @@ public class ARegistro extends javax.swing.JFrame {
         DefaultCategoryDataset dtsc = new DefaultCategoryDataset();
         String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
         try{
-        LeerInicio ini = new LeerInicio();
+        UsuarioReadDB ini = new UsuarioReadDB();
         Calendar c = Calendar.getInstance();
         int[] meses = ini.leerMeses(c.get(Calendar.YEAR));
         System.out.println("meses resultado: " + Arrays.toString(meses));
@@ -343,8 +339,47 @@ public class ARegistro extends javax.swing.JFrame {
         btnGenerarRR = new javax.swing.JButton();
         btnCerrarRR = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         btnGroupFecha = new javax.swing.ButtonGroup();
         btnGroupDatos = new javax.swing.ButtonGroup();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel41 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
+        dlgRprtArtPry = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        lblRprt1 = new javax.swing.JLabel();
+        lblRprt2 = new javax.swing.JLabel();
+        lblRprt3 = new javax.swing.JLabel();
+        lblRprt5 = new javax.swing.JLabel();
+        lblRprt4 = new javax.swing.JLabel();
+        lblRprt6 = new javax.swing.JLabel();
+        txtRprt1 = new javax.swing.JTextField();
+        txtRprt2 = new javax.swing.JTextField();
+        txtRprt3 = new javax.swing.JTextField();
+        cbRprt1 = new javax.swing.JCheckBox();
+        cbRprt2 = new javax.swing.JCheckBox();
+        cbRprt3 = new javax.swing.JCheckBox();
+        cbRprt4 = new javax.swing.JCheckBox();
+        cbRprt5 = new javax.swing.JCheckBox();
+        cbRprt6 = new javax.swing.JCheckBox();
+        cbRprt7 = new javax.swing.JCheckBox();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnRpActualizar = new javax.swing.JButton();
+        btnRpCancelar = new javax.swing.JButton();
+        btnRpImprimir = new javax.swing.JButton();
+        hiddenIDRprt = new javax.swing.JLabel();
+        groupSolictudAlDepto = new javax.swing.ButtonGroup();
+        groupImprevisto = new javax.swing.ButtonGroup();
         pnlBackground = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblIco1 = new javax.swing.JLabel();
@@ -375,8 +410,8 @@ public class ARegistro extends javax.swing.JFrame {
         lblIni = new javax.swing.JLabel();
         jdtChooser1 = new com.toedter.calendar.JDateChooser();
         lblFn = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -662,6 +697,13 @@ public class ARegistro extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(33, 33, 33));
         jLabel11.setText("<html>Debe especificar una opcion de las siguientes<br>para recuperar los datos necesarios:");
 
+        jButton1.setText("Solicutdes de Mantenimiento");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pblBkReporteLayout = new javax.swing.GroupLayout(pblBkReporte);
         pblBkReporte.setLayout(pblBkReporteLayout);
         pblBkReporteLayout.setHorizontalGroup(
@@ -682,6 +724,10 @@ public class ARegistro extends javax.swing.JFrame {
                     .addGroup(pblBkReporteLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(pblBkReporteLayout.createSequentialGroup()
+                .addGap(162, 162, 162)
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         pblBkReporteLayout.setVerticalGroup(
             pblBkReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -698,7 +744,9 @@ public class ARegistro extends javax.swing.JFrame {
                 .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(pnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(4, 4, 4))
         );
 
         javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
@@ -710,6 +758,293 @@ public class ARegistro extends javax.swing.JFrame {
         dlgReporteLayout.setVerticalGroup(
             dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pblBkReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel7.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel38.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel38.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel38.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel39.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel39.setText("Usuario:");
+
+        jLabel40.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel41.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel38, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel41)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel39)
+                    .addComponent(jLabel40))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel41))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel39)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel40)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        dlgRprtArtPry.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgRprtArtPry.setTitle("[Reimprimir/Modificar/Eliminar Reporte de VideoProyector]");
+        dlgRprtArtPry.setMinimumSize(new java.awt.Dimension(715, 550));
+        dlgRprtArtPry.setModal(true);
+        dlgRprtArtPry.setPreferredSize(new java.awt.Dimension(715, 550));
+        dlgRprtArtPry.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                dlgRprtArtPryWindowClosing(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTable3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "VIDEOPROYECTOR", "RESUMEN DEL REPORTE", "IMPREVISTO", "FECHA DE CREACIÓN"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable3.getTableHeader().setReorderingAllowed(false);
+        jTable3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable3MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable3);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 680, 150));
+
+        lblRprt1.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt1.setText("Área Solicitante:");
+        jPanel2.add(lblRprt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 229, 98, -1));
+
+        lblRprt2.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt2.setText("Nombre del Solicitante:");
+        jPanel2.add(lblRprt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 167, -1, 14));
+
+        lblRprt3.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt3.setText("Descripción corta de la falla:");
+        jPanel2.add(lblRprt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 291, -1, -1));
+
+        lblRprt5.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt5.setText("Descripción detallada del servicio solicitado o falla a reparar:");
+        lblRprt5.setToolTipText("");
+        jPanel2.add(lblRprt5, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 248, 365, -1));
+
+        lblRprt4.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt4.setText("Departamento a quien se dirige la solicitud:");
+        jPanel2.add(lblRprt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 353, -1, -1));
+
+        lblRprt6.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt6.setText("Imprevisto:");
+        jPanel2.add(lblRprt6, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 167, -1, -1));
+
+        txtRprt1.setMinimumSize(new java.awt.Dimension(300, 30));
+        txtRprt1.setPreferredSize(new java.awt.Dimension(300, 30));
+        jPanel2.add(txtRprt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 188, -1, -1));
+
+        txtRprt2.setMinimumSize(new java.awt.Dimension(300, 30));
+        txtRprt2.setPreferredSize(new java.awt.Dimension(300, 30));
+        jPanel2.add(txtRprt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
+
+        txtRprt3.setMinimumSize(new java.awt.Dimension(300, 30));
+        txtRprt3.setPreferredSize(new java.awt.Dimension(300, 30));
+        jPanel2.add(txtRprt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 312, -1, -1));
+
+        groupSolictudAlDepto.add(cbRprt1);
+        cbRprt1.setText("Recursos Materiales y Servicios");
+        cbRprt1.setOpaque(false);
+        jPanel2.add(cbRprt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 375, -1, -1));
+
+        groupSolictudAlDepto.add(cbRprt2);
+        cbRprt2.setText("Centro de Cómputo");
+        cbRprt2.setOpaque(false);
+        jPanel2.add(cbRprt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 398, -1, -1));
+
+        groupSolictudAlDepto.add(cbRprt3);
+        cbRprt3.setText("Mantenimiento de Equipo");
+        cbRprt3.setOpaque(false);
+        jPanel2.add(cbRprt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 421, -1, -1));
+
+        groupImprevisto.add(cbRprt4);
+        cbRprt4.setText("Reparación");
+        cbRprt4.setOpaque(false);
+        jPanel2.add(cbRprt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 192, -1, -1));
+
+        groupImprevisto.add(cbRprt5);
+        cbRprt5.setText("Mantenimiento");
+        cbRprt5.setOpaque(false);
+        jPanel2.add(cbRprt5, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 218, -1, -1));
+
+        groupImprevisto.add(cbRprt6);
+        cbRprt6.setText("Aplicar Garantía");
+        cbRprt6.setOpaque(false);
+        jPanel2.add(cbRprt6, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 192, -1, -1));
+
+        groupImprevisto.add(cbRprt7);
+        cbRprt7.setText("Dar de Baja");
+        cbRprt7.setOpaque(false);
+        jPanel2.add(cbRprt7, new org.netbeans.lib.awtextra.AbsoluteConstraints(439, 218, -1, -1));
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(5);
+        jTextArea1.setWrapStyleWord(true);
+        jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyTyped(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jTextArea1);
+
+        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 274, 365, 138));
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator1.setMinimumSize(new java.awt.Dimension(3, 256));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(3, 256));
+        jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 173, -1, -1));
+
+        btnRpActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Pencil_22px.png"))); // NOI18N
+        btnRpActualizar.setText("Actualizar");
+        btnRpActualizar.setEnabled(false);
+        btnRpActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRpActualizarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRpActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 450, -1, -1));
+
+        btnRpCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnRpCancelar.setText("Cancelar");
+        btnRpCancelar.setEnabled(false);
+        btnRpCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRpCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRpCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 450, -1, -1));
+
+        btnRpImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Print_36px.png"))); // NOI18N
+        btnRpImprimir.setText("Reimprimir");
+        btnRpImprimir.setEnabled(false);
+        btnRpImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRpImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnRpImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, -1, -1));
+
+        hiddenIDRprt.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        hiddenIDRprt.setText("SoyID");
+        jPanel2.add(hiddenIDRprt, new org.netbeans.lib.awtextra.AbsoluteConstraints(618, 199, -1, -1));
+
+        javax.swing.GroupLayout dlgRprtArtPryLayout = new javax.swing.GroupLayout(dlgRprtArtPry.getContentPane());
+        dlgRprtArtPry.getContentPane().setLayout(dlgRprtArtPryLayout);
+        dlgRprtArtPryLayout.setHorizontalGroup(
+            dlgRprtArtPryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgRprtArtPryLayout.setVerticalGroup(
+            dlgRprtArtPryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -925,7 +1260,7 @@ public class ARegistro extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "USR_ENTREGA", "USR_RECIBE", "PROYECTOR", "PROFESOR", "AULA", "FECHA_SALIDA", "FECHA_REGRESO", "TIEMPO"
+                "ID", "USUARIO ENTREGA", "USUARIO RECIBE", "PROYECTOR", "PROFESOR", "AULA", "FECHA SALIDA", "FECHA REGRESO", "TIEMPO"
             }
         ) {
             Class[] types = new Class [] {
@@ -951,7 +1286,7 @@ public class ARegistro extends javax.swing.JFrame {
         jMiLabel.setText("jMiLabel");
         jMiLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         jMiLabel.setPreferredSize(new java.awt.Dimension(880, 300));
-        jPanel1.add(jMiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 440, -1, -1));
+        jPanel1.add(jMiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 550, -1, -1));
 
         jdtChooser2.setToolTipText("Fecha de fin");
         jdtChooser2.setDateFormatString("dd/MM/yyyy");
@@ -973,16 +1308,9 @@ public class ARegistro extends javax.swing.JFrame {
 
         pnlBackground.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, -1, 430));
 
-        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Reportes");
-        jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
-        jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
-        jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
-        pnlBackground.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 150, -1, -1));
-
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafico-60.png"))); // NOI18N
+        jLabel12.setToolTipText("Reportes");
         jLabel12.setMaximumSize(new java.awt.Dimension(70, 60));
         jLabel12.setMinimumSize(new java.awt.Dimension(70, 60));
         jLabel12.setPreferredSize(new java.awt.Dimension(70, 60));
@@ -991,7 +1319,15 @@ public class ARegistro extends javax.swing.JFrame {
                 jLabel12MouseClicked(evt);
             }
         });
-        pnlBackground.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 90, -1, -1));
+        pnlBackground.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 95, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Reportes");
+        jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
+        jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
+        jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
+        pnlBackground.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(915, 150, 80, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1140,7 +1476,10 @@ public class ARegistro extends javax.swing.JFrame {
 
     private void btnGenerarRRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarRRActionPerformed
         String[] fch;
-        int opc = 1;
+        int opc = 6;
+        dlgReporte.setVisible(false);
+        dlgReporte.dispose();
+        
         if(rb6.isSelected()){
             fch = rbFechaEsp();
         }else{
@@ -1154,36 +1493,246 @@ public class ARegistro extends javax.swing.JFrame {
         if(fch.length > 0){
             GenerarReportes gr = new GenerarReportes();
             if(dRb5.isSelected()){
-                gr.getRRTods(fch,1);
-                gr.getRRTods(fch,2);
-                gr.getRRTods(fch,3);
-                gr.getRRTods(fch,4);
+                gr.getRRTods(fch,1, opc);
+                gr.getRRTods(fch,2, opc);
+                gr.getRRTods(fch,3, opc);
+                gr.getRRTods(fch,4, opc);
             }else if(dRb3.isSelected()){ //videoproyector
-                gr.getRRTods(fch,1);
+                gr.getRRTods(fch,1, opc);
             }else if(dRb2.isSelected()){ //profesores
-                gr.getRRTods(fch,2);
+                gr.getRRTods(fch,2, opc);
             }else if(dRb1.isSelected()){ //departamentos
-                gr.getRRTods(fch,3);
+                gr.getRRTods(fch,3, opc);
             }else if(dRb4.isSelected()){ //departamentos
-                gr.getRRTods(fch,4);
+                gr.getRRTods(fch,4, opc);
             }
+            try{new LogDB().log(usuario, "E_PRESTAMOS", 5);}catch(SQLException e){System.out.println("Error al generarLog:"+e);}
         }
-        
-        dlgReporte.setVisible(false);
-        dlgReporte.dispose();
     }//GEN-LAST:event_btnGenerarRRActionPerformed
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
-        //inicializar
-        pnlFechasFiltro.setVisible(false);
-        rb1.setSelected(true);
-        dRb5.setSelected(true);
+        dlgConfirm.setLocationRelativeTo(pnlBackground);
+        dlgConfirm.setVisible(true);
         
-        //mostrar dialog
-        dlgReporte.setLocationRelativeTo(pnlBackground);
-        dlgReporte.setVisible(true);
+        if(valido){
+            valido = false;
+            //inicializar
+            pnlFechasFiltro.setVisible(false);
+            rb1.setSelected(true);
+            dRb5.setSelected(true);
+
+            //mostrar dialog
+            dlgReporte.setLocationRelativeTo(pnlBackground);
+            dlgReporte.setVisible(true);
+        }
     }//GEN-LAST:event_jLabel12MouseClicked
-    
+
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    valido = true;
+                    usuario = crdncial;
+                    txtUsuario.setText("");
+                    txtPass.setText("");
+                    dlgConfirm.setVisible(false);
+                    dlgConfirm.dispose();
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            usuario = "";
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
+
+    private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
+        if(evt.getClickCount() == 2 && jTable3.getSelectedRow() != -1 && jTable3.isEnabled()){
+            int row = jTable3.getSelectedRow();
+            String id = jTable3.getValueAt(row, 0).toString();
+            hiddenIDRprt.setText(id);
+            jTable3.setEnabled(false);
+            btnRpActualizar.setEnabled(true);
+            btnRpCancelar.setEnabled(true);
+            btnRpImprimir.setEnabled(true);
+            try {
+                PrestamoDB press = new PrestamoDB();    
+                String[] arr = press.getReporte(Integer.parseInt(id));
+                System.out.println("Arr On clic: " + Arrays.toString(arr));
+                //titulo
+                txtRprt3.setText(arr[2]);
+                //nombre_encargado
+                txtRprt1.setText(arr[3]);
+                //area
+                txtRprt2.setText(arr[4]);
+                //depto_reparador
+                if(arr[5] == null){
+                    cbRprt1.setSelected(true);
+                }else if(arr[5].equals("a")){
+                    cbRprt1.setSelected(true);
+                }else if(arr[5].equals("b")){
+                    cbRprt2.setSelected(true);
+                }else if(arr[5].equals("c")){
+                    cbRprt3.setSelected(true);
+                }
+                //imprevisto
+                if(arr[6] == null){
+                    cbRprt4.setSelected(true); //reparacion
+                }else if(arr[6].equals("a")){
+                    cbRprt4.setSelected(true); //reparacion
+                }else if(arr[6].equals("b")){
+                    cbRprt5.setSelected(true);  //mantenimiento
+                }else if(arr[6].equals("c")){
+                    cbRprt6.setSelected(true);  //aplicar garantia
+                }else if(arr[6].equals("d")){
+                    cbRprt7.setSelected(true);  //dar de baja
+                }
+                //detalles
+                jTextArea1.setText(arr[7]);
+            } catch (SQLException e) {
+            }
+            
+        }
+    }//GEN-LAST:event_jTable3MouseClicked
+
+    private void jTextArea1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyTyped
+        if (jTextArea1.getText().length() >= 450) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextArea1KeyTyped
+
+    private void btnRpActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRpActualizarActionPerformed
+        String titulo = txtRprt3.getText().trim();
+        String nombreEncargado = txtRprt1.getText().trim();
+        String area = txtRprt2.getText().trim();
+        String deptoReparador = "";
+        String imprevisto = "";
+        String detalles = jTextArea1.getText().trim();
+        
+        if(cbRprt1.isSelected()){ deptoReparador = "a";} 
+        else if(cbRprt2.isSelected()){ deptoReparador = "b";} 
+        else if(cbRprt3.isSelected()){ deptoReparador = "c";}
+        if(cbRprt4.isSelected()){ imprevisto = "a";} 
+        else if(cbRprt5.isSelected()){ imprevisto = "b";} 
+        else if(cbRprt6.isSelected()){ imprevisto = "c";}
+        else if(cbRprt7.isSelected()){ imprevisto = "d";}
+        String[] datos = {
+            titulo,
+            nombreEncargado,
+            area,
+            deptoReparador,
+            imprevisto,
+            detalles
+        };
+        if(!titulo.isEmpty() && !nombreEncargado.isEmpty() && !area.isEmpty() && !deptoReparador.isEmpty() && !imprevisto.isEmpty() && !detalles.isEmpty()){
+            try {
+                PrestamoDB pres = new PrestamoDB();
+                int id = Integer.parseInt(hiddenIDRprt.getText());
+                System.out.println("Arr to "+ id +" upd: " + Arrays.toString(datos));
+                pres.updReporte(id, datos);
+                new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 2);
+                fillJTable3();
+                clearUpdReprt();
+                JOptionPane.showMessageDialog(this, "Reporte actualizado!!!");
+            } catch (SQLException e) {System.out.println("Error al generar actualizacion de datos del reporte: " + e);}
+        }else{JOptionPane.showMessageDialog(this, "Recuerde llenar completamente el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);}
+    }//GEN-LAST:event_btnRpActualizarActionPerformed
+
+    private void btnRpCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRpCancelarActionPerformed
+        clearUpdReprt();
+    }//GEN-LAST:event_btnRpCancelarActionPerformed
+
+    private void dlgRprtArtPryWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_dlgRprtArtPryWindowClosing
+        clearUpdReprt();
+    }//GEN-LAST:event_dlgRprtArtPryWindowClosing
+
+    private void btnRpImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRpImprimirActionPerformed
+        
+        try {
+            GenerarReportes genR = new GenerarReportes();    
+            PrestamoDB pres = new PrestamoDB();
+            String[] arr = pres.getReporte(Integer.parseInt(hiddenIDRprt.getText()));
+            String[] reporteDtos = {arr[4], arr[3], arr[7], arr[5], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
+            genR.getReporteFalloPry(reporteDtos);
+            new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 5);
+        } catch (SQLException e) {
+            System.out.println("Error al generar Reporte: " + e);
+        }
+        clearUpdReprt();
+        dlgRprtArtPry.setVisible(false);
+        dlgRprtArtPry.dispose();
+        
+    }//GEN-LAST:event_btnRpImprimirActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dlgReporte.setVisible(false);
+        jDateChooser1.setCalendar(null);
+        jDateChooser2.setCalendar(null);
+        dlgReporte.dispose();
+        fillJTable3();
+        
+        dlgRprtArtPry.setLocationRelativeTo(this);
+        dlgRprtArtPry.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+    public void fillJTable3(){
+        System.out.println("Llenando con reportes de Videoproyectores");
+        try {
+            PrestamoDB pres = new PrestamoDB();
+            DefaultTableModel modelPryRprt = (DefaultTableModel) jTable3.getModel();
+            String[] cols = {jTable3.getColumnName(0),jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3), jTable3.getColumnName(4)};
+            String[][] datos = pres.getReportejTable();
+            modelPryRprt.setDataVector(datos, cols);
+        } catch (SQLException ex) {
+            System.out.println("Error al llenar tabla con los reportes realizados: " + ex);
+        }
+    }
+    public void clearUpdReprt(){
+        jTable3.setEnabled(true);
+        btnRpActualizar.setEnabled(false);
+        btnRpCancelar.setEnabled(false);
+        btnRpImprimir.setEnabled(false);
+        
+        txtRprt1.setText("");
+        txtRprt2.setText("");
+        txtRprt3.setText("");
+        cbRprt1.setSelected(false);
+        cbRprt2.setSelected(false);
+        cbRprt3.setSelected(false);
+        cbRprt4.setSelected(false);
+        cbRprt5.setSelected(false);
+        cbRprt6.setSelected(false);
+        cbRprt7.setSelected(false);
+        jTextArea1.setText("");
+    }
     public String[] rbFechasOpc(int opc){
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
@@ -1284,24 +1833,41 @@ public class ARegistro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarRR;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnGenerarRR;
     private javax.swing.ButtonGroup btnGroupDatos;
     private javax.swing.ButtonGroup btnGroupFecha;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnRpActualizar;
+    private javax.swing.JButton btnRpCancelar;
+    private javax.swing.JButton btnRpImprimir;
+    private javax.swing.JCheckBox cbRprt1;
+    private javax.swing.JCheckBox cbRprt2;
+    private javax.swing.JCheckBox cbRprt3;
+    private javax.swing.JCheckBox cbRprt4;
+    private javax.swing.JCheckBox cbRprt5;
+    private javax.swing.JCheckBox cbRprt6;
+    private javax.swing.JCheckBox cbRprt7;
     private javax.swing.JRadioButton dRb1;
     private javax.swing.JRadioButton dRb2;
     private javax.swing.JRadioButton dRb3;
     private javax.swing.JRadioButton dRb4;
     private javax.swing.JRadioButton dRb5;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgReporte;
+    private javax.swing.JDialog dlgRprtArtPry;
+    private javax.swing.ButtonGroup groupImprevisto;
+    private javax.swing.ButtonGroup groupSolictudAlDepto;
+    private javax.swing.JLabel hiddenIDRprt;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
     private javax.swing.JLabel ico6;
     private javax.swing.JLabel ico7;
     private javax.swing.JLabel ico8;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
@@ -1311,17 +1877,28 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jMiLabel;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTextArea jTextArea1;
     private com.toedter.calendar.JDateChooser jdtChooser1;
     private com.toedter.calendar.JDateChooser jdtChooser2;
     private javax.swing.JLabel labelFecha;
@@ -1330,6 +1907,12 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIco2;
     private javax.swing.JLabel lblIni;
+    private javax.swing.JLabel lblRprt1;
+    private javax.swing.JLabel lblRprt2;
+    private javax.swing.JLabel lblRprt3;
+    private javax.swing.JLabel lblRprt4;
+    private javax.swing.JLabel lblRprt5;
+    private javax.swing.JLabel lblRprt6;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloDlg;
     private javax.swing.JPanel panelOPC;
@@ -1346,5 +1929,10 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton rb4;
     private javax.swing.JRadioButton rb5;
     private javax.swing.JRadioButton rb6;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtRprt1;
+    private javax.swing.JTextField txtRprt2;
+    private javax.swing.JTextField txtRprt3;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

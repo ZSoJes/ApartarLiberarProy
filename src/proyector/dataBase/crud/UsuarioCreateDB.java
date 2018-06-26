@@ -20,10 +20,10 @@ import proyector.dataBase.Conexion;
  *
  * @author JuanGSot
  */
-public class CrearInicio {
+public class UsuarioCreateDB {
     private final Connection conn;
     
-    public CrearInicio() throws SQLException{
+    public UsuarioCreateDB() throws SQLException{
         Conexion conexion = new Conexion();
         conn = conexion.getConexion();
     }
@@ -47,7 +47,7 @@ public class CrearInicio {
         Random randomGenerator = new Random();
         String date = new SimpleDateFormat("ddMMyy").format(new Date());
         String id = "";
-        LeerInicio leer = new LeerInicio();
+        UsuarioReadDB leer = new UsuarioReadDB();
         while(true){                        //generando id
             id = datos[1].split("")[0];
             id += datos[1].split("")[1];

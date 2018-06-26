@@ -506,14 +506,17 @@ public class VideoproyectorDB {
         }
     }
     
-    public void reportePry(int proye, String titulo, String folio, String detalles){
+    public void reportePry(int proye, String[] datos){
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("INSERT INTO E_REP_VIDEOPROYECTORES(ID_VIDEOPROYECTOR, TITULO, FOLIO, DETALLES) VALUES(?, ?, ?, ?)");
+            prep = conn.prepareStatement("INSERT INTO E_REP_VIDEOPROYECTORES(ID_VIDEOPROYECTOR, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES) VALUES(?, ?, ?, ?, ?, ?, ?)");
             prep.setInt(1, proye);
-            prep.setString(2, titulo);
-            prep.setString(3, folio);
-            prep.setString(4, detalles);
+            prep.setString(2, datos[0]);
+            prep.setString(3, datos[1]);
+            prep.setString(4, datos[2]);
+            prep.setString(5, datos[3]);
+            prep.setString(6, datos[4]);
+            prep.setString(7, datos[5]);
             prep.executeUpdate();
             prep.close();
         }catch(SQLException ex){

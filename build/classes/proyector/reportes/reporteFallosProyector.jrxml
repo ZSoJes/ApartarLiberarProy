@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="529" leftMargin="41" rightMargin="42" topMargin="48" bottomMargin="48" uuid="b843c247-f693-4940-8f8d-13d0237940b4">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="650"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<style name="style1">
 		<box>
@@ -20,30 +20,24 @@
 			<rightPen lineWidth="0.75"/>
 		</box>
 	</style>
-	<scriptlet name="Imagenes" class="com.rutas.Imagenes"/>
+	<scriptlet name="Imagenes" class="com.rutas.PathRelativo"/>
 	<parameter name="area" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="solicitante" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="fecha" class="java.lang.String">
+	<parameter name="nombreEncargado" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="desc" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="opc" class="java.lang.String">
+	<parameter name="deptoReparador" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="folio" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="nomPry" class="java.lang.String">
+	<parameter name="noSeriePry" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select * from E_VIDEOPROYECTORES WHERE NO_SERIE = $P{nomPry}]]>
+		<![CDATA[select * from E_VIDEOPROYECTORES WHERE NO_SERIE = $P{noSeriePry}]]>
 	</queryString>
 	<field name="ID_VIDEOPROYECTOR" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -193,7 +187,7 @@
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font fontName="SansSerif" size="8" isBold="true"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$P{opc}.equals( "a" )?"X":""]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{deptoReparador}.equals( "a" )?"X":""]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -203,7 +197,7 @@
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font fontName="SansSerif" size="8" isBold="true"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$P{opc}.equals( "b" )?"X":""]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{deptoReparador}.equals( "b" )?"X":""]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -213,7 +207,7 @@
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font fontName="SansSerif" size="8" isBold="true"/>
 						</textElement>
-						<textFieldExpression><![CDATA[$P{opc}.equals( "c" )?"X":""]]></textFieldExpression>
+						<textFieldExpression><![CDATA[$P{deptoReparador}.equals( "c" )?"X":""]]></textFieldExpression>
 					</textField>
 				</frame>
 			</elementGroup>
@@ -253,7 +247,7 @@
 				<reportElement style="borde1" x="5" y="136" width="519" height="45" uuid="e5795177-7398-4101-9cc9-58ce871f2f97"/>
 				<staticText>
 					<reportElement x="21" y="0" width="364" height="20" uuid="0b904496-383d-411c-ba9b-27e44a326508"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Nombre y Firma del Solicitante:]]></text>
@@ -263,45 +257,50 @@
 					<textElement>
 						<font fontName="SansSerif" size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{solicitante}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{nombreEncargado}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement style="borde1" x="5" y="181" width="519" height="39" uuid="3c73c267-bf03-4d7d-82dd-bbc470110bd6"/>
+				<reportElement style="borde1" x="5" y="181" width="519" height="45" uuid="3c73c267-bf03-4d7d-82dd-bbc470110bd6"/>
 				<staticText>
 					<reportElement x="21" y="0" width="364" height="20" uuid="9f96f7b6-2252-4d64-b196-8d19f389d81a"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Fecha de Elaboración:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="44" y="20" width="238" height="19" uuid="6d9157c8-5422-4143-8907-1d782d1eec01"/>
+					<reportElement x="44" y="20" width="341" height="19" uuid="6d9157c8-5422-4143-8907-1d782d1eec01"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement style="borde1" x="5" y="220" width="519" height="35" uuid="72eba7c3-5ecf-4a57-be87-195d4da09b94"/>
+				<reportElement style="borde1" x="5" y="226" width="519" height="50" uuid="72eba7c3-5ecf-4a57-be87-195d4da09b94"/>
 				<staticText>
 					<reportElement x="21" y="0" width="364" height="20" uuid="725e6290-3ea8-44ba-881c-2fdd9a781e5e"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Descripción del servicio solicitado o falla a reparar:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="31" y="15" width="488" height="20" uuid="61c164b3-340c-470e-9c6a-15845006549c"/>
+					<reportElement x="44" y="20" width="475" height="14" uuid="61c164b3-340c-470e-9c6a-15845006549c"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif"/>
 					</textElement>
-					<textFieldExpression><![CDATA["El VideoProyector con el nombre: " + $F{NOMBRE} + " de la marca "+ $F{MARCA} + " " +$F{MODELO} + " presenta lo siguiente"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["El VideoProyector con el nombre: " + $F{NOMBRE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="44" y="34" width="475" height="16" uuid="07e5ab8e-42a4-4eac-9a85-96c9d5a89b8b"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA["perteneciente a las siguientes caracteristicas:"+ $F{MARCA} + " " +$F{MODELO} + "."]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement style="borde1" x="5" y="255" width="519" height="259" uuid="f26e5c8d-09fc-40d8-be5d-09e57c9a3bf0"/>
+				<reportElement style="borde1" x="5" y="276" width="519" height="238" uuid="f26e5c8d-09fc-40d8-be5d-09e57c9a3bf0"/>
 				<textField>
 					<reportElement x="21" y="13" width="482" height="224" uuid="82648b97-076a-4785-8623-6d55aa0f88b3"/>
 					<textElement textAlignment="Justified">
@@ -311,18 +310,11 @@
 				</textField>
 			</frame>
 			<textField>
-				<reportElement x="420" y="61" width="100" height="20" uuid="c9c649e6-ed4a-468e-b847-be55b1bef134"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{folio}]]></textFieldExpression>
-			</textField>
-			<textField>
 				<reportElement x="5" y="546" width="343" height="20" uuid="3795b6e0-95cb-4088-b8ee-a162d63666c7"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA["C.c.p. "+($P{opc}.equals("a")?"Recursos Materiales y Servicios":($P{opc}.equals("b")?"Mantenimiento de Equipo":"Centro de Cómputo"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["C.c.p. "+($P{deptoReparador}.equals("a")?"Recursos Materiales y Servicios":($P{deptoReparador}.equals("b")?"Mantenimiento de Equipo":"Centro de Cómputo"))]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

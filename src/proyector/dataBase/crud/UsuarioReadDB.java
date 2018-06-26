@@ -20,11 +20,11 @@ import proyector.dataBase.Conexion;
  *
  * @author JuanGSot
  */
-public class LeerInicio {
+public class UsuarioReadDB {
 
     private final Connection conn;
 
-    public LeerInicio() throws SQLException {
+    public UsuarioReadDB() throws SQLException {
         Conexion conexion = new Conexion();
         conn = conexion.getConexion();
     }
