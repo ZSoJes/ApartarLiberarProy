@@ -63,19 +63,19 @@
 		<property name="date1" value="$P{date1}"/>
 		<property name="date2" value="$P{date2}"/>
 		<parameter name="idProf" class="java.lang.String">
-			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA["0012"]]></defaultValueExpression>
 		</parameter>
 		<parameter name="date1" class="java.lang.String">
-			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA["2018-01-01T00:00:00Z"]]></defaultValueExpression>
 		</parameter>
 		<parameter name="date2" class="java.lang.String">
-			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA["2018-12-01T23:00:00Z"]]></defaultValueExpression>
 		</parameter>
 		<queryString>
 			<![CDATA[SELECT
     TO_CHAR(CREADO, 'DD/MM/YYYY') AS FECHA, 
-    TO_CHAR(CREADO, 'HH:MM AM') AS SALIDA, 
-    TO_CHAR(ACTUALIZADO, 'HH:MM AM') AS REGRESO, 
+    TO_CHAR(CREADO, 'HH:MI AM') AS SALIDA, 
+    TO_CHAR(ACTUALIZADO, 'HH:MI AM') AS REGRESO, 
     SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_PRESTAMOS.ID_VIDEOPROYECTOR AS VIDEOPROYECTOR
 FROM
      E_PRESTAMOS

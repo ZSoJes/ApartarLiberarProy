@@ -197,21 +197,19 @@ public class UsuarioReadDB {
     }
 
     public boolean getEsAdminUsuario(String id){
-        boolean loEs = false;
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE ID_USUARIO = ? AND ADMINDR = TRUE");
+            prep = conn.prepareStatement("SELECT ADMINDR FROM E_USUARIOS WHERE ID_USUARIO = ?");
             prep.setString(1, id);
             ResultSet rs = prep.executeQuery();
             while (rs.next()) {
-                loEs = rs.getInt(1) > 0;
+                return rs.getBoolean(1);
             }
             //cerrar conexiones
             prep.close();
             rs.close();
-        } catch (SQLException e) {
-        }
-        return loEs;
+        } catch (SQLException e) {System.out.println("Error en encontrar usuario: " + e);}
+        return false;
     }
     /**
      * regresa la contraseña cifrada del usuario indicado para comparar con
@@ -288,7 +286,7 @@ public class UsuarioReadDB {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
             String[] tablaNombre = tablaSeleccionada(tabla);
-            String sql = "CALL CSVWRITE('" + ruta.replace('\\', '/').concat("/"+tablaNombre[0]) + "', 'SELECT * FROM " + tablaNombre[1] + "',STRINGDECODE('charset=windows-1252'))";
+            String sql = "CALL CSVWRITE('" + ruta.replace('\\', '/').concat("/"+tablaNombre[0]) + "', '"+ tablaNombre[1] + "',STRINGDECODE('charset=windows-1252'))";
             prep = conn.prepareStatement(sql);
             prep.executeUpdate();
             prep.close();
@@ -305,15 +303,15 @@ public class UsuarioReadDB {
         switch(tabla){
             case 1:
                 tablaNombre[0] = "departamentos";
-                tablaNombre[1] = "E_DEPARTAMENTOS";
+                tablaNombre[1] = "SELECT ID_DEPARTAMENTO, NOMBRE, ABBREV, ENCARGADO FROM E_DEPARTAMENTOS";
             break;
             case 2:
                 tablaNombre[0] = "profesores";
-                tablaNombre[1] = "E_PROFESORES";
+                tablaNombre[1] = "SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR, ESTATUS FROM E_PROFESORES";
             break;
             case 3:
                 tablaNombre[0] = "videoproyectores";
-                tablaNombre[1] = "E_VIDEOPROYECTORES";
+                tablaNombre[1] = "SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE FROM E_VIDEOPROYECTORES";
             break;
             case 4:
                 tablaNombre[0] = "aulas";
@@ -321,14 +319,27 @@ public class UsuarioReadDB {
             break;
             case 5:
                 tablaNombre[0] = "articulos";
-                tablaNombre[1] = "E_ACCESORIOS";
+                tablaNombre[1] = "SELECT ID_ACCESORIO, NOMBRE, EXISTENCIAS FROM E_ACCESORIOS";
             break;
             case 6:
                 tablaNombre[0] = "usuarios";
-                tablaNombre[1] = "E_USUARIOS";
+                tablaNombre[1] = "SELECT ID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR FROM E_USUARIOS";
             break;
         }
         tablaNombre[0] = tablaNombre[0].concat(fm.format(c.getTime()) + ".csv");
         return tablaNombre;
+    }
+    
+    public void bulkDataDB(String ruta){
+        try {
+            PreparedStatement prep;
+            System.out.println("ruta: " + ruta.replace('\\', '/'));
+            String sql = "BACKUP TO ('" + ruta.replace('\\', '/').concat("/backupDB.zip") + "')";
+            prep = conn.prepareStatement(sql);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar multiples registros a la db Profesores: " + e);
+        }
     }
 }

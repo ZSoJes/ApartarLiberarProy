@@ -1534,12 +1534,17 @@ public class ARegistro extends javax.swing.JFrame {
             if (leer.getExisteUsuario(crdncial)) {
                 String hashed = leer.getPass(crdncial);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
-                    valido = true;
-                    usuario = crdncial;
-                    txtUsuario.setText("");
-                    txtPass.setText("");
-                    dlgConfirm.setVisible(false);
-                    dlgConfirm.dispose();
+                    System.out.println("Es valido: " + leer.getEsAdminUsuario(crdncial));
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        usuario = crdncial;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
                 }else{
                     throw new Exception();
                 }
@@ -1553,7 +1558,7 @@ public class ARegistro extends javax.swing.JFrame {
             txtPass.setText("");
             valido = false;
             usuario = "";
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 

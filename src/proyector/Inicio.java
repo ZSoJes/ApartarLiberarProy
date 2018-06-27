@@ -852,7 +852,8 @@ public final class Inicio extends javax.swing.JFrame {
         login.add(barraSeparadora6, gridBagConstraints);
 
         btnIniciar.setBackground(new java.awt.Color(0, 178, 104));
-        btnIniciar.setMinimumSize(new java.awt.Dimension(159, 46));
+        btnIniciar.setMinimumSize(new java.awt.Dimension(159, 40));
+        btnIniciar.setPreferredSize(new java.awt.Dimension(159, 40));
         btnIniciar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnIniciarMouseClicked(evt);
@@ -885,7 +886,7 @@ public final class Inicio extends javax.swing.JFrame {
         btnIniciarLayout.setVerticalGroup(
             btnIniciarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnIniciarLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(9, 9, 9)
                 .addGroup(btnIniciarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblIcoIniciar)
                     .addComponent(lblBtnIniciar))
@@ -1220,7 +1221,7 @@ public final class Inicio extends javax.swing.JFrame {
                 System.out.println("es admin:" + leer.getEsAdminUsuario(usuario));
                 String[] usr = leer.getUsuario(usuario);
                 if(usr[0] != null && leer.getEsAdminUsuario(usuario)){
-                    int opc = JOptionPane.showConfirmDialog(null, "CONTRASEÑA:", "Info",JOptionPane.WARNING_MESSAGE,JOptionPane.YES_NO_OPTION);
+                    int opc = JOptionPane.showConfirmDialog(frameBackground, "CONTRASEÑA:", "Info",JOptionPane.WARNING_MESSAGE,JOptionPane.YES_NO_OPTION);
                     if(opc == JOptionPane.OK_OPTION){
                         recovery.setLocationRelativeTo(frameBackground);
                         recovery.setVisible(true);
@@ -1383,6 +1384,8 @@ public final class Inicio extends javax.swing.JFrame {
                 if (leer.getExisteUsuario(usuario)) {
                     String hashed = leer.getPass(usuario);
                     if (BCrypt.checkpw(String.valueOf(jPassAcceso.getPassword()), hashed)) {
+                        System.out.println("Usuario:"+usuario);
+                        System.out.println("valido: "+ leer.getEsAdminUsuario(usuario));
                         if(leer.getEsAdminUsuario(usuario)){
                             Menu menu = new Menu();
                             menu.setVisible(true);
@@ -1399,7 +1402,8 @@ public final class Inicio extends javax.swing.JFrame {
                     throw new Exception();
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Intenta de nuevo\nEsta ingresando icorrectamente \nusuario y/o contraseña!!!\n\no su usuario no puede dar inicio al programa", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Intenta de nuevo\nEsta ingresando icorrectamente \nusuario y/o contraseña!!!\n\no su usuario no puede dar inicio al programa", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                System.out.println("Error usuario carga:" + ex);
                 txtUsuario.setText("");
                 jPassAcceso.setText("");
             }

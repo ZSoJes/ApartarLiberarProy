@@ -1873,36 +1873,7 @@ public class Profesor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void lblTituloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTituloMouseClicked
-                int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
-                                                          + "\n-Los datos deben ser separados por coma(,)"
-                                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
-                                                          + "\n-La informacion debe tener el siguiente orden"
-                                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
-                                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        if(respuesta == JOptionPane.OK_OPTION){
-            int status = fcProfCSV.showOpenDialog(null);
-            if (status == fcProfCSV.APPROVE_OPTION) {
-                File selectedFile = fcProfCSV.getSelectedFile();
-                System.out.println(":::::::::::::::::::::::::::::::::...\n"
-                                 + "Ubicación del archivo: " + selectedFile.getParent());
-                System.out.println("Nombre del archivo: " + selectedFile.getName());
 
-                try {
-                    ProfesorDB prof = new ProfesorDB();
-    //                if(
-                        prof.bulkLoadProfe(selectedFile.getPath());//){
-                        JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
-                        System.out.println("dibujo tabla nuevamente");
-                        getTable();
-                        txtBusqueda.requestFocusInWindow();
-    //                }else{
-    //                    JOptionPane.showMessageDialog(null, "Rectifique los datos\n!!!No se han creado los registros!!!");
-    //                }
-                } catch (Exception e) {            
-                    System.out.println("Error al leer archivo que fue recibido");
-                }
-            }
-        }
     }//GEN-LAST:event_lblTituloMouseClicked
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {

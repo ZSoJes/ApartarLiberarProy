@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 import proyector.comboItemProf;
 import proyector.dataBase.Conexion;
 
@@ -238,7 +239,6 @@ public class ProfesorDB {
     }
     
     public void bulkLoadProfe(String ruta){
-        //boolean correcto = false;
         try {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
@@ -252,7 +252,25 @@ public class ProfesorDB {
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error al insertar multiples registros a la db Profesores: " + e);
+            JOptionPane.showMessageDialog(null,"Error al insertar multiples registros a la db Profesores\n\nEs posible que uno o varios registros ya existan, causando que no sea posible una carga uniforme de los datos\n\n" + e, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //return correcto;
+    }
+    
+    public void bulkLoadUsuario(String ruta){
+        try {
+            PreparedStatement prep;
+            System.out.println("ruta: " + ruta.replace('\\', '/'));
+            String sql = "INSERT INTO E_USUARIOS(ID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR) "
+                       + "SELECT * FROM CSVREAD('" + ruta.replace('\\', '/') + "', null, ";
+            //sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":"STRINGDECODE('charset=UTF-8'))"); //si es windows decode char con windows 1252 sino usa UTF-8 -se debe usar windows1252 en linux error charsetUTF8
+            sql = sql.concat("STRINGDECODE('charset=windows-1252'))");
+            System.out.println("SQL: "+ sql);
+            prep = conn.prepareStatement(sql);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar multiples registros a la db Usuarios: " + e);
+            JOptionPane.showMessageDialog(null,"Error al insertar multiples registros a la db Usuarios\n\nEs posible que uno o varios registros ya existan, causando que no sea posible una carga uniforme de los datos\n\n" + e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

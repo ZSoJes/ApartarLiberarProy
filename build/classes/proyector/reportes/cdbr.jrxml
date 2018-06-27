@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" columnCount="2" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="277" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9554847d-429f-4e58-bf16-15f9f663ed3f">
-	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="175"/>
+	<property name="ireport.y" value="0"/>
 	<style name="style1" hAlign="Center">
 		<conditionalStyle>
 			<style/>
@@ -75,12 +75,6 @@
 				</textElement>
 				<text><![CDATA[Tecnológico Nacional de México]]></text>
 			</staticText>
-			<componentElement>
-				<reportElement style="style1" positionType="FixRelativeToBottom" stretchType="RelativeToBandHeight" x="45" y="71" width="190" height="55" uuid="b7677a21-391f-4b7f-927a-c5e67493bbab"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barHeight="100">
-					<jr:codeExpression><![CDATA[$F{NO_SERIE}]]></jr:codeExpression>
-				</jr:barbecue>
-			</componentElement>
 			<textField>
 				<reportElement x="45" y="126" width="190" height="15" uuid="662458e4-f028-4268-a2e0-f2a3a56faf60"/>
 				<textElement textAlignment="Center">
@@ -88,6 +82,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NO_SERIE}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement style="style1" x="45" y="71" width="190" height="55" uuid="93f5a8cb-1868-4e49-8705-64d4e94e4a95"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39 (Extended)" drawText="false" checksumRequired="false" barHeight="100">
+					<jr:codeExpression><![CDATA[$F{NO_SERIE}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
 		</band>
 	</detail>
 </jasperReport>

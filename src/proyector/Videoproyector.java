@@ -36,6 +36,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AccesorioDB;
+import proyector.dataBase.crud.LogDB;
 import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.VideoproyectorDB;
@@ -3264,11 +3265,16 @@ public final class Videoproyector extends javax.swing.JFrame {
             if (leer.getExisteUsuario(usuario)) {
                 String hashed = leer.getPass(usuario);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
-                    valido = true;
-                    txtUsuario.setText("");
-                    txtPass.setText("");
-                    dlgConfirm.setVisible(false);
-                    dlgConfirm.dispose();
+                    if(leer.getEsAdminUsuario(usuario)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                        new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 5);
+                    }else{
+                        throw new Exception();
+                    }
                 }else{
                     throw new Exception();
                 }
@@ -3281,7 +3287,7 @@ public final class Videoproyector extends javax.swing.JFrame {
             txtUsuario.setText("");
             txtPass.setText("");
             valido = false;
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 

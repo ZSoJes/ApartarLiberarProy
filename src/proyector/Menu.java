@@ -310,6 +310,8 @@ public class Menu extends javax.swing.JFrame {
         jLabel38 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        lblLoadProf = new javax.swing.JLabel();
+        lblUsuarios = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         contacto = new javax.swing.JDialog();
@@ -334,6 +336,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel43 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
+        fcProfCSV = new javax.swing.JFileChooser();
         bkMenu = new javax.swing.JPanel();
         menuBar = new javax.swing.JPanel();
         lblHora = new javax.swing.JLabel();
@@ -1662,10 +1665,32 @@ public class Menu extends javax.swing.JFrame {
         pnlMenuBK.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 90, 90));
 
         jButton6.setText("Respaldo DB Completo");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         pnlMenuBK.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
 
         jButton7.setText("Recuperar DB Completo");
+        jButton7.setEnabled(false);
         pnlMenuBK.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, -1, -1));
+
+        lblLoadProf.setText("Cargar Profesores");
+        lblLoadProf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblLoadProfMouseClicked(evt);
+            }
+        });
+        pnlMenuBK.add(lblLoadProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, -1, -1));
+
+        lblUsuarios.setText("Cargar Usuarios");
+        lblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblUsuariosMouseClicked(evt);
+            }
+        });
+        pnlMenuBK.add(lblUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
 
         jLayeredPane1.add(pnlMenuBK, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 550, 250));
 
@@ -1756,7 +1781,6 @@ public class Menu extends javax.swing.JFrame {
         dlgLog.setTitle("[Log]");
         dlgLog.setMinimumSize(new java.awt.Dimension(550, 570));
         dlgLog.setModal(true);
-        dlgLog.setPreferredSize(new java.awt.Dimension(550, 570));
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
         jPanel3.setMinimumSize(new java.awt.Dimension(541, 550));
@@ -3224,11 +3248,15 @@ public class Menu extends javax.swing.JFrame {
             if (leer.getExisteUsuario(crdncial)) {
                 String hashed = leer.getPass(crdncial);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
-                    valido = true;
-                    txtUsuario.setText("");
-                    txtPass.setText("");
-                    dlgConfirm.setVisible(false);
-                    dlgConfirm.dispose();
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
                 }else{
                     throw new Exception();
                 }
@@ -3241,7 +3269,7 @@ public class Menu extends javax.swing.JFrame {
             txtUsuario.setText("");
             txtPass.setText("");
             valido = false;
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados");
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 
@@ -3262,6 +3290,66 @@ public class Menu extends javax.swing.JFrame {
             btnComprobar.doClick();
         }
     }//GEN-LAST:event_txtPassKeyTyped
+
+    private void lblLoadProfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoadProfMouseClicked
+        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
+                                          + "\n-Los datos deben ser separados por coma(,)"
+                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                                          + "\n-La informacion debe tener el siguiente orden"
+                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
+                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if(respuesta == JOptionPane.OK_OPTION){
+            int status = fcProfCSV.showOpenDialog(null);
+            if (status == fcProfCSV.APPROVE_OPTION) {
+                File selectedFile = fcProfCSV.getSelectedFile();
+                System.out.println(":::::::::::::::::::::::::::::::::...\nUbicación del archivo: " + selectedFile.getParent());
+                System.out.println("Nombre del archivo: " + selectedFile.getName());
+                try {
+                    ProfesorDB prof = new ProfesorDB();
+                    prof.bulkLoadProfe(selectedFile.getPath());
+                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
+                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
+            }
+        }
+    }//GEN-LAST:event_lblLoadProfMouseClicked
+
+    private void lblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUsuariosMouseClicked
+        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
+                                          + "\n-Los datos deben ser separados por coma(,)"
+                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                                          + "\n-La informacion debe tener el siguiente orden"
+                                          + "\nID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR"
+                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if(respuesta == JOptionPane.OK_OPTION){
+            int status = fcProfCSV.showOpenDialog(null);
+            if (status == fcProfCSV.APPROVE_OPTION) {
+                File selectedFile = fcProfCSV.getSelectedFile();
+                System.out.println(":::::::::::::::::::::::::::::::::...\nUbicación del archivo: " + selectedFile.getParent());
+                System.out.println("Nombre del archivo: " + selectedFile.getName());
+                try {
+                    ProfesorDB prof = new ProfesorDB();
+                    prof.bulkLoadUsuario(selectedFile.getPath());
+                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
+                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
+            }
+        }
+    }//GEN-LAST:event_lblUsuariosMouseClicked
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardado el backup");
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+            int option = f.showSaveDialog(jTabbedPane1);
+            //File path = f.getCurrentDirectory();
+            if (option == JFileChooser.APPROVE_OPTION){
+                String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
+                try{
+                    UsuarioReadDB leer = new UsuarioReadDB();
+                    leer.bulkDataDB(path);
+                    JOptionPane.showMessageDialog(this, "Listo");
+                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
+            }else{ System.out.println("No se eligio una ruta"); }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -3338,6 +3426,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgLog;
     private javax.swing.JDialog dlgUsuario;
+    private javax.swing.JFileChooser fcProfCSV;
     private javax.swing.JLabel hdnIDCopy;
     private javax.swing.JLabel hiddenLbl;
     private javax.swing.JLabel ico1;
@@ -3441,11 +3530,13 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel lblIcoInfo1;
     private javax.swing.JLabel lblInfoCrear;
     private javax.swing.JLabel lblInfoCrear1;
+    private javax.swing.JLabel lblLoadProf;
     private javax.swing.JLabel lblLogo1;
     private javax.swing.JLabel lblLogo2;
     private javax.swing.JLabel lblLogo3;
     private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblUsuarioHidenID;
+    private javax.swing.JLabel lblUsuarios;
     private javax.swing.JPanel menuBar;
     private javax.swing.JPanel menuBarIzq;
     private javax.swing.JPasswordField passConfN;

@@ -142,7 +142,7 @@ public class VideoproyectorDB {
         int i = 0;
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO FROM E_VIDEOPROYECTORES");
+            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO FROM E_VIDEOPROYECTORES ORDER BY NOMBRE");
             ResultSet rs = prep.executeQuery();
             
             while (rs.next()) {
