@@ -176,6 +176,7 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         Aulas = new javax.swing.JLabel();
         pnlBtnNuevo = new javax.swing.JPanel();
         icoN = new javax.swing.JLabel();
@@ -866,8 +867,21 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel4.setToolTipText("Artículos");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        panelOPC.add(jLabel4, gridBagConstraints);
 
         bkAulas.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
@@ -1298,6 +1312,13 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
         }
     }//GEN-LAST:event_txtAulaNuevoKeyTyped
 
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel4MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1371,6 +1392,7 @@ AulaDB aula = new AulaDB();
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;

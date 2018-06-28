@@ -152,6 +152,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         departamentos = new javax.swing.JLabel();
         scrollPane = new javax.swing.JScrollPane();
         pnlContenedor = new javax.swing.JPanel();
@@ -744,8 +745,21 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(jLabel9, gridBagConstraints);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel4.setToolTipText("Artículos");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        panelOPC.add(jLabel4, gridBagConstraints);
 
         bkDepartamentos.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
@@ -1065,6 +1079,13 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_ico5MouseClicked
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel4MouseClicked
    
     /**
      * Metodo encargado de crear un jPanel con una estructura predefinida para recibir 
@@ -1288,6 +1309,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

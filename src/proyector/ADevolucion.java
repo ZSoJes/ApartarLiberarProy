@@ -191,6 +191,7 @@ public class ADevolucion extends javax.swing.JFrame {
         ico6 = new javax.swing.JLabel();
         ico7 = new javax.swing.JLabel();
         ico8 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnPnDevolver = new javax.swing.JPanel();
@@ -405,7 +406,6 @@ public class ADevolucion extends javax.swing.JFrame {
         pryArt.setMinimumSize(new java.awt.Dimension(320, 295));
         pryArt.setModal(true);
         pryArt.setUndecorated(true);
-        pryArt.setPreferredSize(new java.awt.Dimension(320, 295));
         pryArt.setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(195, 83, 93));
@@ -485,7 +485,6 @@ public class ADevolucion extends javax.swing.JFrame {
         dlgReporte.setTitle("[Reporte de Artículos]");
         dlgReporte.setMinimumSize(new java.awt.Dimension(750, 420));
         dlgReporte.setModal(true);
-        dlgReporte.setPreferredSize(new java.awt.Dimension(750, 420));
 
         jPanel2.setBackground(new java.awt.Color(255, 138, 101));
         jPanel2.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
@@ -693,6 +692,8 @@ public class ADevolucion extends javax.swing.JFrame {
 
         panelOPC.setBackground(new java.awt.Color(250, 250, 250));
         panelOPC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 173, 179), 1, true));
+        panelOPC.setMinimumSize(new java.awt.Dimension(44, 376));
+        panelOPC.setPreferredSize(new java.awt.Dimension(44, 376));
         panelOPC.setLayout(new java.awt.GridBagLayout());
 
         ico3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prestamo_32px.png"))); // NOI18N
@@ -750,7 +751,7 @@ public class ADevolucion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 4, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(ico7, gridBagConstraints);
 
         ico8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Video Projector_42px.png"))); // NOI18N
@@ -762,10 +763,23 @@ public class ADevolucion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(ico8, gridBagConstraints);
 
-        pnlBackground.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, 50, 350));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel13.setToolTipText("Artículos");
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        panelOPC.add(jLabel13, gridBagConstraints);
+
+        pnlBackground.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
         lblTitulo.setFont(new java.awt.Font("SansSerif", 1, 26)); // NOI18N
         lblTitulo.setText("Devolución");
@@ -1340,6 +1354,13 @@ public class ADevolucion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtDescKeyTyped
 
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel13MouseClicked
+
     public void miPanel(String[] datos) throws SQLException{
         JPanel pnlVidDetalles = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
@@ -1581,6 +1602,7 @@ public class ADevolucion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

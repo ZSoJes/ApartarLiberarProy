@@ -219,6 +219,7 @@ public class Profesor extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         pnlBtnNuevo = new javax.swing.JPanel();
         ico1 = new javax.swing.JLabel();
@@ -1138,8 +1139,21 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(jLabel9, gridBagConstraints);
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel11.setToolTipText("Artículos");
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        panelOPC.add(jLabel11, gridBagConstraints);
 
         pnlBkProfesor.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
@@ -1154,6 +1168,8 @@ public class Profesor extends javax.swing.JFrame {
 
         pnlBtnNuevo.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnNuevo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
+        pnlBtnNuevo.setMinimumSize(new java.awt.Dimension(80, 95));
+        pnlBtnNuevo.setPreferredSize(new java.awt.Dimension(80, 95));
         pnlBtnNuevo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlBtnNuevoMouseClicked(evt);
@@ -1191,10 +1207,12 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnNuevo.add(lblN1, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(912, 144, -1, -1));
+        pnlBkProfesor.add(pnlBtnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 190, -1, -1));
 
         pnlBtnBorrar.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnBorrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
+        pnlBtnBorrar.setMinimumSize(new java.awt.Dimension(80, 95));
+        pnlBtnBorrar.setPreferredSize(new java.awt.Dimension(80, 95));
         pnlBtnBorrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlBtnBorrarMouseClicked(evt);
@@ -1232,10 +1250,12 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnBorrar.add(lblN2, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 270, -1, -1));
+        pnlBkProfesor.add(pnlBtnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 320, -1, -1));
 
         pnlBtnActualizar.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnActualizar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
+        pnlBtnActualizar.setMinimumSize(new java.awt.Dimension(80, 95));
+        pnlBtnActualizar.setPreferredSize(new java.awt.Dimension(80, 95));
         pnlBtnActualizar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlBtnActualizarMouseClicked(evt);
@@ -1273,7 +1293,7 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnActualizar.add(lblN3, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 390, -1, -1));
+        pnlBkProfesor.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 440, -1, -1));
 
         lblInstrucciones.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblInstrucciones.setText("Filtrar información:");
@@ -1876,6 +1896,13 @@ public class Profesor extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lblTituloMouseClicked
 
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
+
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
         if (!(Character.isAlphabetic(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
@@ -1956,6 +1983,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -310,8 +310,11 @@ public class Menu extends javax.swing.JFrame {
         jLabel38 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        lblLoadProf = new javax.swing.JLabel();
-        lblUsuarios = new javax.swing.JLabel();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jLabel44 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         contacto = new javax.swing.JDialog();
@@ -352,6 +355,9 @@ public class Menu extends javax.swing.JFrame {
         btnAul = new javax.swing.JPanel();
         ico3 = new javax.swing.JLabel();
         lbl3 = new javax.swing.JLabel();
+        btnAcc = new javax.swing.JPanel();
+        ico5 = new javax.swing.JLabel();
+        lbl5 = new javax.swing.JLabel();
         btnVid = new javax.swing.JPanel();
         ico4 = new javax.swing.JLabel();
         lbl4 = new javax.swing.JLabel();
@@ -1527,6 +1533,7 @@ public class Menu extends javax.swing.JFrame {
         jTabbedPane1.addTab("<html><center><b>Administrar<br>Usuarios</b></center><html>", pnlControlUsuarios);
 
         pnlBackup.setBackground(new java.awt.Color(255, 255, 255));
+        pnlBackup.setPreferredSize(new java.awt.Dimension(920, 556));
         pnlBackup.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel32.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
@@ -1654,7 +1661,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel39.setForeground(new java.awt.Color(255, 255, 255));
         jLabel39.setText("Los archivos seran generados en la ubicacion indicada al presionar el boton");
-        pnlMenuBK.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 212, -1, -1));
+        pnlMenuBK.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
 
         cb6.setForeground(new java.awt.Color(255, 255, 255));
         cb6.setText("Usuarios");
@@ -1662,7 +1669,7 @@ public class Menu extends javax.swing.JFrame {
         pnlMenuBK.add(cb6, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 116, -1, -1));
 
         jLabel38.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/files-90.png"))); // NOI18N
-        pnlMenuBK.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, 90, 90));
+        pnlMenuBK.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, 90, 90));
 
         jButton6.setText("Respaldo DB Completo");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -1670,31 +1677,45 @@ public class Menu extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        pnlMenuBK.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+        pnlMenuBK.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 270, -1, -1));
 
         jButton7.setText("Recuperar DB Completo");
         jButton7.setEnabled(false);
-        pnlMenuBK.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, -1, -1));
+        pnlMenuBK.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 310, -1, -1));
 
-        lblLoadProf.setText("Cargar Profesores");
-        lblLoadProf.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblLoadProfMouseClicked(evt);
+        jButton8.setText("Cargar Usuarios");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
             }
         });
-        pnlMenuBK.add(lblLoadProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, -1, -1));
+        pnlMenuBK.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, -1));
 
-        lblUsuarios.setText("Cargar Usuarios");
-        lblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblUsuariosMouseClicked(evt);
+        jButton9.setText("Cargar Profesores");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
             }
         });
-        pnlMenuBK.add(lblUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
+        pnlMenuBK.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, -1, -1));
 
-        jLayeredPane1.add(pnlMenuBK, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 550, 250));
+        jLabel44.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        jLabel44.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel44.setText("Carga de Datos desde CSV:");
+        pnlMenuBK.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, -1, -1));
 
-        pnlBackup.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+        jLabel45.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        jLabel45.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel45.setText("Respaldo y recuperación total:");
+        pnlMenuBK.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, -1, -1));
+
+        jSeparator1.setMinimumSize(new java.awt.Dimension(500, 4));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(500, 4));
+        pnlMenuBK.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 220, -1, -1));
+
+        jLayeredPane1.add(pnlMenuBK, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 550, 350));
+
+        pnlBackup.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 930, 470));
 
         jLabel34.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel34.setForeground(new java.awt.Color(0, 191, 255));
@@ -1959,7 +1980,7 @@ public class Menu extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 15, 0);
         menuBar.add(lblHora, gridBagConstraints);
 
         labelHora.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -1990,7 +2011,8 @@ public class Menu extends javax.swing.JFrame {
         menuBar.add(labelFecha, gridBagConstraints);
 
         btnProf.setBackground(new java.awt.Color(239, 239, 239));
-        btnProf.setPreferredSize(new java.awt.Dimension(265, 64));
+        btnProf.setMinimumSize(new java.awt.Dimension(265, 51));
+        btnProf.setPreferredSize(new java.awt.Dimension(265, 51));
         btnProf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnProfMouseClicked(evt);
@@ -2002,45 +2024,36 @@ public class Menu extends javax.swing.JFrame {
                 btnProfMouseExited(evt);
             }
         });
+        btnProf.setLayout(new java.awt.GridBagLayout());
 
         ico1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prof_42px.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 22, 5, 0);
+        btnProf.add(ico1, gridBagConstraints);
 
         lbl1.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         lbl1.setForeground(new java.awt.Color(43, 212, 128));
         lbl1.setText("Profesores");
-
-        javax.swing.GroupLayout btnProfLayout = new javax.swing.GroupLayout(btnProf);
-        btnProf.setLayout(btnProfLayout);
-        btnProfLayout.setHorizontalGroup(
-            btnProfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnProfLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(ico1)
-                .addGap(18, 18, 18)
-                .addComponent(lbl1)
-                .addContainerGap())
-        );
-        btnProfLayout.setVerticalGroup(
-            btnProfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnProfLayout.createSequentialGroup()
-                .addGroup(btnProfLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(btnProfLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ico1))
-                    .addGroup(btnProfLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(lbl1)))
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(14, 18, 14, 74);
+        btnProf.add(lbl1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 25, 23, 25);
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(0, 25, 21, 25);
         menuBar.add(btnProf, gridBagConstraints);
 
         btnDep.setBackground(new java.awt.Color(239, 239, 239));
-        btnDep.setPreferredSize(new java.awt.Dimension(265, 64));
+        btnDep.setMinimumSize(new java.awt.Dimension(265, 51));
+        btnDep.setPreferredSize(new java.awt.Dimension(265, 51));
         btnDep.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnDepMouseClicked(evt);
@@ -2052,44 +2065,35 @@ public class Menu extends javax.swing.JFrame {
                 btnDepMouseExited(evt);
             }
         });
+        btnDep.setLayout(new java.awt.GridBagLayout());
 
         ico2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/depart_42px.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 22, 5, 0);
+        btnDep.add(ico2, gridBagConstraints);
 
         lbl2.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         lbl2.setForeground(new java.awt.Color(43, 212, 128));
         lbl2.setText("Departamentos");
-
-        javax.swing.GroupLayout btnDepLayout = new javax.swing.GroupLayout(btnDep);
-        btnDep.setLayout(btnDepLayout);
-        btnDepLayout.setHorizontalGroup(
-            btnDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnDepLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(ico2)
-                .addGap(18, 18, 18)
-                .addComponent(lbl2)
-                .addContainerGap())
-        );
-        btnDepLayout.setVerticalGroup(
-            btnDepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnDepLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ico2)
-                .addGap(24, 24, 24))
-            .addGroup(btnDepLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(lbl2)
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(14, 18, 14, 22);
+        btnDep.add(lbl2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 23, 0);
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 21, 0);
         menuBar.add(btnDep, gridBagConstraints);
 
         btnAul.setBackground(new java.awt.Color(239, 239, 239));
-        btnAul.setPreferredSize(new java.awt.Dimension(265, 64));
+        btnAul.setMinimumSize(new java.awt.Dimension(265, 51));
+        btnAul.setPreferredSize(new java.awt.Dimension(265, 51));
         btnAul.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnAulMouseClicked(evt);
@@ -2101,45 +2105,75 @@ public class Menu extends javax.swing.JFrame {
                 btnAulMouseExited(evt);
             }
         });
+        btnAul.setLayout(new java.awt.GridBagLayout());
 
         ico3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aul_42px.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 22, 5, 0);
+        btnAul.add(ico3, gridBagConstraints);
 
         lbl3.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         lbl3.setForeground(new java.awt.Color(43, 212, 128));
         lbl3.setText("Aulas");
-
-        javax.swing.GroupLayout btnAulLayout = new javax.swing.GroupLayout(btnAul);
-        btnAul.setLayout(btnAulLayout);
-        btnAulLayout.setHorizontalGroup(
-            btnAulLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAulLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(ico3)
-                .addGap(18, 18, 18)
-                .addComponent(lbl3)
-                .addContainerGap())
-        );
-        btnAulLayout.setVerticalGroup(
-            btnAulLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAulLayout.createSequentialGroup()
-                .addGroup(btnAulLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(btnAulLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ico3))
-                    .addGroup(btnAulLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lbl3)))
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(14, 18, 14, 123);
+        btnAul.add(lbl3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 23, 0);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 21, 0);
         menuBar.add(btnAul, gridBagConstraints);
 
+        btnAcc.setBackground(new java.awt.Color(239, 239, 239));
+        btnAcc.setMinimumSize(new java.awt.Dimension(265, 51));
+        btnAcc.setPreferredSize(new java.awt.Dimension(265, 51));
+        btnAcc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAccMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAccMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAccMouseExited(evt);
+            }
+        });
+        btnAcc.setLayout(new java.awt.GridBagLayout());
+
+        ico5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 22, 5, 0);
+        btnAcc.add(ico5, gridBagConstraints);
+
+        lbl5.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
+        lbl5.setForeground(new java.awt.Color(43, 212, 128));
+        lbl5.setText("Artículos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(14, 18, 14, 92);
+        btnAcc.add(lbl5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 17, 0);
+        menuBar.add(btnAcc, gridBagConstraints);
+
         btnVid.setBackground(new java.awt.Color(239, 239, 239));
-        btnVid.setPreferredSize(new java.awt.Dimension(265, 64));
+        btnVid.setMinimumSize(new java.awt.Dimension(265, 51));
+        btnVid.setPreferredSize(new java.awt.Dimension(265, 51));
         btnVid.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnVidMouseClicked(evt);
@@ -2151,41 +2185,30 @@ public class Menu extends javax.swing.JFrame {
                 btnVidMouseExited(evt);
             }
         });
+        btnVid.setLayout(new java.awt.GridBagLayout());
 
         ico4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Video Projector_42px.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 22, 5, 0);
+        btnVid.add(ico4, gridBagConstraints);
 
         lbl4.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         lbl4.setForeground(new java.awt.Color(43, 212, 128));
         lbl4.setText("Video Proyectores");
-
-        javax.swing.GroupLayout btnVidLayout = new javax.swing.GroupLayout(btnVid);
-        btnVid.setLayout(btnVidLayout);
-        btnVidLayout.setHorizontalGroup(
-            btnVidLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnVidLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(ico4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbl4)
-                .addContainerGap())
-        );
-        btnVidLayout.setVerticalGroup(
-            btnVidLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnVidLayout.createSequentialGroup()
-                .addGroup(btnVidLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(btnVidLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ico4))
-                    .addGroup(btnVidLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lbl4)))
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(14, 6, 14, 10);
+        btnVid.add(lbl4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 23, 0);
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 21, 0);
         menuBar.add(btnVid, gridBagConstraints);
 
         bkMenu.add(menuBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(629, 0, -1, -1));
@@ -3291,29 +3314,39 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtPassKeyTyped
 
-    private void lblLoadProfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLoadProfMouseClicked
-        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
-                                          + "\n-Los datos deben ser separados por coma(,)"
-                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
-                                          + "\n-La informacion debe tener el siguiente orden"
-                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
-                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        if(respuesta == JOptionPane.OK_OPTION){
-            int status = fcProfCSV.showOpenDialog(null);
-            if (status == fcProfCSV.APPROVE_OPTION) {
-                File selectedFile = fcProfCSV.getSelectedFile();
-                System.out.println(":::::::::::::::::::::::::::::::::...\nUbicación del archivo: " + selectedFile.getParent());
-                System.out.println("Nombre del archivo: " + selectedFile.getName());
-                try {
-                    ProfesorDB prof = new ProfesorDB();
-                    prof.bulkLoadProfe(selectedFile.getPath());
-                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
-                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
-            }
-        }
-    }//GEN-LAST:event_lblLoadProfMouseClicked
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardado el backup");
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+            int option = f.showSaveDialog(jTabbedPane1);
+            //File path = f.getCurrentDirectory();
+            if (option == JFileChooser.APPROVE_OPTION){
+                String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
+                try{
+                    UsuarioReadDB leer = new UsuarioReadDB();
+                    leer.bulkDataDB(path);
+                    JOptionPane.showMessageDialog(this, "Listo");
+                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
+            }else{ System.out.println("No se eligio una ruta"); }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void lblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblUsuariosMouseClicked
+    private void btnAccMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAccMouseClicked
+        btnAcc.setBackground(new Color(240, 240, 240));
+        Articulo acc = new Articulo();
+        acc.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnAccMouseClicked
+
+    private void btnAccMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAccMouseEntered
+        btnAcc.setBackground(new Color(43, 212, 128));
+    }//GEN-LAST:event_btnAccMouseEntered
+
+    private void btnAccMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAccMouseExited
+        btnAcc.setBackground(new Color(240, 240, 240));
+    }//GEN-LAST:event_btnAccMouseExited
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
                                           + "\n-Los datos deben ser separados por coma(,)"
                                           + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
@@ -3333,23 +3366,29 @@ public class Menu extends javax.swing.JFrame {
                 } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
             }
         }
-    }//GEN-LAST:event_lblUsuariosMouseClicked
+    }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardado el backup");
-            JFileChooser f = new JFileChooser();
-            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
-            int option = f.showSaveDialog(jTabbedPane1);
-            //File path = f.getCurrentDirectory();
-            if (option == JFileChooser.APPROVE_OPTION){
-                String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
-                try{
-                    UsuarioReadDB leer = new UsuarioReadDB();
-                    leer.bulkDataDB(path);
-                    JOptionPane.showMessageDialog(this, "Listo");
-                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
-            }else{ System.out.println("No se eligio una ruta"); }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
+                                          + "\n-Los datos deben ser separados por coma(,)"
+                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                                          + "\n-La informacion debe tener el siguiente orden"
+                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
+                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if(respuesta == JOptionPane.OK_OPTION){
+            int status = fcProfCSV.showOpenDialog(null);
+            if (status == fcProfCSV.APPROVE_OPTION) {
+                File selectedFile = fcProfCSV.getSelectedFile();
+                System.out.println(":::::::::::::::::::::::::::::::::...\nUbicación del archivo: " + selectedFile.getParent());
+                System.out.println("Nombre del archivo: " + selectedFile.getName());
+                try {
+                    ProfesorDB prof = new ProfesorDB();
+                    prof.bulkLoadProfe(selectedFile.getPath());
+                    JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
+                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
+            }
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -3398,6 +3437,7 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bkMenu;
+    private javax.swing.JPanel btnAcc;
     private javax.swing.JPanel btnActUpd;
     private javax.swing.JLabel btnActUpd1;
     private javax.swing.JLabel btnActUpd2;
@@ -3433,6 +3473,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel ico2;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
+    private javax.swing.JLabel ico5;
     private javax.swing.JLabel icoExt1;
     private javax.swing.JLabel icoExt2;
     private javax.swing.JLabel icoExt3;
@@ -3446,6 +3487,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -3485,6 +3528,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3504,6 +3549,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
@@ -3516,6 +3562,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel lbl2;
     private javax.swing.JLabel lbl3;
     private javax.swing.JLabel lbl4;
+    private javax.swing.JLabel lbl5;
     private javax.swing.JLabel lblAcc;
     private javax.swing.JLabel lblAjustes;
     private javax.swing.JLabel lblBienv;
@@ -3530,13 +3577,11 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel lblIcoInfo1;
     private javax.swing.JLabel lblInfoCrear;
     private javax.swing.JLabel lblInfoCrear1;
-    private javax.swing.JLabel lblLoadProf;
     private javax.swing.JLabel lblLogo1;
     private javax.swing.JLabel lblLogo2;
     private javax.swing.JLabel lblLogo3;
     private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblUsuarioHidenID;
-    private javax.swing.JLabel lblUsuarios;
     private javax.swing.JPanel menuBar;
     private javax.swing.JPanel menuBarIzq;
     private javax.swing.JPasswordField passConfN;

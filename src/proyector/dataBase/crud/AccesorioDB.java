@@ -387,4 +387,29 @@ public class AccesorioDB {
             }
         }
     }
+    
+    /**
+     * Indica si el articulo ya existe en la DB a traves del nombre
+     *
+     * @param nombre
+     * @return
+     */
+    public boolean accesorioExist(String nombre) {
+        boolean art = false;
+        ResultSet rs;
+        PreparedStatement prep;
+        try {
+            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_ACCESORIOS WHERE LOWER(NOMBRE) LIKE LOWER(?);");
+            prep.setString(1, nombre);
+            rs = prep.executeQuery();
+            while (rs.next()) {
+                art = rs.getInt(1)>0?true:false;
+            }
+            prep.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error al verificar accesorio accesorioExist AccesorioDB:"+e);
+        }
+        return art;
+    }
 }

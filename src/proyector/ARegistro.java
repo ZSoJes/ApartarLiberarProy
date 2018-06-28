@@ -397,6 +397,7 @@ public class ARegistro extends javax.swing.JFrame {
         ico6 = new javax.swing.JLabel();
         ico7 = new javax.swing.JLabel();
         ico8 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -868,7 +869,6 @@ public class ARegistro extends javax.swing.JFrame {
         dlgRprtArtPry.setTitle("[Reimprimir/Modificar/Eliminar Reporte de VideoProyector]");
         dlgRprtArtPry.setMinimumSize(new java.awt.Dimension(715, 550));
         dlgRprtArtPry.setModal(true);
-        dlgRprtArtPry.setPreferredSize(new java.awt.Dimension(715, 550));
         dlgRprtArtPry.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 dlgRprtArtPryWindowClosing(evt);
@@ -1144,8 +1144,8 @@ public class ARegistro extends javax.swing.JFrame {
 
         panelOPC.setBackground(new java.awt.Color(250, 250, 250));
         panelOPC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 173, 179), 1, true));
-        panelOPC.setMinimumSize(new java.awt.Dimension(280, 50));
-        panelOPC.setPreferredSize(new java.awt.Dimension(280, 50));
+        panelOPC.setMinimumSize(new java.awt.Dimension(376, 44));
+        panelOPC.setPreferredSize(new java.awt.Dimension(376, 44));
         panelOPC.setLayout(new java.awt.GridBagLayout());
 
         ico3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prestamo_32px.png"))); // NOI18N
@@ -1167,7 +1167,7 @@ public class ARegistro extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panelOPC.add(ico4, gridBagConstraints);
 
         ico5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prof_42px.png"))); // NOI18N
@@ -1191,7 +1191,7 @@ public class ARegistro extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panelOPC.add(ico6, gridBagConstraints);
 
         ico7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aul_42px.png"))); // NOI18N
@@ -1203,7 +1203,7 @@ public class ARegistro extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 4, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panelOPC.add(ico7, gridBagConstraints);
 
         ico8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Video Projector_42px.png"))); // NOI18N
@@ -1215,10 +1215,23 @@ public class ARegistro extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panelOPC.add(ico8, gridBagConstraints);
 
-        pnlBackground.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 85, -1, -1));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel13.setToolTipText("Artículos");
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 15);
+        panelOPC.add(jLabel13, gridBagConstraints);
+
+        pnlBackground.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 87, -1, -1));
 
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 3, 24)); // NOI18N
         lblTitulo.setText("Registros");
@@ -1708,6 +1721,13 @@ public class ARegistro extends javax.swing.JFrame {
         dlgRprtArtPry.setLocationRelativeTo(this);
         dlgRprtArtPry.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel13MouseClicked
     public void fillJTable3(){
         System.out.println("Llenando con reportes de Videoproyectores");
         try {
@@ -1880,6 +1900,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel38;

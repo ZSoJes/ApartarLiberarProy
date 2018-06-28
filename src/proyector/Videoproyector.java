@@ -32,10 +32,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
-import proyector.dataBase.crud.AccesorioDB;
 import proyector.dataBase.crud.LogDB;
 import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
@@ -91,13 +89,9 @@ public final class Videoproyector extends javax.swing.JFrame {
         txtUsuario.setTransferHandler(null);
         txtPass.setTransferHandler(null);
         
-        jTabbedPane1.setEnabledAt(3, false);
-        jTabbedPane1.setEnabledAt(4, false);
-        hiddenLabelArt.setVisible(false);
         tabbedPane.setEnabledAt(1, false);
         labelFecha.setText(date);     
-        jPanel4.setVisible(true);
-        jPanel3.setVisible(false);
+
         //coloca la fecha
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();                                //coloca la hora
@@ -108,79 +102,6 @@ public final class Videoproyector extends javax.swing.JFrame {
         timer.start();
     }
 
-    /**
-     * Introduce la informacion en el jTable con los accesorios
-     *
-     * @throws SQLException
-     */
-    public void getTable() throws SQLException {
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-        AccesorioDB acc = new AccesorioDB();
-
-        String[] cols = {jTable2.getColumnName(0),jTable2.getColumnName(1), jTable2.getColumnName(2), jTable2.getColumnName(3)};
-        int count = acc.getCantAccesorios(true);
-        System.out.println("\nAccesorios existentes: " + count);
-
-        String[][] datos = acc.getAccesorios(false);
-        String art[][] = new String[count][4];
-        
-        for(int i = 0; i < count ;i++){
-            for (int j = 0; j < 4; j++) {
-                art[i][j] = datos[i][j];
-                if(j == 3) { art[i][j] = String.valueOf(Integer.parseInt(datos[i][2]) - Integer.parseInt(datos[i][3])); }
-            }
-        }
-//        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        model.setDataVector(art, cols);
-    }
-
-    /**
-     * Introduce la informacion en el jTable con los accesoriosPrestados
-     *
-     * @throws SQLException
-     */
-    public void getRegistrosPrestamoAcc() throws SQLException {
-        DefaultTableModel modelReg = (DefaultTableModel) jTable3.getModel();
-        AccesorioDB acc = new AccesorioDB();
-        String[] cols = {jTable3.getColumnName(0),jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3),jTable3.getColumnName(4)};
-        
-        String[][] datos = acc.getRegAccesorios(false);
-        int count = datos.length;
-        System.out.println("\nRegistros accesorios existentes: " + count);
-//        for(String[] data : datos){
-//            System.out.println("Arrays: " + Arrays.toString(data));
-//        }
-        
-        jTable3.getColumnModel().getColumn(0).setPreferredWidth(20);
-        jTable3.getColumnModel().getColumn(1).setPreferredWidth(195);
-        jTable3.getColumnModel().getColumn(2).setPreferredWidth(135);
-        jTable3.getColumnModel().getColumn(3).setPreferredWidth(20);
-        jTable3.getColumnModel().getColumn(4).setPreferredWidth(70);
-        jTable3.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        modelReg.setDataVector(datos, cols);
-    }
-    
-    public void getRegistrosPrestamoAccHOY() throws SQLException {
-        DefaultTableModel model5 = (DefaultTableModel) jTable5.getModel();
-        AccesorioDB acc = new AccesorioDB();
-        String[] cols = {jTable5.getColumnName(0),jTable5.getColumnName(1), jTable5.getColumnName(2), jTable5.getColumnName(3),jTable5.getColumnName(4)};
-        
-        String[][] datos = acc.getRegAccesorios(true);
-        int count = datos.length;
-        System.out.println("\nRegistros accesorios existentes: " + count);
-//        for(String[] data : datos){
-//            System.out.println("Arrays: " + Arrays.toString(data));
-//        }
-        
-        jTable3.getColumnModel().getColumn(0).setPreferredWidth(20);
-        jTable3.getColumnModel().getColumn(1).setPreferredWidth(195);
-        jTable3.getColumnModel().getColumn(2).setPreferredWidth(135);
-        jTable3.getColumnModel().getColumn(3).setPreferredWidth(20);
-        jTable3.getColumnModel().getColumn(4).setPreferredWidth(70);
-        jTable3.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        model5.setDataVector(datos, cols);
-    }
-    
     public void toResumenServicio() throws SQLException{
         DefaultTableModel model4 = (DefaultTableModel) jTable4.getModel();
         VideoproyectorDB vd = new VideoproyectorDB();
@@ -303,51 +224,6 @@ public final class Videoproyector extends javax.swing.JFrame {
         btnReporte = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         hiddenNSerie = new javax.swing.JLabel();
-        articulos = new javax.swing.JDialog();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        pnlAllArt = new javax.swing.JPanel();
-        lblTituloArt = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        pnlAddArt = new javax.swing.JPanel();
-        lblTituloArt1 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        txtNom = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        txtExist = new javax.swing.JTextField();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        txtDesc = new javax.swing.JTextArea();
-        jLabel17 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        pnlRegArt = new javax.swing.JPanel();
-        jLayeredPane2 = new javax.swing.JLayeredPane();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel28 = new javax.swing.JLabel();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        lblTituloArt4 = new javax.swing.JLabel();
-        tglReg = new javax.swing.JToggleButton();
-        jLabel29 = new javax.swing.JLabel();
-        pnlRptArt = new javax.swing.JPanel();
-        lblTituloArt2 = new javax.swing.JLabel();
-        pnlModArt = new javax.swing.JPanel();
-        lblTituloArt3 = new javax.swing.JLabel();
-        txtNom3 = new javax.swing.JTextField();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        txtExist1 = new javax.swing.JTextField();
-        jLabel24 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        txtDesc1 = new javax.swing.JTextArea();
-        hiddenLabelArt = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         dlgServicio = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
@@ -382,6 +258,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         btnPnlCrear = new javax.swing.JPanel();
         lblIco0 = new javax.swing.JLabel();
         lblIco1 = new javax.swing.JLabel();
@@ -390,10 +267,6 @@ public final class Videoproyector extends javax.swing.JFrame {
         lblIco3 = new javax.swing.JLabel();
         lblIco4 = new javax.swing.JLabel();
         lblIco5 = new javax.swing.JLabel();
-        btnPnlArticulos = new javax.swing.JPanel();
-        lblIco6 = new javax.swing.JLabel();
-        lblIco7 = new javax.swing.JLabel();
-        lblIco8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlContenedor = new javax.swing.JPanel();
         btnPnlGaf = new javax.swing.JPanel();
@@ -1396,539 +1269,6 @@ public final class Videoproyector extends javax.swing.JFrame {
 
         fallosReporte.getAccessibleContext().setAccessibleParent(this);
 
-        articulos.setTitle("[Artículos]");
-        articulos.setBackground(new java.awt.Color(238, 238, 238));
-        articulos.setMinimumSize(new java.awt.Dimension(550, 550));
-        articulos.setModal(true);
-        articulos.setResizable(false);
-        articulos.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                articulosWindowClosing(evt);
-            }
-        });
-
-        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        jTabbedPane1.setMinimumSize(new java.awt.Dimension(542, 474));
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(542, 474));
-        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTabbedPane1MouseClicked(evt);
-            }
-        });
-
-        pnlAllArt.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblTituloArt.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        lblTituloArt.setText("Artículos Existentes");
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Doble clic sobre un elemento permitira abrir la modificación");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Articulo", "Existencias", "En prestamo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
-            }
-        });
-        jScrollPane3.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(4);
-            jTable2.getColumnModel().getColumn(1).setPreferredWidth(50);
-            jTable2.getColumnModel().getColumn(2).setPreferredWidth(23);
-            jTable2.getColumnModel().getColumn(3).setPreferredWidth(23);
-        }
-
-        jButton2.setText("Cerrar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlAllArtLayout = new javax.swing.GroupLayout(pnlAllArt);
-        pnlAllArt.setLayout(pnlAllArtLayout);
-        pnlAllArtLayout.setHorizontalGroup(
-            pnlAllArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAllArtLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(197, 197, 197))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAllArtLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(pnlAllArtLayout.createSequentialGroup()
-                .addGap(139, 139, 139)
-                .addComponent(lblTituloArt)
-                .addContainerGap(157, Short.MAX_VALUE))
-        );
-        pnlAllArtLayout.setVerticalGroup(
-            pnlAllArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAllArtLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloArt)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("<html><center>Artículos<br>Listados</center></html>", pnlAllArt);
-
-        pnlAddArt.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblTituloArt1.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        lblTituloArt1.setText("Agregar Artículo");
-
-        jLabel15.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel15.setText("Nombre del artículo");
-
-        txtNom.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtNom.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtNom.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNomKeyTyped(evt);
-            }
-        });
-
-        jLabel16.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel16.setText("Cantidad de existencias");
-
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        txtExist.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtExist.setPreferredSize(new java.awt.Dimension(125, 30));
-        txtExist.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtExistKeyTyped(evt);
-            }
-        });
-
-        txtDesc.setColumns(20);
-        txtDesc.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtDesc.setLineWrap(true);
-        txtDesc.setRows(5);
-        txtDesc.setWrapStyleWord(true);
-        txtDesc.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescKeyTyped(evt);
-            }
-        });
-        jScrollPane4.setViewportView(txtDesc);
-
-        jLabel17.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel17.setText("Corta descripción");
-
-        jButton3.setText("Limpiar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlAddArtLayout = new javax.swing.GroupLayout(pnlAddArt);
-        pnlAddArt.setLayout(pnlAddArtLayout);
-        pnlAddArtLayout.setHorizontalGroup(
-            pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAddArtLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblTituloArt1)
-                .addGap(166, 166, 166))
-            .addGroup(pnlAddArtLayout.createSequentialGroup()
-                .addGroup(pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(pnlAddArtLayout.createSequentialGroup()
-                            .addGap(30, 30, 30)
-                            .addGroup(pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel16)
-                                .addComponent(jLabel15)
-                                .addComponent(jLabel17)
-                                .addGroup(pnlAddArtLayout.createSequentialGroup()
-                                    .addComponent(jButton1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3))))
-                        .addGroup(pnlAddArtLayout.createSequentialGroup()
-                            .addGap(96, 96, 96)
-                            .addComponent(txtNom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(pnlAddArtLayout.createSequentialGroup()
-                            .addGap(96, 96, 96)
-                            .addComponent(txtExist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(115, Short.MAX_VALUE))
-        );
-        pnlAddArtLayout.setVerticalGroup(
-            pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAddArtLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloArt1)
-                .addGap(29, 29, 29)
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel16)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtExist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlAddArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
-                .addContainerGap(107, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("<html><center>Agregar<br>Artículo</center></html>", pnlAddArt);
-
-        pnlRegArt.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLayeredPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel28.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        jLabel28.setText("Registro de Artículos Prestados HOY");
-
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Profesor", "Articulo", "Hora", "Fecha"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable5.getTableHeader().setReorderingAllowed(false);
-        jScrollPane8.setViewportView(jTable5);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jLabel28)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jLabel28)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLayeredPane2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Profesor", "Articulo", "Hora", "Fecha"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable3.getTableHeader().setReorderingAllowed(false);
-        jScrollPane7.setViewportView(jTable3);
-
-        lblTituloArt4.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        lblTituloArt4.setText("Registro de Artículos Prestados");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblTituloArt4)
-                        .addGap(102, 102, 102))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloArt4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jLayeredPane2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 457, -1));
-
-        tglReg.setText("Todos los Registros de artículos");
-        tglReg.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                tglRegItemStateChanged(evt);
-            }
-        });
-
-        jLabel29.setText("Cambiar a:");
-
-        javax.swing.GroupLayout pnlRegArtLayout = new javax.swing.GroupLayout(pnlRegArt);
-        pnlRegArt.setLayout(pnlRegArtLayout);
-        pnlRegArtLayout.setHorizontalGroup(
-            pnlRegArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRegArtLayout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(jLabel29)
-                .addGap(46, 46, 46)
-                .addComponent(tglReg)
-                .addContainerGap(121, Short.MAX_VALUE))
-            .addGroup(pnlRegArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE))
-        );
-        pnlRegArtLayout.setVerticalGroup(
-            pnlRegArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRegArtLayout.createSequentialGroup()
-                .addGap(454, 454, 454)
-                .addGroup(pnlRegArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tglReg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21))
-            .addGroup(pnlRegArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlRegArtLayout.createSequentialGroup()
-                    .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 60, Short.MAX_VALUE)))
-        );
-
-        jTabbedPane1.addTab("<html><center>Registros de<br>Artículos<br>Prestados<center></html>", pnlRegArt);
-
-        pnlRptArt.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblTituloArt2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        lblTituloArt2.setText("Reportar Articulo");
-
-        javax.swing.GroupLayout pnlRptArtLayout = new javax.swing.GroupLayout(pnlRptArt);
-        pnlRptArt.setLayout(pnlRptArtLayout);
-        pnlRptArtLayout.setHorizontalGroup(
-            pnlRptArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRptArtLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(lblTituloArt2)
-                .addContainerGap(125, Short.MAX_VALUE))
-        );
-        pnlRptArtLayout.setVerticalGroup(
-            pnlRptArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlRptArtLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloArt2)
-                .addContainerGap(469, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("<html><center>Reportar<br>Artículo</center></html>", pnlRptArt);
-
-        pnlModArt.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblTituloArt3.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        lblTituloArt3.setText("Modificar Artículo");
-
-        txtNom3.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtNom3.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtNom3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNom3KeyTyped(evt);
-            }
-        });
-
-        jLabel22.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel22.setText("Nombre del artículo");
-
-        jLabel23.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel23.setText("Cantidad de existencias");
-
-        txtExist1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtExist1.setPreferredSize(new java.awt.Dimension(125, 30));
-        txtExist1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtExist1KeyTyped(evt);
-            }
-        });
-
-        jLabel24.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel24.setText("Corta descripción");
-
-        txtDesc1.setColumns(20);
-        txtDesc1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtDesc1.setLineWrap(true);
-        txtDesc1.setRows(5);
-        txtDesc1.setWrapStyleWord(true);
-        txtDesc1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDesc1KeyTyped(evt);
-            }
-        });
-        jScrollPane5.setViewportView(txtDesc1);
-
-        hiddenLabelArt.setText("Soy yo");
-
-        jButton4.setText("Actualizar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
-        jButton5.setText("Borrar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlModArtLayout = new javax.swing.GroupLayout(pnlModArt);
-        pnlModArt.setLayout(pnlModArtLayout);
-        pnlModArtLayout.setHorizontalGroup(
-            pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlModArtLayout.createSequentialGroup()
-                .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlModArtLayout.createSequentialGroup()
-                        .addGap(157, 157, 157)
-                        .addComponent(lblTituloArt3))
-                    .addGroup(pnlModArtLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel23)
-                                .addComponent(jLabel22)
-                                .addComponent(jLabel24)
-                                .addGroup(pnlModArtLayout.createSequentialGroup()
-                                    .addGap(66, 66, 66)
-                                    .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtNom3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtExist1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(118, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlModArtLayout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(jButton4)
-                .addGap(92, 92, 92)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(hiddenLabelArt)
-                .addGap(73, 73, 73))
-        );
-        pnlModArtLayout.setVerticalGroup(
-            pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlModArtLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloArt3)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNom3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtExist1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel24)
-                .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlModArtLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                        .addComponent(hiddenLabelArt)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlModArtLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlModArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
-                            .addComponent(jButton5))
-                        .addGap(56, 56, 56))))
-        );
-
-        jTabbedPane1.addTab("<HTML><center>Modificar<br>Articulo<center></HTML>", pnlModArt);
-
-        javax.swing.GroupLayout articulosLayout = new javax.swing.GroupLayout(articulos.getContentPane());
-        articulos.getContentPane().setLayout(articulosLayout);
-        articulosLayout.setHorizontalGroup(
-            articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        articulosLayout.setVerticalGroup(
-            articulosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
-        );
-
         dlgServicio.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         dlgServicio.setTitle("[Horas Servicio -Resumen-]");
         dlgServicio.setMinimumSize(new java.awt.Dimension(709, 518));
@@ -2111,8 +1451,8 @@ public final class Videoproyector extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Video proyectores]");
         setIconImage(img.getImage());
-        setMaximumSize(new java.awt.Dimension(1024, 600));
         setMinimumSize(new java.awt.Dimension(1024, 600));
+        setResizable(false);
 
         pnlBkVid.setBackground(new java.awt.Color(255, 255, 255));
         pnlBkVid.setMaximumSize(new java.awt.Dimension(1024, 600));
@@ -2293,14 +1633,29 @@ public final class Videoproyector extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 0);
         panelOPC.add(jLabel9, gridBagConstraints);
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_42px.png"))); // NOI18N
+        jLabel4.setToolTipText("Artículos");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
+        panelOPC.add(jLabel4, gridBagConstraints);
 
         pnlBkVid.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
         btnPnlCrear.setBackground(new java.awt.Color(239, 239, 239));
         btnPnlCrear.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
-        btnPnlCrear.setMaximumSize(new java.awt.Dimension(78, 86));
+        btnPnlCrear.setMaximumSize(new java.awt.Dimension(80, 95));
+        btnPnlCrear.setMinimumSize(new java.awt.Dimension(80, 95));
+        btnPnlCrear.setPreferredSize(new java.awt.Dimension(80, 95));
         btnPnlCrear.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPnlCrearMouseClicked(evt);
@@ -2345,11 +1700,13 @@ public final class Videoproyector extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 5, 0);
         btnPnlCrear.add(lblIco2, gridBagConstraints);
 
-        pnlBkVid.add(btnPnlCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 100, -1, -1));
+        pnlBkVid.add(btnPnlCrear, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 120, -1, -1));
 
         btnPnlReportar.setBackground(new java.awt.Color(239, 239, 239));
         btnPnlReportar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
-        btnPnlReportar.setMaximumSize(new java.awt.Dimension(78, 86));
+        btnPnlReportar.setMaximumSize(new java.awt.Dimension(80, 95));
+        btnPnlReportar.setMinimumSize(new java.awt.Dimension(80, 95));
+        btnPnlReportar.setPreferredSize(new java.awt.Dimension(80, 95));
         btnPnlReportar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPnlReportarMouseClicked(evt);
@@ -2394,56 +1751,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 5, 0);
         btnPnlReportar.add(lblIco5, gridBagConstraints);
 
-        pnlBkVid.add(btnPnlReportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 200, -1, -1));
-
-        btnPnlArticulos.setBackground(new java.awt.Color(0, 191, 255));
-        btnPnlArticulos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
-        btnPnlArticulos.setMaximumSize(new java.awt.Dimension(78, 86));
-        btnPnlArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPnlArticulosMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnPnlArticulosMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnPnlArticulosMouseExited(evt);
-            }
-        });
-        btnPnlArticulos.setLayout(new java.awt.GridBagLayout());
-
-        lblIco6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIco6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Electrical_36px.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 20);
-        btnPnlArticulos.add(lblIco6, gridBagConstraints);
-
-        lblIco7.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblIco7.setForeground(new java.awt.Color(255, 255, 255));
-        lblIco7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIco7.setText("Registro de");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 0);
-        btnPnlArticulos.add(lblIco7, gridBagConstraints);
-
-        lblIco8.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        lblIco8.setForeground(new java.awt.Color(255, 255, 255));
-        lblIco8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIco8.setText("Articulos");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 5, 0);
-        btnPnlArticulos.add(lblIco8, gridBagConstraints);
-
-        pnlBkVid.add(btnPnlArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 295, -1, -1));
+        pnlBkVid.add(btnPnlReportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 240, -1, -1));
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -2457,7 +1765,9 @@ public final class Videoproyector extends javax.swing.JFrame {
 
         btnPnlGaf.setBackground(new java.awt.Color(239, 239, 239));
         btnPnlGaf.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
-        btnPnlGaf.setMaximumSize(new java.awt.Dimension(78, 86));
+        btnPnlGaf.setMaximumSize(new java.awt.Dimension(80, 95));
+        btnPnlGaf.setMinimumSize(new java.awt.Dimension(80, 95));
+        btnPnlGaf.setPreferredSize(new java.awt.Dimension(80, 95));
         btnPnlGaf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPnlGafMouseClicked(evt);
@@ -2502,11 +1812,13 @@ public final class Videoproyector extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 5, 0);
         btnPnlGaf.add(lblIco11, gridBagConstraints);
 
-        pnlBkVid.add(btnPnlGaf, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, -1, -1));
+        pnlBkVid.add(btnPnlGaf, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 470, -1, -1));
 
         btnPnlCodebar.setBackground(new java.awt.Color(239, 239, 239));
         btnPnlCodebar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(64, 190, 205)));
-        btnPnlCodebar.setMaximumSize(new java.awt.Dimension(78, 102));
+        btnPnlCodebar.setMaximumSize(new java.awt.Dimension(80, 100));
+        btnPnlCodebar.setMinimumSize(new java.awt.Dimension(80, 100));
+        btnPnlCodebar.setPreferredSize(new java.awt.Dimension(80, 100));
         btnPnlCodebar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnPnlCodebarMouseClicked(evt);
@@ -2551,7 +1863,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 5, 0);
         btnPnlCodebar.add(lblIco14, gridBagConstraints);
 
-        pnlBkVid.add(btnPnlCodebar, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 390, -1, -1));
+        pnlBkVid.add(btnPnlCodebar, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 350, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2831,169 +2143,6 @@ public final class Videoproyector extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtSer2KeyTyped
 
-    private void btnPnlArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlArticulosMouseClicked
-        btnPnlArticulos.setBackground(new Color(0,191,255));
-        lblIco6.setIcon(art);
-        lblIco7.setForeground(new Color(255,255,255));
-        lblIco8.setForeground(new Color(255,255,255));
-        
-        try {
-            getTable();
-        } catch (SQLException ex) {
-            Logger.getLogger(Videoproyector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        articulos.setLocationRelativeTo(pnlBkVid);
-        articulos.setVisible(true);
-    }//GEN-LAST:event_btnPnlArticulosMouseClicked
-
-    private void btnPnlArticulosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlArticulosMouseEntered
-        btnPnlArticulos.setBackground(new Color(239,239,239));
-        lblIco6.setIcon(artW);
-        lblIco7.setForeground(new Color(239,239,239));
-        lblIco8.setForeground(new Color(239,239,239));
-    }//GEN-LAST:event_btnPnlArticulosMouseEntered
-
-    private void btnPnlArticulosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlArticulosMouseExited
-        btnPnlArticulos.setBackground(new Color(0,191,255));
-        lblIco6.setIcon(art);
-        lblIco7.setForeground(new Color(255,255,255));
-        lblIco8.setForeground(new Color(255,255,255));
-    }//GEN-LAST:event_btnPnlArticulosMouseExited
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        articulos.setVisible(false);
-        articulos.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void txtExistKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistKeyTyped
-        char caracter = evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
-            evt.consume();
-        }
-        if (txtExist.getText().length() >= 6) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtExistKeyTyped
-
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        int fila = jTable2.getSelectedRow();
-        if(evt.getClickCount() == 2){
-            System.out.println("fila seleccionada: " + fila);
-            jTabbedPane1.setEnabledAt(4, true);
-            jTabbedPane1.setSelectedIndex(4);
-            try {
-                AccesorioDB acc = new AccesorioDB();
-                String id = String.valueOf(jTable2.getValueAt(fila, 0));
-                String[] datos = acc.getAccesorio(id);
-                hiddenLabelArt.setText(datos[0]);
-                txtNom3.setText(datos[1]);
-                txtExist1.setText(datos[2]);
-                txtDesc1.setText(datos[4]);
-            } catch (SQLException ex) {
-                Logger.getLogger(Videoproyector.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-//        int fila = (int) jTable2.getModel().getValueAt(jTable2.getSelectedRow(),3);
-//        System.out.println("Seleccionaste la fila de articulos id: " +jTable2.getModel().getValueAt(jTable2.convertRowIndexToModel(fila), 3));
-    }//GEN-LAST:event_jTable2MouseClicked
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String nom = txtNom.getText().trim();
-        String exist = txtExist.getText().trim();
-        String desc = txtDesc.getText().trim();
-        if (!nom.isEmpty() && !exist.isEmpty() && !desc.isEmpty()){
-            String[] articulo = {nom, exist, desc};
-            System.out.println("Arreglo de datos: " + Arrays.toString(articulo));
-            try {
-                AccesorioDB artic = new AccesorioDB();
-                artic.setAccesorio(articulo);
-                JOptionPane.showMessageDialog(null, "Se ha creado el nuevo registro");
-            } catch (SQLException ex) {
-                System.out.println("Error al realizar el guardado de Articulo: " + ex);
-            }
-            txtNom.setText("");
-            txtDesc.setText("");
-            txtExist.setText("");
-        }else{
-            JOptionPane.showMessageDialog(null, "No puede dejar ningun campo vacio\nFavor de completar el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void txtNomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomKeyTyped
-        if (txtNom.getText().length() >= 20) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtNomKeyTyped
-
-    private void txtDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescKeyTyped
-        if (txtDesc.getText().length() >= 350) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtDescKeyTyped
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        txtNom.setText("");
-        txtDesc.setText("");
-        txtExist.setText("");
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        int tab = jTabbedPane1.getSelectedIndex();
-        if(tab == 0 ){
-            try {
-                getTable();
-            } catch (SQLException ex) {
-                Logger.getLogger(Videoproyector.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(tab != 3 && tab != 4 ){
-            jTabbedPane1.setEnabledAt(3, false);
-            jTabbedPane1.setEnabledAt(4, false);
-        }
-        if(tab == 2){
-            System.out.println("::...Diburar registros accesorios");
-            try {
-            getRegistrosPrestamoAccHOY();
-            } catch (SQLException e) {
-                System.out.println("Problemas al recupear registros accesorios jTabbedPane clic: " + e);
-            }
-        }
-    }//GEN-LAST:event_jTabbedPane1MouseClicked
-
-    private void txtNom3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNom3KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNom3KeyTyped
-
-    private void txtExist1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExist1KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtExist1KeyTyped
-
-    private void txtDesc1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDesc1KeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDesc1KeyTyped
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        String dato1 = txtNom3.getText().trim();
-        String dato2 = txtExist1.getText().trim();
-        String dato3 = txtDesc1.getText().trim();
-        String id = hiddenLabelArt.getText().trim();
-        if(!dato1.isEmpty() && !dato2.isEmpty() && !dato3.isEmpty()){
-            String[] info = {id, dato1, dato2, dato3};
-            try {
-                AccesorioDB acc = new AccesorioDB();
-                acc.updAccesorio(info);
-                JOptionPane.showMessageDialog(null, "Se ha actualizado el registro");
-                jTabbedPane1.setEnabledAt(4, false);
-                jTabbedPane1.setSelectedIndex(0);
-                getTable();
-            } catch (SQLException e) {
-                System.out.println("Error al realizar esta acción Actualizar Accesorio: " + e);
-            }
-        }else{
-            JOptionPane.showMessageDialog(null,"Favor de no dejar en blanco ningún campo");
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void btnPnlGafMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlGafMouseClicked
         btnPnlGaf.setBackground(new Color(239,239,239));
         GenerarReportes g = new GenerarReportes();
@@ -3033,39 +2182,6 @@ public final class Videoproyector extends javax.swing.JFrame {
             System.out.println("Error al cargar la tabla con el resumen de hrs de servicio: " + ex);
         }
     }//GEN-LAST:event_lblPanelTituloMouseClicked
-
-    private void tglRegItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tglRegItemStateChanged
-        if (tglReg.isSelected()) {
-            try{getRegistrosPrestamoAcc();}catch(SQLException e){System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);}
-            jPanel3.setVisible(true);
-            jPanel4.setVisible(false);
-            tglReg.setText("Los registros de artículos de HOY");
-        } else {
-            try{getRegistrosPrestamoAccHOY();}catch(SQLException e){System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);}
-            jPanel4.setVisible(true);
-            jPanel3.setVisible(false);
-            tglReg.setText("Todos los Registros de artículos");
-        }
-    }//GEN-LAST:event_tglRegItemStateChanged
-
-    private void articulosWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_articulosWindowClosing
-        jTabbedPane1.setSelectedIndex(0);
-        tglReg.setSelected(false);
-    }//GEN-LAST:event_articulosWindowClosing
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        int opc = JOptionPane.showConfirmDialog(null,"Esta seguro de querer eliminar este articulo","Advertencia", JOptionPane.OK_CANCEL_OPTION);
-        if(opc == JOptionPane.OK_OPTION){
-            try {
-                AccesorioDB acc = new AccesorioDB();
-                acc.destroyAcc(Integer.parseInt(hiddenLabelArt.getText().trim()));
-                jTabbedPane1.setSelectedIndex(1);
-                JOptionPane.showMessageDialog(null, "Elemento eliminado!!! ya no existiran registros");
-            } catch (SQLException e) {
-                System.out.println("Error al eliminar el registro de accesorio: " + e);
-            }
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void btnPnlReportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnlReportarMouseClicked
         dlgConfirm.setLocationRelativeTo(this);
@@ -3321,6 +2437,13 @@ public final class Videoproyector extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtDetallesKeyTyped
 
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        Articulo art = new Articulo();
+        art.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_jLabel4MouseClicked
+
     public int[] formatFecha(String date) {
         int[] res = new int[5];
         res[0] = Integer.parseInt(date.substring(0, 4));              //año
@@ -3559,7 +2682,6 @@ public final class Videoproyector extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDialog articulos;
     private javax.swing.JPanel barraSeparadora;
     private javax.swing.JPanel barraSeparadora1;
     private javax.swing.JPanel barraSeparadora2;
@@ -3577,7 +2699,6 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnMant;
     private javax.swing.JToggleButton btnMenu;
-    private javax.swing.JPanel btnPnlArticulos;
     private javax.swing.JPanel btnPnlCodebar;
     private javax.swing.JPanel btnPnlCrear;
     private javax.swing.JPanel btnPnlGaf;
@@ -3596,40 +2717,26 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgServicio;
     private javax.swing.JDialog fallosReporte;
-    private javax.swing.JLabel hiddenLabelArt;
     private javax.swing.JLabel hiddenNSerie;
     private javax.swing.JLabel hidenData;
     private javax.swing.JLabel hidenData2;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
@@ -3648,29 +2755,17 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel lblCreadHead;
@@ -3688,9 +2783,6 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JLabel lblIco3;
     private javax.swing.JLabel lblIco4;
     private javax.swing.JLabel lblIco5;
-    private javax.swing.JLabel lblIco6;
-    private javax.swing.JLabel lblIco7;
-    private javax.swing.JLabel lblIco8;
     private javax.swing.JLabel lblIco9;
     private javax.swing.JLabel lblIcoInfo;
     private javax.swing.JLabel lblNomHead;
@@ -3704,15 +2796,8 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitulo1;
     private javax.swing.JLabel lblTitulo2;
     private javax.swing.JLabel lblTitulo3;
-    private javax.swing.JLabel lblTituloArt;
-    private javax.swing.JLabel lblTituloArt1;
-    private javax.swing.JLabel lblTituloArt2;
-    private javax.swing.JLabel lblTituloArt3;
-    private javax.swing.JLabel lblTituloArt4;
     private javax.swing.JPanel panelOPC;
     private javax.swing.JPanel pnlActualizar;
-    private javax.swing.JPanel pnlAddArt;
-    private javax.swing.JPanel pnlAllArt;
     private javax.swing.JPanel pnlBackground1;
     private javax.swing.JPanel pnlBkVid;
     private javax.swing.JPanel pnlCabecera;
@@ -3727,25 +2812,15 @@ public final class Videoproyector extends javax.swing.JFrame {
     private javax.swing.JPanel pnlDetalles1;
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JPanel pnlFormulario1;
-    private javax.swing.JPanel pnlModArt;
-    private javax.swing.JPanel pnlRegArt;
-    private javax.swing.JPanel pnlRptArt;
     private javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JToggleButton tglReg;
     private javax.swing.JTextField txtArea;
-    private javax.swing.JTextArea txtDesc;
-    private javax.swing.JTextArea txtDesc1;
     private javax.swing.JTextArea txtDetalles;
-    private javax.swing.JTextField txtExist;
-    private javax.swing.JTextField txtExist1;
     private javax.swing.JTextField txtMarc1;
     private javax.swing.JTextField txtMarc2;
     private javax.swing.JTextField txtMod1;
     private javax.swing.JTextField txtMod2;
-    private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNom1;
     private javax.swing.JTextField txtNom2;
-    private javax.swing.JTextField txtNom3;
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtSer1;
     private javax.swing.JTextField txtSer2;
