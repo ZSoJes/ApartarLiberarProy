@@ -307,7 +307,7 @@ public class UsuarioReadDB {
             break;
             case 2:
                 tablaNombre[0] = "profesores";
-                tablaNombre[1] = "SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR, ESTATUS FROM E_PROFESORES";
+                tablaNombre[1] = "SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO FROM E_PROFESORES";
             break;
             case 3:
                 tablaNombre[0] = "videoproyectores";

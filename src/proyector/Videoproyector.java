@@ -810,7 +810,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         lblStatus.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         pnlDetalles.add(lblStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 250, 20));
 
-        btnMant.setText("Retirar del Mantenimiento");
+        btnMant.setText("Habilitar Nuevamente");
         btnMant.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMantActionPerformed(evt);
@@ -2330,7 +2330,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                 try {
                     VideoproyectorDB pry = new VideoproyectorDB();
                     GenerarReportes genR = new GenerarReportes();
-                    pry.setReparacionPry(hiddenNSerie.getText());
+                    pry.setReparacionPry(hiddenNSerie.getText(), imprevisto);
                     
                     pry.reportePry(Integer.parseInt(pry.getProyectorID(hiddenNSerie.getText())), datos);
                     genR.getReporteFalloPry(reporteDtos);
@@ -2527,7 +2527,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         try {
             VideoproyectorDB vid = new VideoproyectorDB();
             String[] arr = vid.showMeEvStatus(datos[0]);
-            if(arr[2].equals("MANTENIMIENTO") && !Boolean.valueOf(arr[3])){
+            if(arr[2].equals("Mantenimiento") || arr[2].equals("Reparación") || arr[2].equals("En Garantía") || arr[2].equals("De baja")){ //&& !Boolean.valueOf(arr[3])){
                 nomVid.setBackground(new Color(153, 151, 149));
             }else if(arr[2].equals("EN PRESTAMO") && !Boolean.valueOf(arr[3])){
                 nomVid.setBackground(new Color(38, 198, 218));
@@ -2611,7 +2611,10 @@ public final class Videoproyector extends javax.swing.JFrame {
                 lblServSem.setText(servicioFormat(servicio[4]));
                 }catch(SQLException ex){ System.out.println("Error al generar datos de prestamoDB sobre videoproyector btn bot jpanel generado dinamicamente:" + ex);}
                 
-                if((lblStatus.getText()).equals("MANTENIMIENTO")){
+                //if((lblStatus.getText()).equals("MANTENIMIENTO")){
+                //new Videoproyector().showMeEvStatus(datos[0])[3]
+                boolean estadoBtnMant = Boolean.valueOf(new VideoproyectorDB().showMeEvStatus(datos[0])[3]);
+                if(!estadoBtnMant){ //verificar si esta disponible a traves de ev_estatus //si no esta disponible debe aparecer
                     btnMant.setVisible(true);
                 }else{
                     btnMant.setVisible(false);

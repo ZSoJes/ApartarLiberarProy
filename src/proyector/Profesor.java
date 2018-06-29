@@ -8,11 +8,6 @@ package proyector;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -102,10 +97,10 @@ public class Profesor extends javax.swing.JFrame {
             for (int j = 0; j < 6; j++) {
                 //data[i][j] = profe.getProfesores()[i][j];
                 //probar a futuo almacenar en un hash y asignar el valor de acuerdo al k,v del id depart
+//                if (j == 5) {
+//                    data[i][j] = new DepartamentoDB().getDepartamento(Integer.parseInt(profe.getProfesores()[i][j]))[0];
+//                }
                 if (j == 4) {
-                    data[i][j] = Boolean.valueOf(data[i][j]) ? "PLAZA" : "HONORARIOS";
-                }
-                if (j == 5) {
                     data[i][j] = new DepartamentoDB().getDepartamento(Integer.parseInt(profe.getProfesores()[i][j]))[0];
                 }
             }
@@ -160,8 +155,6 @@ public class Profesor extends javax.swing.JFrame {
         txtId = new javax.swing.JTextField();
         lblDepart = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
         dlgBorrar = new javax.swing.JDialog();
         pnlBkBorrar = new javax.swing.JPanel();
         btnCerrar1 = new javax.swing.JButton();
@@ -199,8 +192,6 @@ public class Profesor extends javax.swing.JFrame {
         lblAMat2 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         lblHide = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
         fcProfCSV = new javax.swing.JFileChooser();
         pnlBkProfesor = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -443,25 +434,6 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 35, 5, 0);
         pnlFormulario.add(jComboBox1, gridBagConstraints);
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel6.setText("Estado Laboral");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlFormulario.add(jLabel6, gridBagConstraints);
-
-        jComboBox3.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLAZA", "HONORARIOS" }));
-        jComboBox3.setMinimumSize(new java.awt.Dimension(200, 30));
-        jComboBox3.setPreferredSize(new java.awt.Dimension(200, 30));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 35, 5, 0);
-        pnlFormulario.add(jComboBox3, gridBagConstraints);
 
         javax.swing.GroupLayout pnlBkNuevoLayout = new javax.swing.GroupLayout(pnlBkNuevo);
         pnlBkNuevo.setLayout(pnlBkNuevoLayout);
@@ -890,26 +862,6 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         dlgPnlFormulario.add(lblHide, gridBagConstraints);
 
-        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Estado Laboral");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        dlgPnlFormulario.add(jLabel10, gridBagConstraints);
-
-        jComboBox4.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLAZA", "HONORARIOS" }));
-        jComboBox4.setMinimumSize(new java.awt.Dimension(200, 30));
-        jComboBox4.setPreferredSize(new java.awt.Dimension(200, 30));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 0);
-        dlgPnlFormulario.add(jComboBox4, gridBagConstraints);
-
         jLayeredPane1.setLayer(pnlDlgSeleccion, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(dlgPnlFormulario, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -1315,7 +1267,7 @@ public class Profesor extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID_PROFESOR", "NOMBRE", "A_PATERNO", "A_MATERNO", "EST. LABORAL", "DEPARTAMENTO"
+                "ID_PROFESOR", "NOMBRE", "A_PATERNO", "A_MATERNO", "DEPARTAMENTO", "SIN ADEUDO"
             }
         ) {
             Class[] types = new Class [] {
@@ -1346,13 +1298,13 @@ public class Profesor extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(2).setResizable(false);
             jTable1.getColumnModel().getColumn(3).setResizable(false);
             jTable1.getColumnModel().getColumn(4).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(20);
         }
 
         pnlBkProfesor.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 824, 353));
 
-        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_PROFESOR", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "ESTATUS LABORAL", "DEPARTAMENTO" }));
+        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_PROFESOR", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "DEPARTAMENTO" }));
         comboFiltro.setMinimumSize(new java.awt.Dimension(125, 30));
         comboFiltro.setPreferredSize(new java.awt.Dimension(125, 30));
         pnlBkProfesor.add(comboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 160, -1));
@@ -1547,14 +1499,8 @@ public class Profesor extends javax.swing.JFrame {
                         HashMap<String, Integer> map = profe.segundoCombo();
 
                         int seleccion = map.get(jComboBox1.getSelectedItem().toString());
-                        String honorarioPlaza = "true";
-                        if (jComboBox3.getSelectedIndex() == 0) {
-                            honorarioPlaza = "true"; //plaza
-                        } else if (jComboBox3.getSelectedIndex() == 1) {
-                            honorarioPlaza = "false";
-                        }
 
-                        String datos[] = {id, String.valueOf(seleccion), nom, apat, amat, honorarioPlaza};
+                        String datos[] = {id, String.valueOf(seleccion), nom, apat, amat};
                         System.out.println("array de datos: " + Arrays.toString(datos));
                         if (rdBtnOpc1.isSelected()) {
                             System.out.println("ya seleccionaste la opcion 1 ahora veamos si existe el id:" + profe.getExisteProfesor(id));
@@ -1717,7 +1663,6 @@ public class Profesor extends javax.swing.JFrame {
                 txtAMat1.setText(datos[4]);
                 txtId1.setText(datos[0]);
                 jComboBox2.setSelectedItem(new DepartamentoDB().getDepartamento(Integer.parseInt(datos[1])));
-                jComboBox4.setSelectedIndex((Boolean.valueOf(datos[5]) ? 0 : 1));
                 txtDlgBuscar.setText("");
                 //cambia la vista a formulario
                 btnActualizar.setEnabled(true);
@@ -1739,14 +1684,9 @@ public class Profesor extends javax.swing.JFrame {
             dlgActualizar.dispose();
             ProfesorDB profe = new ProfesorDB();
             HashMap<String, Integer> map = profe.segundoCombo();
-            String honorarioPlaza = "true";
-            if (jComboBox4.getSelectedIndex() == 0) {
-                honorarioPlaza = "true"; //plaza
-            } else if (jComboBox4.getSelectedIndex() == 1) {
-                honorarioPlaza = "false";
-            }
+            
             String seleccion = map.get(jComboBox2.getSelectedItem().toString()).toString();          //departamento
-            String[] datos = {seleccion, txtNom1.getText(), txtAPat1.getText(), txtAMat1.getText(), honorarioPlaza};  //datos para actualizar profe
+            String[] datos = {seleccion, txtNom1.getText(), txtAPat1.getText(), txtAMat1.getText()};  //datos para actualizar profe
             String newId = txtId1.getText().trim();                                          //cambiar de string a int newId
             String oldId = lblHide.getText().trim();                                         //cambiar de string a int oldId
 
@@ -1979,16 +1919,12 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

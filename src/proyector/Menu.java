@@ -96,6 +96,7 @@ public class Menu extends javax.swing.JFrame {
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
         timer.start();        
+        
     }
 
     public void reloj() {

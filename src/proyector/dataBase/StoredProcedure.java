@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
+import proyector.dataBase.crud.PrestamoDB;
 
 public class StoredProcedure{
     
@@ -22,5 +22,150 @@ public class StoredProcedure{
     public static ResultSet consultarLog(Connection conn) throws SQLException{
         String sql = "SELECT * FROM E_LOG_MOVIMIENTOS ORDER BY ID_LOG DESC";
         return conn.createStatement().executeQuery(sql);
+    }
+    
+    public static void crearPrestamo(Connection conn, String idUsuario, int idProy, String idProf, int idAul){
+        PreparedStatement prestStatm;
+        PreparedStatement proyStatm;
+        PreparedStatement profStatm;
+        PreparedStatement aulStatm;
+        
+        String prestamo = "INSERT INTO E_PRESTAMOS(ID_SALIDA, ID_VIDEOPROYECTOR, ID_PROFESOR, ID_AULA) VALUES (?,?,?,?)";
+        String proy = "UPDATE EV_ESTATUS SET NOMBRE  = ?, DISPONIBILIDAD = ? WHERE ID_VIDEOPROYECTOR = ?";
+        String profe = "UPDATE E_PROFESORES SET ESTATUS = FALSE WHERE ID_PROFESOR = ?";
+        String aula = "UPDATE E_AULAS SET ESTATUS = FALSE WHERE ID_AULA = ?";
+        try{
+            prestStatm = conn.prepareStatement(prestamo);
+            proyStatm = conn.prepareStatement(proy);
+            profStatm = conn.prepareStatement(profe);
+            aulStatm = conn.prepareStatement(aula);
+            
+            prestStatm.setString(1, idUsuario);
+            prestStatm.setInt(2, idProy);
+            prestStatm.setString(3, idProf);
+            prestStatm.setInt(4, idAul);
+            proyStatm.setString(1, "EN PRESTAMO");
+            proyStatm.setBoolean(2, false);
+            proyStatm.setInt(3, idProy);
+            profStatm.setString(1, idProf);
+            aulStatm.setInt(1, idAul);
+            
+            prestStatm.execute();
+            proyStatm.execute();
+            profStatm.execute();
+            aulStatm.execute();
+
+            prestStatm.close();
+            proyStatm.close();
+            profStatm.close();
+            aulStatm.close();
+        }catch(SQLException e){System.out.println("Error en crear prestamo Procedure:"+e);}
+    }
+    
+    public static void liberarPrestamoN(Connection conn, String idUsuario, int idProy, String idProf, int idAul, int idPrest){
+        PreparedStatement prestStatm;
+        PreparedStatement proyStatm;
+        PreparedStatement profStatm;
+        PreparedStatement aulStatm;
+        
+        String prestamo = "UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE WHERE ID_PRESTAMO = ?";
+        String proyector = "UPDATE EV_ESTATUS SET NOMBRE = 'DISPONIBLE', DISPONIBILIDAD = TRUE WHERE ID_VIDEOPROYECTOR = ?";
+        String profesor = "UPDATE E_PROFESORES SET ESTATUS = TRUE WHERE ID_PROFESOR = ?";
+        String aula = "UPDATE E_AULAS SET ESTATUS = TRUE WHERE ID_AULA = ?";
+        
+        try{
+            prestStatm = conn.prepareStatement(prestamo);
+            proyStatm = conn.prepareStatement(proyector);
+            profStatm = conn.prepareStatement(profesor);
+            aulStatm = conn.prepareStatement(aula);
+            
+            prestStatm.setString(1, idUsuario);
+            prestStatm.setInt(2, idPrest);
+            proyStatm.setInt(1, idProy);
+            profStatm.setString(1, idProf);
+            aulStatm.setInt(1, idAul);
+                    
+            prestStatm.execute();
+            proyStatm.execute();
+            profStatm.execute();
+            aulStatm.execute();
+            
+            prestStatm.close();
+            proyStatm.close();
+            profStatm.close();
+            aulStatm.close();
+        }catch(SQLException e){
+            System.out.println("Error al liberar de forma normal prestamo en Procedure:"+e);
+        }
+    }
+    
+    public static ResultSet genReportProy(Connection conn, String[] datos){
+        PreparedStatement prep;
+
+        String reporte = "INSERT INTO E_REP_VIDEOPROYECTORES "+
+        "(ID_VIDEOPROYECTOR, ID_PROFESOR, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES) "+
+        "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String idReporte = "SELECT ID_REPORTE_VIDEOPROYECTOR FROM E_REP_VIDEOPROYECTORES ORDER BY ID_REPORTE_VIDEOPROYECTOR DESC LIMIT 1";
+        try{
+            prep = conn.prepareStatement(reporte);
+            prep.setInt(1, Integer.parseInt(datos[0]));//proy
+            for (int i = 1; i < 8; i++) {
+                prep.setString(i+1, datos[i]);
+            }
+            prep.execute();
+            prep.close();
+        }catch(SQLException e){
+            System.out.println("\nError al generar el reporte del proyector Procedure:"+e);
+        }
+        try{
+            return conn.createStatement().executeQuery(idReporte);
+        }catch(SQLException e){
+            System.out.println("\nError al recuperar ID reporte del proyector Procedure:"+e);
+        }
+        return null;
+    }
+    
+    public static void liberarPrestamoReport(Connection conn, String idUsuario, int idProy, String idProf, int idAul, int idPrest, int idReporte){
+        PreparedStatement prestStatm;
+        PreparedStatement proyStatm;
+        PreparedStatement profStatm;
+        PreparedStatement aulStatm;
+        
+        String prestamo = "UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE, ESTATUS_DEVOLUCION = FALSE, ID_REPORTE_VIDEOPROYECTOR = ? WHERE ID_PRESTAMO = ?";
+        String proyector = "UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = FALSE WHERE ID_VIDEOPROYECTOR = ?";
+        String profesor = "UPDATE E_PROFESORES SET ESTATUS = FALSE, SIN_ADEUDO = FALSE WHERE ID_PROFESOR = ?";
+        String aula = "UPDATE E_AULAS SET ESTATUS = TRUE WHERE ID_AULA = ?";
+        
+        try{
+            String[] arr = new PrestamoDB().getReporte(idReporte);
+            
+            prestStatm = conn.prepareStatement(prestamo);
+            proyStatm = conn.prepareStatement(proyector);
+            profStatm = conn.prepareStatement(profesor);
+            aulStatm = conn.prepareStatement(aula);
+            
+            prestStatm.setString(1, idUsuario);
+            prestStatm.setInt(2, idReporte);
+            prestStatm.setInt(3, idPrest);
+            
+            String imprevisto = arr[7].equals("a")?"Reparación":(arr[7].equals("b")?"Mantenimiento":(arr[7].equals("c")?"En Garantía":"De baja"));
+            proyStatm.setString(1, imprevisto);
+            proyStatm.setInt(2,idProy);
+            
+            profStatm.setString(1, idProf);
+            aulStatm.setInt(1, idAul);
+                    
+            prestStatm.execute();
+            proyStatm.execute();
+            profStatm.execute();
+            aulStatm.execute();
+            
+            prestStatm.close();
+            proyStatm.close();
+            profStatm.close();
+            aulStatm.close();
+        }catch(SQLException e){
+            System.out.println("Error al liberar de forma normal prestamo en Procedure:"+e);
+        }
     }
 }

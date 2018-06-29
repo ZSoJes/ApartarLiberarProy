@@ -29,7 +29,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import proyector.dataBase.Conexion;
-import javax.swing.JDialog;
 /**
  *
  * @author Juan
@@ -172,7 +171,10 @@ public class GenerarReportes {
                         ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteDep" + File.separator + "DepPrestamos.jasper";
                     break;
                     case 4:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reporteAccesoriosYPry.jasper";
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reporteAccesorios.jasper";
+                    break;
+                    case 5:
+                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reportePry.jasper";
                     break;
                 }
                 

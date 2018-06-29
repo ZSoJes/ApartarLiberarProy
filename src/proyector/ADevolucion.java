@@ -37,6 +37,7 @@ import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
+import proyector.reportes.GenerarReportes;
 
 /**
  *
@@ -45,36 +46,31 @@ import proyector.dataBase.crud.VideoproyectorDB;
 public class ADevolucion extends javax.swing.JFrame {
 
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
-    String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private static ArrayList<String> accesorios = new ArrayList<String>();
     /**
      * Creates new form ADevolucion
      */
     public ADevolucion() {
         initComponents();
-        panelOPC.setVisible(false);
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(16);     //indica la velocidad de movimiento del scroll
-        labelFecha.setText(date);                                   //coloca la fecha
-        
-        //ocultar info desde jcrollpane
-        lblHiden.setVisible(false);
-        txtProyNSerie.setTransferHandler(null);
-        txtTitulo.setTransferHandler(null);
-        txtDesc.setTransferHandler(null);
-        dibujarDevoluciones();
-        cargarComboProy();
-        combPnl.setVisible(false);
-//        jComboBox1.setVisible(false);
-        hiddenProf.setVisible(false);
-        hiddenProf1.setVisible(false);
-        txtProyNSerie.requestFocusInWindow();
+        labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         Timer timer = new Timer(500, (ActionEvent e) -> {
-            reloj();                                                //coloca la hora
+            reloj();
         });
         timer.setRepeats(true);
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
         timer.start();
+        
+        panelOPC.setVisible(false);
+        scrollContainer.getVerticalScrollBar().setUnitIncrement(16);
+        
+        pnlCbNSerie.setVisible(false);
+        dibujarDevoluciones();
+        cargarComboProy();
+        txtNSerie.requestFocusInWindow();
+        
+        lblHiddenProfReportArt.setVisible(false);
+        lblHiddenProfReporte.setVisible(false);
     }
 
     /**
@@ -88,12 +84,13 @@ public class ADevolucion extends javax.swing.JFrame {
         try {
             PrestamoDB pres = new PrestamoDB();
             String[][] datos = pres.getPrestamos(true,false);
-            System.out.println("Prestamos existentes: " + pres.getPrestamosCount(true));
+            
             for(String[] dato: datos){
                 miPanel(dato);
             }    
             
             //acomodar componentes
+            System.out.println("Prestamos existentes: " + datos.length);
             System.out.println("Dibujar cada prestamo");
             int comp = pnlContenedor.getComponentCount();
             float filas = (comp / 4) + (comp % 4 == 0 ? 0 : 1);
@@ -113,14 +110,15 @@ public class ADevolucion extends javax.swing.JFrame {
             if(map1.isEmpty()){
                 jComboBox1.setEnabled(false);
             }else{
+                // agrega los datos al comboBox
                 for (String s : map1.keySet()) {
-                    // agrega los datos al comboBox
-                    jComboBox1.addItem(s);
-                    System.out.println("S:" + s);
+                    String proy = s;
+                    jComboBox1.addItem(proy);
+                    System.out.println("\n- VideoProyector " + proy);
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AlPrestamo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar registros de proyectores disponibles:"+ex);
         }
     }
     /**
@@ -133,32 +131,31 @@ public class ADevolucion extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        dialogUsuario = new javax.swing.JDialog();
-        dlgBk = new javax.swing.JPanel();
+        dlgUsuario = new javax.swing.JDialog();
+        pnlBackground1 = new javax.swing.JPanel();
         pnlColor = new javax.swing.JPanel();
         pnlColor1 = new javax.swing.JPanel();
         pnlFormulario = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         txtUsuarioVal = new javax.swing.JTextField();
-        pnlBtnGuardar = new javax.swing.JPanel();
-        icoGuardar1 = new javax.swing.JLabel();
-        lblTxtGuardar1 = new javax.swing.JLabel();
+        lblIcoInfo = new javax.swing.JLabel();
+        lblInfo2 = new javax.swing.JLabel();
         pnlBtnCerrar = new javax.swing.JPanel();
         icoCerrar1 = new javax.swing.JLabel();
         lblTxtCerrar1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        lblHiden = new javax.swing.JLabel();
+        lblInfo3 = new javax.swing.JLabel();
+        lblStatsGood = new javax.swing.JLabel();
+        lblStatsBad = new javax.swing.JLabel();
         pryArt = new javax.swing.JDialog();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        pnlBackground2 = new javax.swing.JPanel();
+        lblTituloArt = new javax.swing.JLabel();
         lblNProy = new javax.swing.JLabel();
         btnReportarAcc = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jLabel8 = new javax.swing.JLabel();
-        hiddenProf = new javax.swing.JLabel();
+        lblInfo4 = new javax.swing.JLabel();
+        lblHiddenProfReportArt = new javax.swing.JLabel();
         dlgReporte = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -173,7 +170,34 @@ public class ADevolucion extends javax.swing.JFrame {
         lblListItems = new javax.swing.JLabel();
         btnReportar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        hiddenProf1 = new javax.swing.JLabel();
+        lblHiddenProfReporte = new javax.swing.JLabel();
+        fallosReporte = new javax.swing.JDialog();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        txtArea = new javax.swing.JTextField();
+        txtSolicitante = new javax.swing.JTextField();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        txtDetalles = new javax.swing.JTextArea();
+        jLabel36 = new javax.swing.JLabel();
+        cb1 = new javax.swing.JCheckBox();
+        cb2 = new javax.swing.JCheckBox();
+        cb3 = new javax.swing.JCheckBox();
+        jLabel42 = new javax.swing.JLabel();
+        txtTituloR = new javax.swing.JTextField();
+        lblRprt6 = new javax.swing.JLabel();
+        cb4 = new javax.swing.JCheckBox();
+        cb5 = new javax.swing.JCheckBox();
+        cb6 = new javax.swing.JCheckBox();
+        cb7 = new javax.swing.JCheckBox();
+        btnReporte = new javax.swing.JButton();
+        btnCancelar1 = new javax.swing.JButton();
+        hiddenNSerie = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         pnlBackground = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblIco1 = new javax.swing.JLabel();
@@ -193,27 +217,28 @@ public class ADevolucion extends javax.swing.JFrame {
         ico8 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        btnPnDevolver = new javax.swing.JPanel();
+        lblInfo = new javax.swing.JLabel();
+        btnDevolver = new javax.swing.JPanel();
         lblIco3 = new javax.swing.JLabel();
         lblTextoDev = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollContainer = new javax.swing.JScrollPane();
         pnlContenedor = new javax.swing.JPanel();
         chkBLista = new javax.swing.JCheckBox();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
-        noSeriePnl = new javax.swing.JPanel();
+        layerNoSerie = new javax.swing.JLayeredPane();
+        pnlNoSerie = new javax.swing.JPanel();
         barraSeparadora = new javax.swing.JPanel();
-        txtProyNSerie = new javax.swing.JTextField();
-        combPnl = new javax.swing.JPanel();
+        txtNSerie = new javax.swing.JTextField();
+        pnlCbNSerie = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
 
-        dialogUsuario.setMinimumSize(new java.awt.Dimension(589, 321));
-        dialogUsuario.setModal(true);
-        dialogUsuario.setUndecorated(true);
-        dialogUsuario.setResizable(false);
+        dlgUsuario.setMinimumSize(new java.awt.Dimension(581, 321));
+        dlgUsuario.setModal(true);
+        dlgUsuario.setUndecorated(true);
+        dlgUsuario.setResizable(false);
 
-        dlgBk.setBackground(new java.awt.Color(255, 103, 96));
-        dlgBk.setMinimumSize(new java.awt.Dimension(589, 321));
+        pnlBackground1.setBackground(new java.awt.Color(255, 103, 96));
+        pnlBackground1.setMinimumSize(new java.awt.Dimension(581, 321));
+        pnlBackground1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlColor.setBackground(new java.awt.Color(158, 163, 13));
         pnlColor.setPreferredSize(new java.awt.Dimension(25, 321));
@@ -229,6 +254,8 @@ public class ADevolucion extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        pnlBackground1.add(pnlColor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 322));
+
         pnlColor1.setBackground(new java.awt.Color(206, 210, 72));
         pnlColor1.setPreferredSize(new java.awt.Dimension(15, 0));
 
@@ -242,6 +269,8 @@ public class ADevolucion extends javax.swing.JFrame {
             pnlColor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        pnlBackground1.add(pnlColor1, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 0, -1, 322));
 
         pnlFormulario.setOpaque(false);
         pnlFormulario.setLayout(new java.awt.GridBagLayout());
@@ -273,37 +302,15 @@ public class ADevolucion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(2, 20, 20, 20);
         pnlFormulario.add(txtUsuarioVal, gridBagConstraints);
 
-        pnlBtnGuardar.setBackground(new java.awt.Color(239, 239, 239));
-        pnlBtnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlBtnGuardarMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnlBtnGuardarMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnlBtnGuardarMouseExited(evt);
-            }
-        });
-        pnlBtnGuardar.setLayout(new java.awt.GridBagLayout());
+        pnlBackground1.add(pnlFormulario, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 340, -1));
 
-        icoGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Save_22px.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(4, 14, 4, 0);
-        pnlBtnGuardar.add(icoGuardar1, gridBagConstraints);
+        lblIcoInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/More Info_22px.png"))); // NOI18N
+        pnlBackground1.add(lblIcoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 285, -1, -1));
 
-        lblTxtGuardar1.setFont(new java.awt.Font("Verdana", 1, 11)); // NOI18N
-        lblTxtGuardar1.setForeground(new java.awt.Color(0, 191, 255));
-        lblTxtGuardar1.setText("Guardar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
-        pnlBtnGuardar.add(lblTxtGuardar1, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        pnlFormulario.add(pnlBtnGuardar, gridBagConstraints);
+        lblInfo2.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
+        lblInfo2.setForeground(new java.awt.Color(255, 255, 255));
+        lblInfo2.setText("<html>clic en pulgar arrbia para Liberar prestamo<br>clic en pulgar abajo para reportar videoproyector</html>");
+        pnlBackground1.add(lblInfo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, -1, -1));
 
         pnlBtnCerrar.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnCerrar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -332,74 +339,60 @@ public class ADevolucion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 14);
         pnlBtnCerrar.add(lblTxtCerrar1, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        pnlFormulario.add(pnlBtnCerrar, gridBagConstraints);
+        pnlBackground1.add(pnlBtnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(249, 227, -1, -1));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/More Info_22px.png"))); // NOI18N
+        lblInfo3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblInfo3.setForeground(new java.awt.Color(255, 255, 255));
+        lblInfo3.setText("Estatus del Proyector");
+        pnlBackground1.add(lblInfo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 128, -1, -1));
 
-        jLabel6.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Puede presionar enter o el boton Guardar para validar");
+        lblStatsGood.setBackground(new java.awt.Color(255, 103, 96));
+        lblStatsGood.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStatsGood.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pulgarArriba-74px.png"))); // NOI18N
+        lblStatsGood.setOpaque(true);
+        lblStatsGood.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblStatsGoodMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblStatsGoodMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblStatsGoodMouseExited(evt);
+            }
+        });
+        pnlBackground1.add(lblStatsGood, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 152, 64, 64));
 
-        lblHiden.setText("jLabel7");
+        lblStatsBad.setBackground(new java.awt.Color(255, 103, 96));
+        lblStatsBad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pulgarAbajo-64px.png"))); // NOI18N
+        lblStatsBad.setMaximumSize(new java.awt.Dimension(74, 74));
+        lblStatsBad.setMinimumSize(new java.awt.Dimension(74, 74));
+        lblStatsBad.setOpaque(true);
+        lblStatsBad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblStatsBadMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblStatsBadMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblStatsBadMouseExited(evt);
+            }
+        });
+        pnlBackground1.add(lblStatsBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(333, 152, -1, -1));
 
-        javax.swing.GroupLayout dlgBkLayout = new javax.swing.GroupLayout(dlgBk);
-        dlgBk.setLayout(dlgBkLayout);
-        dlgBkLayout.setHorizontalGroup(
-            dlgBkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dlgBkLayout.createSequentialGroup()
-                .addComponent(pnlColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pnlColor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(dlgBkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dlgBkLayout.createSequentialGroup()
-                        .addGroup(dlgBkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(dlgBkLayout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel6))
-                            .addGroup(dlgBkLayout.createSequentialGroup()
-                                .addGap(101, 101, 101)
-                                .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(128, 128, 128))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlgBkLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblHiden)
-                        .addGap(43, 43, 43))))
+        javax.swing.GroupLayout dlgUsuarioLayout = new javax.swing.GroupLayout(dlgUsuario.getContentPane());
+        dlgUsuario.getContentPane().setLayout(dlgUsuarioLayout);
+        dlgUsuarioLayout.setHorizontalGroup(
+            dlgUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        dlgBkLayout.setVerticalGroup(
-            dlgBkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlColor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlColor1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-            .addGroup(dlgBkLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(lblHiden)
-                .addGap(1, 1, 1)
-                .addGroup(dlgBkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(21, 21, 21))
+        dlgUsuarioLayout.setVerticalGroup(
+            dlgUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlBackground1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout dialogUsuarioLayout = new javax.swing.GroupLayout(dialogUsuario.getContentPane());
-        dialogUsuario.getContentPane().setLayout(dialogUsuarioLayout);
-        dialogUsuarioLayout.setHorizontalGroup(
-            dialogUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dlgBk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        dialogUsuarioLayout.setVerticalGroup(
-            dialogUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dlgBk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        dialogUsuario.getAccessibleContext().setAccessibleParent(this);
+        dlgUsuario.getAccessibleContext().setAccessibleParent(this);
 
         pryArt.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         pryArt.setTitle("[Articulos]");
@@ -408,22 +401,22 @@ public class ADevolucion extends javax.swing.JFrame {
         pryArt.setUndecorated(true);
         pryArt.setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(195, 83, 93));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(250, 213, 217), 4));
-        jPanel1.setMinimumSize(new java.awt.Dimension(320, 295));
-        jPanel1.setPreferredSize(new java.awt.Dimension(320, 295));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlBackground2.setBackground(new java.awt.Color(195, 83, 93));
+        pnlBackground2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(250, 213, 217), 4));
+        pnlBackground2.setMinimumSize(new java.awt.Dimension(320, 295));
+        pnlBackground2.setPreferredSize(new java.awt.Dimension(320, 295));
+        pnlBackground2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("<html>Articulos solicitados con el siguiente<br>Video Proyector:</html>");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 11, -1, -1));
+        lblTituloArt.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTituloArt.setForeground(new java.awt.Color(255, 255, 255));
+        lblTituloArt.setText("<html>Articulos solicitados con el siguiente<br>Video Proyector:</html>");
+        pnlBackground2.add(lblTituloArt, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 11, -1, -1));
 
         lblNProy.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblNProy.setForeground(new java.awt.Color(255, 255, 255));
         lblNProy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNProy.setText("lblNombreProyector");
-        jPanel1.add(lblNProy, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 320, -1));
+        pnlBackground2.add(lblNProy, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 320, -1));
 
         btnReportarAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
         btnReportarAcc.setText("Reportar!");
@@ -432,7 +425,7 @@ public class ADevolucion extends javax.swing.JFrame {
                 btnReportarAccActionPerformed(evt);
             }
         });
-        jPanel1.add(btnReportarAcc, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+        pnlBackground2.add(btnReportarAcc, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
 
         btnCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
         btnCerrar.setText("Cerrar");
@@ -441,7 +434,7 @@ public class ADevolucion extends javax.swing.JFrame {
                 btnCerrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
+        pnlBackground2.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -452,15 +445,13 @@ public class ADevolucion extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jList1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 170, 90));
+        pnlBackground2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 170, 90));
 
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("<html><center>Para reportar más de un elemento mantenga<br>presionado la tecla CTRL y con clic izquierdo<br>seleccione los demas elementos</center></html>");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 300, 50));
-
-        hiddenProf.setText("SoyProfe");
-        jPanel1.add(hiddenProf, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, -1, -1));
+        lblInfo4.setForeground(new java.awt.Color(255, 255, 255));
+        lblInfo4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblInfo4.setText("<html><center>Para reportar más de un elemento mantenga<br>presionado la tecla CTRL y con clic izquierdo<br>seleccione los demas elementos</center></html>");
+        pnlBackground2.add(lblInfo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 300, 50));
+        pnlBackground2.add(lblHiddenProfReportArt, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, -1, -1));
 
         javax.swing.GroupLayout pryArtLayout = new javax.swing.GroupLayout(pryArt.getContentPane());
         pryArt.getContentPane().setLayout(pryArtLayout);
@@ -469,7 +460,7 @@ public class ADevolucion extends javax.swing.JFrame {
             .addGap(0, 320, Short.MAX_VALUE)
             .addGroup(pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pryArtLayout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlBackground2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         pryArtLayout.setVerticalGroup(
@@ -477,7 +468,7 @@ public class ADevolucion extends javax.swing.JFrame {
             .addGap(0, 295, Short.MAX_VALUE)
             .addGroup(pryArtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pryArtLayout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlBackground2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -538,11 +529,10 @@ public class ADevolucion extends javax.swing.JFrame {
 
         jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 390, 110));
 
-        jPanel3.setBackground(new java.awt.Color(255, 183, 77));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray), "Artículo(s)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.gray), "Artículo(s)"));
 
         lblListItems.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        lblListItems.setForeground(new java.awt.Color(255, 255, 255));
         lblListItems.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblListItems.setText("jLabel14");
         lblListItems.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -581,8 +571,8 @@ public class ADevolucion extends javax.swing.JFrame {
         });
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 345, -1, -1));
 
-        hiddenProf1.setText("SoyProfe");
-        jPanel2.add(hiddenProf1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
+        lblHiddenProfReporte.setText("SoyProfe");
+        jPanel2.add(lblHiddenProfReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
 
         javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
         dlgReporte.getContentPane().setLayout(dlgReporteLayout);
@@ -593,6 +583,228 @@ public class ADevolucion extends javax.swing.JFrame {
         dlgReporteLayout.setVerticalGroup(
             dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+        );
+
+        fallosReporte.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        fallosReporte.setTitle("[Reportar VideoProyector]");
+        fallosReporte.setMinimumSize(new java.awt.Dimension(965, 450));
+        fallosReporte.setModal(true);
+        fallosReporte.setUndecorated(true);
+        fallosReporte.setPreferredSize(new java.awt.Dimension(965, 450));
+        fallosReporte.setResizable(false);
+
+        jPanel5.setBackground(new java.awt.Color(255, 138, 101));
+        jPanel5.setMinimumSize(new java.awt.Dimension(940, 440));
+        jPanel5.setPreferredSize(new java.awt.Dimension(940, 440));
+        jPanel5.setRequestFocusEnabled(false);
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel31.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
+        jLabel31.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel31.setText("Reporte");
+        jPanel5.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 940, -1));
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.white, java.awt.Color.lightGray), "Formulario de Reporte"));
+
+        jLabel33.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel33.setText("Área Solicitante:");
+
+        jLabel34.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel34.setText("Nombre del Solicitante:");
+
+        jLabel35.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel35.setText("Descripción detallada del servicio solicitado o falla a reparar:");
+        jLabel35.setToolTipText("");
+
+        txtArea.setText("Departamento de Desarrollo Académico");
+        txtArea.setMinimumSize(new java.awt.Dimension(370, 30));
+        txtArea.setPreferredSize(new java.awt.Dimension(370, 30));
+
+        txtSolicitante.setMinimumSize(new java.awt.Dimension(370, 30));
+        txtSolicitante.setPreferredSize(new java.awt.Dimension(370, 30));
+
+        txtDetalles.setColumns(20);
+        txtDetalles.setLineWrap(true);
+        txtDetalles.setRows(5);
+        txtDetalles.setWrapStyleWord(true);
+        txtDetalles.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDetallesKeyTyped(evt);
+            }
+        });
+        jScrollPane9.setViewportView(txtDetalles);
+
+        jLabel36.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel36.setText("Departamento a quien se dirige la solicitud:");
+
+        buttonGroup1.add(cb1);
+        cb1.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb1.setText("Recursos Materiales y Servicios");
+        cb1.setOpaque(false);
+
+        buttonGroup1.add(cb2);
+        cb2.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb2.setText("Mantenimiento de Equipo");
+        cb2.setOpaque(false);
+
+        buttonGroup1.add(cb3);
+        cb3.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb3.setText("Centro de Cómputo");
+        cb3.setOpaque(false);
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        jLabel42.setText("Descripción corta de la falla:");
+
+        txtTituloR.setMinimumSize(new java.awt.Dimension(370, 30));
+        txtTituloR.setPreferredSize(new java.awt.Dimension(370, 30));
+        txtTituloR.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTituloRKeyTyped(evt);
+            }
+        });
+
+        lblRprt6.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        lblRprt6.setText("Imprevisto:");
+
+        buttonGroup2.add(cb4);
+        cb4.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb4.setText("Reparación");
+        cb4.setOpaque(false);
+
+        buttonGroup2.add(cb5);
+        cb5.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb5.setText("Mantenimiento");
+        cb5.setOpaque(false);
+
+        buttonGroup2.add(cb6);
+        cb6.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb6.setText("Aplicar Garantía");
+        cb6.setOpaque(false);
+
+        buttonGroup2.add(cb7);
+        cb7.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+        cb7.setText("Dar de Baja");
+        cb7.setOpaque(false);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTituloR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtSolicitante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel34)
+                            .addComponent(jLabel42)
+                            .addComponent(cb3)
+                            .addComponent(cb1)
+                            .addComponent(jLabel36)
+                            .addComponent(cb2)
+                            .addComponent(jLabel33))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblRprt6)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(cb4)
+                                .addGap(31, 31, 31)
+                                .addComponent(cb6))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(cb5)
+                                .addGap(18, 18, 18)
+                                .addComponent(cb7)))
+                        .addGap(255, 255, 255))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane9))
+                        .addContainerGap())))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSolicitante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel33))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblRprt6)
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb4)
+                            .addComponent(cb6))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb5)
+                            .addComponent(cb7))))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel42)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTituloR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel36)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cb1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cb3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cb2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel35)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(15, 15, 15))
+        );
+
+        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 880, 310));
+
+        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
+        btnReporte.setText("Generar Reporte");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 390, -1, -1));
+
+        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnCancelar1.setText("Cancelar Reporte");
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 390, -1, -1));
+
+        hiddenNSerie.setText("NSeriePry");
+        jPanel5.add(hiddenNSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 380, -1, -1));
+
+        javax.swing.GroupLayout fallosReporteLayout = new javax.swing.GroupLayout(fallosReporte.getContentPane());
+        fallosReporte.getContentPane().setLayout(fallosReporteLayout);
+        fallosReporteLayout.setHorizontalGroup(
+            fallosReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 922, Short.MAX_VALUE)
+        );
+        fallosReporteLayout.setVerticalGroup(
+            fallosReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -785,28 +997,28 @@ public class ADevolucion extends javax.swing.JFrame {
         lblTitulo.setText("Devolución");
         pnlBackground.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel3.setText("No. de Serie del VideoProyector:");
-        pnlBackground.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, -1, -1));
+        lblInfo.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        lblInfo.setText("No. de Serie del VideoProyector:");
+        pnlBackground.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, -1, -1));
 
-        btnPnDevolver.setBackground(new java.awt.Color(239, 239, 239));
-        btnPnDevolver.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDevolver.setBackground(new java.awt.Color(239, 239, 239));
+        btnDevolver.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPnDevolverMouseClicked(evt);
+                btnDevolverMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnPnDevolverMouseEntered(evt);
+                btnDevolverMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnPnDevolverMouseExited(evt);
+                btnDevolverMouseExited(evt);
             }
         });
-        btnPnDevolver.setLayout(new java.awt.GridBagLayout());
+        btnDevolver.setLayout(new java.awt.GridBagLayout());
 
         lblIco3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Save_22px.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(12, 10, 12, 0);
-        btnPnDevolver.add(lblIco3, gridBagConstraints);
+        btnDevolver.add(lblIco3, gridBagConstraints);
 
         lblTextoDev.setBackground(new java.awt.Color(0, 191, 255));
         lblTextoDev.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -814,20 +1026,20 @@ public class ADevolucion extends javax.swing.JFrame {
         lblTextoDev.setText("Registrar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
-        btnPnDevolver.add(lblTextoDev, gridBagConstraints);
+        btnDevolver.add(lblTextoDev, gridBagConstraints);
 
-        pnlBackground.add(btnPnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 254, 130, -1));
+        pnlBackground.add(btnDevolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 254, 130, -1));
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(890, 290));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(890, 290));
+        scrollContainer.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollContainer.setMinimumSize(new java.awt.Dimension(890, 290));
+        scrollContainer.setPreferredSize(new java.awt.Dimension(890, 290));
 
         pnlContenedor.setBackground(new java.awt.Color(121, 129, 208));
         pnlContenedor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 7, 9));
-        jScrollPane1.setViewportView(pnlContenedor);
+        scrollContainer.setViewportView(pnlContenedor);
 
-        pnlBackground.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 308, -1, -1));
+        pnlBackground.add(scrollContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 308, -1, -1));
 
         chkBLista.setText("elegir de una lista");
         chkBLista.addActionListener(new java.awt.event.ActionListener() {
@@ -837,7 +1049,11 @@ public class ADevolucion extends javax.swing.JFrame {
         });
         pnlBackground.add(chkBLista, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 210, -1, -1));
 
-        noSeriePnl.setBackground(new java.awt.Color(255, 255, 255));
+        layerNoSerie.setMinimumSize(new java.awt.Dimension(330, 48));
+        layerNoSerie.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        pnlNoSerie.setBackground(new java.awt.Color(255, 255, 255));
+        pnlNoSerie.setMinimumSize(new java.awt.Dimension(330, 48));
 
         barraSeparadora.setBackground(new java.awt.Color(125, 119, 105));
         barraSeparadora.setMinimumSize(new java.awt.Dimension(330, 3));
@@ -854,43 +1070,46 @@ public class ADevolucion extends javax.swing.JFrame {
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
-        txtProyNSerie.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        txtProyNSerie.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtProyNSerie.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 5));
-        txtProyNSerie.setMinimumSize(new java.awt.Dimension(250, 30));
-        txtProyNSerie.setPreferredSize(new java.awt.Dimension(250, 30));
-        txtProyNSerie.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNSerie.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        txtNSerie.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtNSerie.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 5));
+        txtNSerie.setMinimumSize(new java.awt.Dimension(250, 30));
+        txtNSerie.setPreferredSize(new java.awt.Dimension(250, 30));
+        txtNSerie.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtProyNSerieKeyTyped(evt);
+                txtNSerieKeyTyped(evt);
             }
         });
 
-        javax.swing.GroupLayout noSeriePnlLayout = new javax.swing.GroupLayout(noSeriePnl);
-        noSeriePnl.setLayout(noSeriePnlLayout);
-        noSeriePnlLayout.setHorizontalGroup(
-            noSeriePnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlNoSerieLayout = new javax.swing.GroupLayout(pnlNoSerie);
+        pnlNoSerie.setLayout(pnlNoSerieLayout);
+        pnlNoSerieLayout.setHorizontalGroup(
+            pnlNoSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 330, Short.MAX_VALUE)
-            .addGroup(noSeriePnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(noSeriePnlLayout.createSequentialGroup()
+            .addGroup(pnlNoSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlNoSerieLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(noSeriePnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtProyNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlNoSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(barraSeparadora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        noSeriePnlLayout.setVerticalGroup(
-            noSeriePnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlNoSerieLayout.setVerticalGroup(
+            pnlNoSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 48, Short.MAX_VALUE)
-            .addGroup(noSeriePnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(noSeriePnlLayout.createSequentialGroup()
+            .addGroup(pnlNoSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlNoSerieLayout.createSequentialGroup()
                     .addGap(0, 7, Short.MAX_VALUE)
-                    .addComponent(txtProyNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
                     .addComponent(barraSeparadora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 8, Short.MAX_VALUE)))
         );
 
-        combPnl.setBackground(new java.awt.Color(255, 255, 255));
+        layerNoSerie.add(pnlNoSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        pnlCbNSerie.setBackground(new java.awt.Color(255, 255, 255));
+        pnlCbNSerie.setMinimumSize(new java.awt.Dimension(330, 48));
 
         jComboBox1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -911,62 +1130,30 @@ public class ADevolucion extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout combPnlLayout = new javax.swing.GroupLayout(combPnl);
-        combPnl.setLayout(combPnlLayout);
-        combPnlLayout.setHorizontalGroup(
-            combPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlCbNSerieLayout = new javax.swing.GroupLayout(pnlCbNSerie);
+        pnlCbNSerie.setLayout(pnlCbNSerieLayout);
+        pnlCbNSerieLayout.setHorizontalGroup(
+            pnlCbNSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 330, Short.MAX_VALUE)
-            .addGroup(combPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(combPnlLayout.createSequentialGroup()
+            .addGroup(pnlCbNSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlCbNSerieLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        combPnlLayout.setVerticalGroup(
-            combPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlCbNSerieLayout.setVerticalGroup(
+            pnlCbNSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 48, Short.MAX_VALUE)
-            .addGroup(combPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(combPnlLayout.createSequentialGroup()
+            .addGroup(pnlCbNSerieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlCbNSerieLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jLayeredPane1.setLayer(noSeriePnl, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jLayeredPane1.setLayer(combPnl, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        layerNoSerie.add(pnlCbNSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
-        jLayeredPane1.setLayout(jLayeredPane1Layout);
-        jLayeredPane1Layout.setHorizontalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(noSeriePnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(combPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
-        jLayeredPane1Layout.setVerticalGroup(
-            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 90, Short.MAX_VALUE)
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(noSeriePnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
-                    .addContainerGap(27, Short.MAX_VALUE)
-                    .addComponent(combPnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(15, Short.MAX_VALUE)))
-        );
-
-        pnlBackground.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 180, -1, 90));
+        pnlBackground.add(layerNoSerie, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 200, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1057,41 +1244,41 @@ public class ADevolucion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnMenuItemStateChanged
 
-    private void btnPnDevolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnDevolverMouseClicked
-        btnPnDevolver.setBackground(new Color(239,239,239));
-        String datos = txtProyNSerie.getText().trim();
+    private void btnDevolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolverMouseClicked
+        btnDevolver.setBackground(new Color(239,239,239));
+        String datos = txtNSerie.getText().trim();
         if (!datos.isEmpty()){
             //comprobar que exisa un prestamo
             try{
                 PrestamoDB dev = new PrestamoDB();
                 if (dev.getExistePrestamoProy(datos)){
-                    dialogUsuario.setLocationRelativeTo(pnlBackground);
-                    dialogUsuario.setVisible(true);
+                    dlgUsuario.setLocationRelativeTo(pnlBackground);
+                    dlgUsuario.setVisible(true);
                 }else{
                     JOptionPane.showMessageDialog(null, "El videoproyector indicado\nno tiene registro de que haya sido prestado");
-                    txtProyNSerie.setText("");
+                    txtNSerie.setText("");
                 }
-            }catch(Exception ex){
+            }catch(SQLException ex){
                 System.out.println("Error al cargar si existen prestamos: " + ex);
             }
         }else{
             JOptionPane.showMessageDialog(null, "Cuadro de texto vacio!!!");
         }
-    }//GEN-LAST:event_btnPnDevolverMouseClicked
+    }//GEN-LAST:event_btnDevolverMouseClicked
 
-    private void btnPnDevolverMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnDevolverMouseEntered
-        btnPnDevolver.setBackground(new Color(0,191,255));
-    }//GEN-LAST:event_btnPnDevolverMouseEntered
+    private void btnDevolverMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolverMouseEntered
+        btnDevolver.setBackground(new Color(0,191,255));
+    }//GEN-LAST:event_btnDevolverMouseEntered
 
-    private void btnPnDevolverMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPnDevolverMouseExited
-        btnPnDevolver.setBackground(new Color(239,239,239));
-    }//GEN-LAST:event_btnPnDevolverMouseExited
+    private void btnDevolverMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolverMouseExited
+        btnDevolver.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_btnDevolverMouseExited
 
     private void pnlBtnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnCerrarMouseClicked
         pnlBtnCerrar.setBackground(new Color(239,239,239));
         
-        dialogUsuario.setVisible(false);
-        dialogUsuario.dispose();
+        dlgUsuario.setVisible(false);
+        dlgUsuario.dispose();
         txtUsuarioVal.setText("");
     }//GEN-LAST:event_pnlBtnCerrarMouseClicked
 
@@ -1102,75 +1289,73 @@ public class ADevolucion extends javax.swing.JFrame {
     private void pnlBtnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnCerrarMouseExited
         pnlBtnCerrar.setBackground(new Color(239,239,239));
     }//GEN-LAST:event_pnlBtnCerrarMouseExited
-
-    private void pnlBtnGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnGuardarMouseClicked
-        accionarLiberacion();
-    }//GEN-LAST:event_pnlBtnGuardarMouseClicked
-    public void accionarLiberacion(){
-        String proyector = txtProyNSerie.getText().trim();
+    public void accionarLiberacion(){//boolean estatusDevolucion, int idReporte
+        String proyector = txtNSerie.getText().trim();
         String credencial = txtUsuarioVal.getText().trim();
-        try {    
-            //revisar que exista el videoproyector txtProyNSerie
-            VideoproyectorDB profe = new VideoproyectorDB();
-            if(profe.getExisteProyector(proyector)){
-                //revisar que no este en blanco el dato de txtUsuarioVal
-                if(!credencial.isEmpty()){
-                    UsuarioReadDB leer = new UsuarioReadDB();
-                    if (leer.getExisteUsuario(credencial)){
-                        //comprobar que exisa un prestamo
-                        PrestamoDB dev = new PrestamoDB();
-                        if (dev.getExistePrestamoProy(proyector)){
-                            // generar actualizacion
-                            // liberar distintos articulos
-                            dev.updPrestamo(proyector, credencial);
-                            new LogDB().log(credencial, "E_PRESTAMOS", 7);
-                            System.out.println("El prestamo se libero!: \n-Proyector:" + proyector + "\n-Credencial: " + credencial);
-                            pnlContenedor.removeAll();
-                            pnlContenedor.repaint();
-                            dibujarDevoluciones();
-                            ImageIcon iconJPane = new ImageIcon("./src/imagenes/Ok.png");
-                            JOptionPane.showMessageDialog(null, "El videoproyector ahora se registra como disponible", "Información", JOptionPane.INFORMATION_MESSAGE, iconJPane);
-                            txtProyNSerie.requestFocusInWindow();
-                            cargarComboProy();
+        
+        if(credencial.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Debe indicar una credencial!!!");
+        }else{
+            try {    
+                //revisar que exista el videoproyector txtProyNSerie
+                VideoproyectorDB profe = new VideoproyectorDB();
+                if(profe.getExisteProyector(proyector)){
+                        UsuarioReadDB leer = new UsuarioReadDB();
+                        if (leer.getExisteUsuario(credencial)){
+                            //comprobar que exisa un prestamo
+                            PrestamoDB dev = new PrestamoDB();
+                            if (dev.getExistePrestamoProy(proyector)){
+                                // generar actualizacion
+                                // liberar distintos articulos
+                                dev.updPrestamo(proyector, credencial);
+                                new LogDB().log(credencial, "E_PRESTAMOS", 7);
+                                System.out.println("\n\nEl prestamo se libero: \n-Proyector:" + proyector + "\n-Credencial: " + credencial+"\n\n");
+                                pnlContenedor.removeAll();
+                                pnlContenedor.repaint();
+                                dibujarDevoluciones();
+                                ImageIcon iconJPane = new ImageIcon("./src/imagenes/Ok.png");
+                                JOptionPane.showMessageDialog(null, "El videoproyector ahora se registra como disponible", "Información", JOptionPane.INFORMATION_MESSAGE, iconJPane);
+                                txtNSerie.requestFocusInWindow();
+                                cargarComboProy();
+                            }else{
+                                JOptionPane.showMessageDialog(null, "El videoproyector indicado no fue reconocido", "Información", JOptionPane.ERROR_MESSAGE);
+                            }
+
                         }else{
-                            JOptionPane.showMessageDialog(null, "El videoproyector indicado \nno se ha prestado", "Información", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Este usuario indicado no se encuentra registrado", "Información", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Este usuario no se encuentra registrado\ny no es capaz de usar esta caracteristica", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "El videoproyector indicado no se ha prestado");
                 }
-            }else{
-                JOptionPane.showMessageDialog(null, "El videoproyector indicado no se ha prestado");
+                txtNSerie.setText("");
+                txtUsuarioVal.setText("");
+                dlgUsuario.setVisible(false);
+
+                chkBLista.setSelected(false);
+                pnlNoSerie.setVisible(true);
+                pnlCbNSerie.setVisible(false);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Existe un problema al liberar proyector:\n\n"+ex);
             }
-            txtProyNSerie.setText("");
-            txtUsuarioVal.setText("");
-            dialogUsuario.setVisible(false);
-            
-            chkBLista.setSelected(false);
-            noSeriePnl.setVisible(true);
-            combPnl.setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(ADevolucion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void txtProyNSerieKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProyNSerieKeyTyped
-        if (txtProyNSerie.getText().length() >= 20) {
+    private void txtNSerieKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNSerieKeyTyped
+        if (txtNSerie.getText().length() >= 20) {
             evt.consume();
         }
         
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            String datos = txtProyNSerie.getText().trim();
+            String datos = txtNSerie.getText().trim();
             if (!datos.isEmpty()){
                 //comprobar que exisa un prestamo
                 try{
                     PrestamoDB dev = new PrestamoDB();
                     if (dev.getExistePrestamoProy(datos)){
-                        dialogUsuario.setLocationRelativeTo(pnlBackground);
-                        dialogUsuario.setVisible(true);
+                        dlgUsuario.setLocationRelativeTo(pnlBackground);
+                        dlgUsuario.setVisible(true);
                     }else{
                         JOptionPane.showMessageDialog(null, "El videoproyector indicado\nno tiene registro de que haya sido prestado");
-                        txtProyNSerie.setText("");
+                        txtNSerie.setText("");
                     }
                 }catch(Exception ex){
                     System.out.println("Error al cargar si existen prestamos: " + ex);
@@ -1179,26 +1364,18 @@ public class ADevolucion extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Cuadro de texto vacio!!!");
             }
         }
-    }//GEN-LAST:event_txtProyNSerieKeyTyped
-
-    private void pnlBtnGuardarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnGuardarMouseEntered
-        pnlBtnGuardar.setBackground(new Color(0,191,255));
-    }//GEN-LAST:event_pnlBtnGuardarMouseEntered
-
-    private void pnlBtnGuardarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnGuardarMouseExited
-        pnlBtnGuardar.setBackground(new Color(239,239,239));
-    }//GEN-LAST:event_pnlBtnGuardarMouseExited
+    }//GEN-LAST:event_txtNSerieKeyTyped
 
     private void txtUsuarioValKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioValKeyTyped
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            accionarLiberacion();
-        }
+//        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+//            accionarLiberacion();
+//        }
     }//GEN-LAST:event_txtUsuarioValKeyTyped
 
     private void chkBListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBListaActionPerformed
         if(chkBLista.isSelected()){
-            noSeriePnl.setVisible(false);
-            combPnl.setVisible(true);
+            pnlNoSerie.setVisible(false);
+            pnlCbNSerie.setVisible(true);
              try {
                 VideoproyectorDB proy = new VideoproyectorDB();
                 HashMap<String, String> map = proy.devolucionCombo();
@@ -1206,7 +1383,7 @@ public class ADevolucion extends javax.swing.JFrame {
                     jComboBox1.setSelectedIndex(0);
                     String proyNoSerie = map.get(jComboBox1.getSelectedItem().toString());
                     System.out.println("No_Serie videoproyector seleccionado: " + proyNoSerie);
-                    txtProyNSerie.setText(proyNoSerie);
+                    txtNSerie.setText(proyNoSerie);
                 }
             } catch (SQLException ex) {
                 System.out.println("Error al recuperar informacion videoproyector ComboBox: " + ex);
@@ -1214,8 +1391,8 @@ public class ADevolucion extends javax.swing.JFrame {
                 System.out.println("!!!!!!Error al recuperar informacion videoproyector ComboBox: " + e);
             }
         }else{
-            noSeriePnl.setVisible(true);
-            combPnl.setVisible(false);
+            pnlNoSerie.setVisible(true);
+            pnlCbNSerie.setVisible(false);
         }
     }//GEN-LAST:event_chkBListaActionPerformed
 
@@ -1227,7 +1404,7 @@ public class ADevolucion extends javax.swing.JFrame {
                 if(!map.isEmpty()){
                     String proyNoSerie = map.get(jComboBox1.getSelectedItem().toString());     //del elemento seleccionado recupera el noSerie
                     System.out.println(".::NoSerie de Proyector seleccionado\n.::stateChanged: " + proyNoSerie);
-                    txtProyNSerie.setText(proyNoSerie);
+                    txtNSerie.setText(proyNoSerie);
                 }
             } catch (SQLException ex) {
                 System.out.println("Error combVid al efecti statedSchanged: " + ex);
@@ -1245,7 +1422,7 @@ public class ADevolucion extends javax.swing.JFrame {
                 if(!map.isEmpty()){
                     String proyNoSerie = map.get(jComboBox1.getSelectedItem().toString());     //del elemento seleccionado recupera el noSerie
                     System.out.println(".::No_Serie proyector comboVid: " + proyNoSerie);
-                    txtProyNSerie.setText(proyNoSerie);
+                    txtNSerie.setText(proyNoSerie);
                 }
             } catch (SQLException ex) {
                 System.out.println("Error al recuperar informacion videoproyector ComboBox: " + ex);
@@ -1261,7 +1438,7 @@ public class ADevolucion extends javax.swing.JFrame {
                 if(!map.isEmpty()){
                     String proyNoSerie = map.get(jComboBox1.getSelectedItem().toString());     //del elemento seleccionado recupera el noSerie
                     System.out.println(".::NoSerie de Proyector seleccionado\n.::focusLost: " + proyNoSerie);
-                    txtProyNSerie.setText(proyNoSerie);
+                    txtNSerie.setText(proyNoSerie);
                 }
             } catch (SQLException ex) {
                 System.out.println("Error combVid al perder focus: " + ex);
@@ -1286,12 +1463,14 @@ public class ADevolucion extends javax.swing.JFrame {
             bulletList += "</ul></html>";
             lblListItems.setText(bulletList);
 
-            hiddenProf1.setText(hiddenProf.getText());
+            lblHiddenProfReporte.setText(lblHiddenProfReportArt.getText());
             try{
-            String[] profe = new ProfesorDB().getProfesor(hiddenProf.getText());
+            String[] profe = new ProfesorDB().getProfesor(lblHiddenProfReportArt.getText());
             txtProf.setText(profe[2] + " " + profe[3] + " " +profe[4]);
             }catch(SQLException ex){ System.out.println("Error al recuperar nombre del profesor en reporte: " + ex); }
-
+            
+            txtTitulo.setTransferHandler(null);
+            txtDesc.setTransferHandler(null);
             dlgReporte.setLocationRelativeTo(this);
             dlgReporte.setVisible(true);
             pryArt.setVisible(false);
@@ -1302,7 +1481,7 @@ public class ADevolucion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReportarAccActionPerformed
 
     private void btnReportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportarActionPerformed
-        String profe = hiddenProf1.getText();
+        String profe = lblHiddenProfReporte.getText();
         String titulo = txtTitulo.getText().trim();
         String detalles = txtDesc.getText().trim();
         int i = 0;
@@ -1361,6 +1540,148 @@ public class ADevolucion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
+    private void lblStatsGoodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsGoodMouseClicked
+        lblStatsGood.setBackground(new Color(255,103,96));
+        accionarLiberacion();
+    }//GEN-LAST:event_lblStatsGoodMouseClicked
+
+    private void lblStatsGoodMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsGoodMouseEntered
+        lblStatsGood.setBackground(new Color(238,238,238));
+    }//GEN-LAST:event_lblStatsGoodMouseEntered
+
+    private void lblStatsGoodMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsGoodMouseExited
+        lblStatsGood.setBackground(new Color(255,103,96));
+    }//GEN-LAST:event_lblStatsGoodMouseExited
+
+    private void lblStatsBadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsBadMouseClicked
+        lblStatsBad.setBackground(new Color(255,103,96));
+        String credncl = txtUsuarioVal.getText().trim();
+        String proyector = txtNSerie.getText().trim();
+        if(!credncl.isEmpty()){
+            try {    
+                //revisar que exista el videoproyector txtProyNSerie
+                VideoproyectorDB profe = new VideoproyectorDB();
+                if(profe.getExisteProyector(proyector)){
+                        UsuarioReadDB leer = new UsuarioReadDB();
+                        if (leer.getExisteUsuario(credncl)){
+                            hiddenNSerie.setText(proyector);
+                            fallosReporte.setLocationRelativeTo(pnlBackground);
+                            fallosReporte.setVisible(true);
+                        }else{JOptionPane.showMessageDialog(this, "El usuario indicado no se encuentra registrado");}
+                }else{JOptionPane.showMessageDialog(this, "El videoproyector indicado no existe");}
+            }catch(SQLException e){System.out.println("Error al cargar reigstros de  db:"+e);}
+        }else{
+            JOptionPane.showMessageDialog(this, "Es importante indique su credenial");
+        }
+    }//GEN-LAST:event_lblStatsBadMouseClicked
+
+    private void lblStatsBadMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsBadMouseEntered
+        lblStatsBad.setBackground(new Color(238,238,238));
+    }//GEN-LAST:event_lblStatsBadMouseEntered
+
+    private void lblStatsBadMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblStatsBadMouseExited
+        lblStatsBad.setBackground(new Color(255,103,96));
+    }//GEN-LAST:event_lblStatsBadMouseExited
+
+    private void txtDetallesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDetallesKeyTyped
+        if (txtDetalles.getText().length() >= 450) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDetallesKeyTyped
+
+    private void txtTituloRKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTituloRKeyTyped
+        if (txtTituloR.getText().length() >= 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTituloRKeyTyped
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        String proyector = txtNSerie.getText().trim();
+        String credencial = txtUsuarioVal.getText().trim();
+        String titulo = txtTituloR.getText().trim();
+        String nombreEncargado = txtSolicitante.getText().trim();
+        String area = txtArea.getText().trim();
+        String deptoReparador = "a";
+        String imprevisto = "a";
+        String detalles = txtDetalles.getText().trim();
+        
+        if(!area.isEmpty() && !nombreEncargado.isEmpty() && !detalles.isEmpty() && !titulo.isEmpty()){
+            if((cb1.isSelected() || cb2.isSelected() || cb3.isSelected()) && (cb4.isSelected() || cb5.isSelected() || cb6.isSelected() || cb7.isSelected())){
+                //deptoReparador
+                if(cb1.isSelected()){ deptoReparador = "a";}
+                else if(cb2.isSelected()){ deptoReparador = "b";}
+                else if(cb3.isSelected()){ deptoReparador = "c";}
+                //imprevisto
+                if(cb4.isSelected()){ imprevisto = "a";}
+                else if(cb5.isSelected()){ imprevisto = "b";}
+                else if(cb6.isSelected()){ imprevisto = "c";}
+                else if(cb7.isSelected()){ imprevisto = "d";}
+                String[] datos = {titulo, nombreEncargado, area, deptoReparador, imprevisto, detalles};
+                String[] reporteDtos = {area, nombreEncargado, detalles, deptoReparador, proyector};
+
+                try {
+                    VideoproyectorDB pry = new VideoproyectorDB();
+                    GenerarReportes genR = new GenerarReportes();
+                    
+                    PrestamoDB pres = new PrestamoDB();
+
+                    pres.updPrestamoConReporte(proyector, credencial, datos);//noSerie, idUsuario, datosR
+                    
+                    genR.getReporteFalloPry(reporteDtos);
+                    new LogDB().log(credencial, "E_PRESTAMOS", 7);
+                    
+                    
+                    System.out.println("El prestamo se libero!: \n-Proyector:" + proyector + "\n-Credencial: " + credencial);
+                    pnlContenedor.removeAll();
+                    pnlContenedor.repaint();
+                    dibujarDevoluciones();
+                    ImageIcon iconJPane = new ImageIcon("./src/imagenes/Ok.png");
+                    JOptionPane.showMessageDialog(null, "El videoproyector ahora se registra como disponible", "Información", JOptionPane.INFORMATION_MESSAGE, iconJPane);
+                    txtNSerie.requestFocusInWindow();
+                    cargarComboProy();
+
+                    txtNSerie.setText("");
+                    txtUsuarioVal.setText("");
+                    dlgUsuario.setVisible(false);
+
+                    chkBLista.setSelected(false);
+                    pnlNoSerie.setVisible(true);
+                    pnlCbNSerie.setVisible(false);
+                    
+                    fallosReporte.setVisible(false);
+                    fallosReporte.dispose();
+                } catch (SQLException ex) {
+                    System.out.println("Error al crear registro de prestamo en videoproyector btnReporte: " + ex);
+                }
+            }else{JOptionPane.showMessageDialog(null, "Recuerde llenar todo el formulario"); clearReport();}
+        }else{
+            JOptionPane.showMessageDialog(null, "Recuerde llenar todo el formulario"); clearReport();
+        }
+    }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        clearReport();
+        fallosReporte.setVisible(false);
+        fallosReporte.dispose();
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    public void clearReport(){
+        txtArea.setText("Departamento de Desarrollo Académico");
+        txtSolicitante.setText("");
+        txtDetalles.setText("");
+        txtTituloR.setText("");
+        jLabel31.setText("Reporte de Fallos");
+        
+        cb1.setSelected(false);
+        cb2.setSelected(false);
+        cb3.setSelected(false);
+        
+        cb4.setSelected(false);
+        cb5.setSelected(false);
+        cb6.setSelected(false);
+        cb7.setSelected(false);
+    }
+    
     public void miPanel(String[] datos) throws SQLException{
         JPanel pnlVidDetalles = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
@@ -1513,7 +1834,7 @@ public class ADevolucion extends javax.swing.JFrame {
                     }
                     jList1.setModel(listModel);
                     // mostrar dialog
-                    hiddenProf.setText(datos[4]);
+                    lblHiddenProfReportArt.setText(datos[4]);
                     pryArt.setLocationRelativeTo(pnlBackground);
                     pryArt.setVisible(true);
                 }
@@ -1576,19 +1897,28 @@ public class ADevolucion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel barraSeparadora;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCancelar1;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JPanel btnDevolver;
     private javax.swing.JToggleButton btnMenu;
-    private javax.swing.JPanel btnPnDevolver;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnReportar;
     private javax.swing.JButton btnReportarAcc;
+    private javax.swing.JButton btnReporte;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JCheckBox cb1;
+    private javax.swing.JCheckBox cb2;
+    private javax.swing.JCheckBox cb3;
+    private javax.swing.JCheckBox cb4;
+    private javax.swing.JCheckBox cb5;
+    private javax.swing.JCheckBox cb6;
+    private javax.swing.JCheckBox cb7;
     private javax.swing.JCheckBox chkBLista;
-    private javax.swing.JPanel combPnl;
-    private javax.swing.JDialog dialogUsuario;
-    private javax.swing.JPanel dlgBk;
     private javax.swing.JDialog dlgReporte;
-    private javax.swing.JLabel hiddenProf;
-    private javax.swing.JLabel hiddenProf1;
+    private javax.swing.JDialog dlgUsuario;
+    private javax.swing.JDialog fallosReporte;
+    private javax.swing.JLabel hiddenNSerie;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
@@ -1596,7 +1926,6 @@ public class ADevolucion extends javax.swing.JFrame {
     private javax.swing.JLabel ico7;
     private javax.swing.JLabel ico8;
     private javax.swing.JLabel icoCerrar1;
-    private javax.swing.JLabel icoGuardar1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1604,48 +1933,66 @@ public class ADevolucion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
-    private javax.swing.JLabel lblHiden;
+    private javax.swing.JLayeredPane layerNoSerie;
+    private javax.swing.JLabel lblHiddenProfReportArt;
+    private javax.swing.JLabel lblHiddenProfReporte;
     private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIco2;
     private javax.swing.JLabel lblIco3;
+    private javax.swing.JLabel lblIcoInfo;
+    private javax.swing.JLabel lblInfo;
+    private javax.swing.JLabel lblInfo2;
+    private javax.swing.JLabel lblInfo3;
+    private javax.swing.JLabel lblInfo4;
     private javax.swing.JLabel lblListItems;
     private javax.swing.JLabel lblNProy;
+    private javax.swing.JLabel lblRprt6;
+    private javax.swing.JLabel lblStatsBad;
+    private javax.swing.JLabel lblStatsGood;
     private javax.swing.JLabel lblTextoDev;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblTituloArt;
     private javax.swing.JLabel lblTxtCerrar1;
-    private javax.swing.JLabel lblTxtGuardar1;
-    private javax.swing.JPanel noSeriePnl;
     private javax.swing.JPanel panelOPC;
     private javax.swing.JPanel pnlBackground;
+    private javax.swing.JPanel pnlBackground1;
+    private javax.swing.JPanel pnlBackground2;
     private javax.swing.JPanel pnlBtnCerrar;
-    private javax.swing.JPanel pnlBtnGuardar;
     private javax.swing.JPanel pnlCabecera;
+    private javax.swing.JPanel pnlCbNSerie;
     private javax.swing.JPanel pnlColor;
     private javax.swing.JPanel pnlColor1;
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JPanel pnlFormulario;
+    private javax.swing.JPanel pnlNoSerie;
     private javax.swing.JDialog pryArt;
+    private javax.swing.JScrollPane scrollContainer;
+    private javax.swing.JTextField txtArea;
     private javax.swing.JTextArea txtDesc;
+    private javax.swing.JTextArea txtDetalles;
+    private javax.swing.JTextField txtNSerie;
     private javax.swing.JTextField txtProf;
-    private javax.swing.JTextField txtProyNSerie;
+    private javax.swing.JTextField txtSolicitante;
     private javax.swing.JTextField txtTitulo;
+    private javax.swing.JTextField txtTituloR;
     private javax.swing.JTextField txtUsuarioVal;
     // End of variables declaration//GEN-END:variables
 }

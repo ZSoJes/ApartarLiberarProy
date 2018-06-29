@@ -246,10 +246,12 @@ public class AlPrestamo extends javax.swing.JFrame {
         verUsuario.setMinimumSize(new java.awt.Dimension(550, 300));
         verUsuario.setModal(true);
         verUsuario.setUndecorated(true);
+        verUsuario.setPreferredSize(new java.awt.Dimension(550, 300));
         verUsuario.setResizable(false);
 
         bkDialog.setBackground(new java.awt.Color(255, 103, 96));
         bkDialog.setMinimumSize(new java.awt.Dimension(550, 300));
+        bkDialog.setPreferredSize(new java.awt.Dimension(550, 300));
 
         lblTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTxt.setForeground(new java.awt.Color(255, 255, 255));
@@ -1199,7 +1201,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                 ProfesorDB prof = new ProfesorDB();
                 if (prof.getExisteProfesor(profe)) {
                     PrestamoDB prestamo = new PrestamoDB();
-                    if (!(prestamo.getExistePrestamo(profe))) { //si !true !(existe un prestamo) utilizar profesor
+                    if ((prestamo.getExistePrestamo(profe))) { //si !true !(existe un prestamo) utilizar profesor
                         DepartamentoDB depar = new DepartamentoDB();
                         String[] datos = prof.getProfesor(profe);
                         String[] depart = depar.getDepartamento(Integer.parseInt(datos[1]));
@@ -1210,7 +1212,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                         lblDepart.setText(depart[0]);
                     } else {
                         txtProf.setText("");
-                        JOptionPane.showMessageDialog(null, "Ingresar profesor que no tenga prestamo vigente", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Ingresar profesor que:\n-NO SE ENCUENTRE en prestamo vigente\n-NO SE ENCUENTRE con un adeudo", "Advertencia", JOptionPane.WARNING_MESSAGE);
                         pnlVacio.setVisible(true);
                         pnlProfeLoad.setVisible(false);
                     }

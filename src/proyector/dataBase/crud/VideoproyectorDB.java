@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import proyector.comboItemProy;
 import proyector.dataBase.Conexion;
@@ -473,16 +472,18 @@ public class VideoproyectorDB {
     } 
     
     /**
-     * A partir de indicar el id del proyector 
+     * A partir de indicar el id del proyector  y del imprevisto indicado en a, b, c, d
      * este termina su estado a reparación
      * @param proye 
+     * @param imp  
      */
-    public void setReparacionPry(String proye){
+    public void setReparacionPry(String proye, String imp){
         try{
             PreparedStatement prep;
             prep = conn.prepareStatement("UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = ? WHERE ID_VIDEOPROYECTOR = "
                     + "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE = ?)");
-            prep.setString(1, "MANTENIMIENTO");
+            String imprevisto = imp.equals("a")?"Reparación":(imp.equals("b")?"Mantenimiento":(imp.equals("c")?"En Garantía":"De baja"));
+            prep.setString(1, imprevisto);
             prep.setBoolean(2, false);
             prep.setString(3, proye);
             prep.executeUpdate();
@@ -523,4 +524,38 @@ public class VideoproyectorDB {
             System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
         }
     }
+    
+    public int getIDReporte(){
+        PreparedStatement prep;
+        ResultSet rs;
+        int id = 0;
+        try {
+            prep = conn.prepareStatement("SELECT * FROM E_REP_VIDEOPROYECTORES ORDER BY ID_REPORTE_VIDEOPROYECTOR DESC LIMIT 1");
+            rs = prep.executeQuery();
+            while(rs.next()){ id = rs.getInt(1); }
+            rs.close();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar el id del ultimo reporte generado");
+        }
+        return id;
+    }
+    
+//    public void setReporteAPrestamo(String noSerie, String credencialUsuario, boolean estatusDevolucion) throws SQLException{
+//        String[] otros = new PrestamoDB().getPrestamo(noSerie);
+//        PreparedStatement prep;
+//        ResultSet rs;
+//        int idReporte = getIDReporte();
+//        try {
+//            String miSQL = "UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE, ESTATUS_DEVOLUCION = ?, ID_REPORTE_VIDEOPROYECTOR = "+ idReporte +" WHERE ID_PRESTAMO = ?";
+//            prep = conn.prepareStatement(miSQL);
+//            prep.setString(1, credencialUsuario);
+//            prep.setBoolean(2, estatusDevolucion);
+//            prep.setInt(3, Integer.parseInt(otros[0]));
+//            prep.executeUpdate();
+//            prep.close();
+//        } catch (SQLException ex) {
+//            System.out.println("\nError al actualizar PRESTAMO a updPrestamo E_PRESTAMOS:" + ex + "\n\n");
+//        }
+//    }
 }

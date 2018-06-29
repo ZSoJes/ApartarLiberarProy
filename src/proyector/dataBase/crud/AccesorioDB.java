@@ -412,4 +412,25 @@ public class AccesorioDB {
         }
         return art;
     }
+    
+    /**
+     * Metodo encargado de ingresar accesorios prestados al registro
+     * EPV_ACCESORIOS
+     *
+     * @param accesorioID
+     * @param prestamoID
+     */
+    public void setPrestamoAccesorio(int accesorioID, int prestamoID) {
+        PreparedStatement prep;
+        try {
+            prep = conn.prepareStatement("INSERT INTO EPV_ACCESORIOS(ID_ACCESORIO, ID_PRESTAMO) VALUES (?,?);");
+            prep.setInt(1, accesorioID);
+            prep.setInt(2, prestamoID);
+            prep.execute();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al insertar prestamo en registro");
+        }
+    }
 }
+

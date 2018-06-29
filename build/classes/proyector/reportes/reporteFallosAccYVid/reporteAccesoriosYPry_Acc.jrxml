@@ -102,7 +102,7 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Reporte #"+$V{miCounter}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Reporte #"+$F{ID_REPORTE_ACCESORIO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a">
 				<reportElement x="284" y="16" width="242" height="20" uuid="40dcde77-ec28-45cd-a106-cc92ffc59d54"/>

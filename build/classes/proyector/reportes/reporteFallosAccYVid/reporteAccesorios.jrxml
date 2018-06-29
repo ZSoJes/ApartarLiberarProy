@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="693a5097-8771-4132-89d7-9fea8ef976b8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<scriptlet name="Imagen" class="com.rutas.PathRelativo"/>
+	<parameter name="date1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{Imagen_SCRIPTLET}.reporte()+"/src/proyector/reportes/reporteFallosAccYVid/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT COUNT(*) AS CONTADOR FROM E_PRESTAMOS WHERE CREADO BETWEEN $P{date1} AND $P{date2}]]>
+	</queryString>
+	<field name="CONTADOR" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="74" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="1" y="59" width="571" height="15" uuid="d5463d22-5a55-49a7-b3dc-b611ad5ed555"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Información registrada entre: "+
+$P{date1}.substring(8,10)+"/"+$P{date1}.substring(5,7)+"/"+$P{date1}.substring(0,4)+
+" - " +
+$P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0,4)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="43" width="571" height="17" uuid="49888c97-d133-4018-ab77-392e21b8c5fb"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Reportes de fallos técnicos/uso de Artículos"]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<image>
+					<reportElement x="528" y="0" width="40" height="50" uuid="d3000a25-d4c2-4e98-acc7-a704c8389dce"/>
+					<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "itt" )]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="52" y="0" width="468" height="20" forecolor="#959393" uuid="90f89769-bbc3-4bf5-b662-c3369aede4f9"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font fontName="Serif" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[INSTITUTO TECNOLÓGICO DE TLÁHUAC]]></text>
+				</staticText>
+				<image>
+					<reportElement x="5" y="3" width="96" height="40" uuid="77d142d3-6b8e-47b6-9b65-ffd4c42b81bf"/>
+					<imageExpression><![CDATA[$P{Imagen_SCRIPTLET}.credencial( "tecnm2" )]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="52" y="20" width="468" height="22" forecolor="#959393" uuid="e7d10369-d211-44b2-ad2d-5e45344fa9ea"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Serif" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[DEPARTAMENTO DE DESARROLLO ACADÉMICO]]></text>
+				</staticText>
+			</elementGroup>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="570" height="15" uuid="b61506bc-a95d-41e8-a4f0-32c1680adadf"/>
+				<subreportParameter name="date1">
+					<subreportParameterExpression><![CDATA[$P{date1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="date2">
+					<subreportParameterExpression><![CDATA[$P{date2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteAccesoriosYPry_Acc.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="0" width="415" height="20" uuid="da6391f6-3ea6-4d2e-b1df-30a8bd2edf00"/>
+				<textElement markup="none"/>
+				<textFieldExpression><![CDATA["Generado: "+ new SimpleDateFormat("E, dd MMMM yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="0" width="80" height="20" uuid="247f6bd2-cdaf-4ef3-91ef-839e7ac341f1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="0" width="40" height="20" uuid="8f124137-fcd2-4809-90bc-3c4b62ae8700"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

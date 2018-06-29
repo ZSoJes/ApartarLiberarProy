@@ -54,15 +54,15 @@ public class ProfesorDB {
         int i = 0;
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR FROM E_PROFESORES ORDER BY ID_PROFESOR");
+            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO FROM E_PROFESORES ORDER BY ID_PROFESOR");
             ResultSet rs = prep.executeQuery();
             while (rs.next()) {
                 array[i][0] = rs.getString("ID_PROFESOR");
                 array[i][1] = rs.getString("NOMBRE");
                 array[i][2] = rs.getString("A_PATERNO");
                 array[i][3] = rs.getString("A_MATERNO");
-                array[i][4] = rs.getString("ESTATUS_ESCOLAR");
-                array[i][5] = rs.getString("ID_DEPARTAMENTO");
+                array[i][4] = rs.getString("ID_DEPARTAMENTO");
+                array[i][5] = rs.getString("SIN_ADEUDO");
                 i++;
             }
             rs.close();
@@ -83,7 +83,7 @@ public class ProfesorDB {
         String profe[] = new String[6];
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR FROM E_PROFESORES WHERE ID_PROFESOR = ?");
+            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO FROM E_PROFESORES WHERE ID_PROFESOR = ?");
             prep.setString(1, id);
             ResultSet rs = prep.executeQuery();
             while (rs.next()){
@@ -92,7 +92,7 @@ public class ProfesorDB {
                 profe[2] = rs.getString("NOMBRE");
                 profe[3] = rs.getString("A_PATERNO");
                 profe[4] = rs.getString("A_MATERNO");
-                profe[5] = rs.getString("ESTATUS_ESCOLAR");
+                profe[5] = rs.getString("SIN_ADEUDO");
             }
             rs.close();
             prep.close();
@@ -153,14 +153,13 @@ public class ProfesorDB {
     public void setProfesor(String[] datos){
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) " +
-                                         "VALUES (?,?,?,?,?,?)");
+            prep = conn.prepareStatement("INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO) " +
+                                         "VALUES (?,?,?,?,?)");
             prep.setString(1, datos[0]);
             prep.setInt(2, Integer.parseInt(datos[1]));
             prep.setString(3, datos[2]);
             prep.setString(4, datos[3]);
             prep.setString(5, datos[4]);
-            prep.setString(6, datos[5]);
             prep.execute();
             System.out.println("Se genero profesor");
             prep.close();
@@ -197,15 +196,14 @@ public class ProfesorDB {
         try{
             PreparedStatement prep;
             prep = conn.prepareStatement("UPDATE E_PROFESORES "+
-            "SET ID_PROFESOR = ?, ID_DEPARTAMENTO = ?, NOMBRE = ?, A_PATERNO = ?, A_MATERNO = ?, ESTATUS_ESCOLAR = ?"+
+            "SET ID_PROFESOR = ?, ID_DEPARTAMENTO = ?, NOMBRE = ?, A_PATERNO = ?, A_MATERNO = ?"+
             "WHERE ID_PROFESOR= ?");
             prep.setString(1, newId);                      //id nuevo
             prep.setInt(2, Integer.parseInt(datos[0])); //id depart
             prep.setString(3, datos[1]);                //nom
             prep.setString(4, datos[2]);                //apellido
             prep.setString(5, datos[3]);
-            prep.setBoolean(6, Boolean.valueOf(datos[4]));
-            prep.setString(7, oldId);
+            prep.setString(6, oldId);
             prep.execute();
             prep.close();
         }catch(SQLException ex){
@@ -223,14 +221,13 @@ public class ProfesorDB {
         try{
             PreparedStatement prep;
             prep = conn.prepareStatement("UPDATE E_PROFESORES "+
-            "SET ID_DEPARTAMENTO = ?, NOMBRE = ?, A_PATERNO = ?, A_MATERNO = ?, ESTATUS_ESCOLAR = ?"+
+            "SET ID_DEPARTAMENTO = ?, NOMBRE = ?, A_PATERNO = ?, A_MATERNO = ?"+
             "WHERE ID_PROFESOR= ?");
             prep.setInt(1, Integer.parseInt(datos[0]));  //id depart
             prep.setString(2, datos[1]);                 //nom
             prep.setString(3, datos[2]);                 //apellido
             prep.setString(4, datos[3]);
-            prep.setBoolean(5, Boolean.valueOf(datos[4]));
-            prep.setString(6, id);
+            prep.setString(5, id);
             prep.execute();
             prep.close();
         }catch(SQLException ex){
@@ -242,7 +239,7 @@ public class ProfesorDB {
         try {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
-            String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ESTATUS_ESCOLAR) "
+            String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO) "
                        + "SELECT * FROM CSVREAD('" + ruta.replace('\\', '/') + "', null, ";
             //sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":"STRINGDECODE('charset=UTF-8'))"); //si es windows decode char con windows 1252 sino usa UTF-8 -se debe usar windows1252 en linux error charsetUTF8
             sql = sql.concat("STRINGDECODE('charset=windows-1252'))");

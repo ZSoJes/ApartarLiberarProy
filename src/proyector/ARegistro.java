@@ -335,11 +335,11 @@ public class ARegistro extends javax.swing.JFrame {
         dRb3 = new javax.swing.JRadioButton();
         dRb4 = new javax.swing.JRadioButton();
         dRb5 = new javax.swing.JRadioButton();
+        dRb6 = new javax.swing.JRadioButton();
         pnlBotones = new javax.swing.JPanel();
         btnGenerarRR = new javax.swing.JButton();
         btnCerrarRR = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         btnGroupFecha = new javax.swing.ButtonGroup();
         btnGroupDatos = new javax.swing.ButtonGroup();
         dlgConfirm = new javax.swing.JDialog();
@@ -365,8 +365,8 @@ public class ARegistro extends javax.swing.JFrame {
         txtRprt2 = new javax.swing.JTextField();
         txtRprt3 = new javax.swing.JTextField();
         cbRprt1 = new javax.swing.JCheckBox();
-        cbRprt2 = new javax.swing.JCheckBox();
         cbRprt3 = new javax.swing.JCheckBox();
+        cbRprt2 = new javax.swing.JCheckBox();
         cbRprt4 = new javax.swing.JCheckBox();
         cbRprt5 = new javax.swing.JCheckBox();
         cbRprt6 = new javax.swing.JCheckBox();
@@ -378,6 +378,7 @@ public class ARegistro extends javax.swing.JFrame {
         btnRpCancelar = new javax.swing.JButton();
         btnRpImprimir = new javax.swing.JButton();
         hiddenIDRprt = new javax.swing.JLabel();
+        lblProfe = new javax.swing.JLabel();
         groupSolictudAlDepto = new javax.swing.ButtonGroup();
         groupImprevisto = new javax.swing.ButtonGroup();
         pnlBackground = new javax.swing.JPanel();
@@ -413,6 +414,7 @@ public class ARegistro extends javax.swing.JFrame {
         lblFn = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -610,13 +612,18 @@ public class ARegistro extends javax.swing.JFrame {
 
         btnGroupDatos.add(dRb4);
         dRb4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        dRb4.setText("<html>Fallos y Perdidas<br>de articulos/videoproyectores</html>");
+        dRb4.setText("<html>Fallos y/o Perdidas<br>de articulos</html>");
         dRb4.setOpaque(false);
 
         btnGroupDatos.add(dRb5);
         dRb5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         dRb5.setText("Todos ");
         dRb5.setOpaque(false);
+
+        btnGroupDatos.add(dRb6);
+        dRb6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        dRb6.setText("<html>Fallos<br>de videoproyectores</html>");
+        dRb6.setOpaque(false);
 
         javax.swing.GroupLayout pnlDatosLayout = new javax.swing.GroupLayout(pnlDatos);
         pnlDatos.setLayout(pnlDatosLayout);
@@ -632,13 +639,14 @@ public class ARegistro extends javax.swing.JFrame {
                             .addComponent(dRb2))
                         .addGap(22, 22, 22)
                         .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dRb4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlDatosLayout.createSequentialGroup()
-                                .addComponent(dRb3)
-                                .addGap(38, 38, 38)
-                                .addComponent(dRb1))))
+                            .addComponent(dRb3)
+                            .addComponent(dRb4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38)
+                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dRb6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dRb1)))
                     .addComponent(jLabel10))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         pnlDatosLayout.setVerticalGroup(
             pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -652,7 +660,11 @@ public class ARegistro extends javax.swing.JFrame {
                     .addComponent(dRb1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(dRb4)
+                    .addGroup(pnlDatosLayout.createSequentialGroup()
+                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dRb4)
+                            .addComponent(dRb6))
+                        .addGap(0, 0, 0))
                     .addComponent(dRb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(23, 23, 23))
         );
@@ -698,13 +710,6 @@ public class ARegistro extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(33, 33, 33));
         jLabel11.setText("<html>Debe especificar una opcion de las siguientes<br>para recuperar los datos necesarios:");
 
-        jButton1.setText("Solicutdes de Mantenimiento");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pblBkReporteLayout = new javax.swing.GroupLayout(pblBkReporte);
         pblBkReporte.setLayout(pblBkReporteLayout);
         pblBkReporteLayout.setHorizontalGroup(
@@ -725,10 +730,6 @@ public class ARegistro extends javax.swing.JFrame {
                     .addGroup(pblBkReporteLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(pblBkReporteLayout.createSequentialGroup()
-                .addGap(162, 162, 162)
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         pblBkReporteLayout.setVerticalGroup(
             pblBkReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -739,15 +740,13 @@ public class ARegistro extends javax.swing.JFrame {
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(pnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addGap(4, 4, 4))
+                .addGap(38, 38, 38))
         );
 
         javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
@@ -954,15 +953,15 @@ public class ARegistro extends javax.swing.JFrame {
         cbRprt1.setOpaque(false);
         jPanel2.add(cbRprt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 375, -1, -1));
 
-        groupSolictudAlDepto.add(cbRprt2);
-        cbRprt2.setText("Centro de Cómputo");
-        cbRprt2.setOpaque(false);
-        jPanel2.add(cbRprt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 398, -1, -1));
-
         groupSolictudAlDepto.add(cbRprt3);
-        cbRprt3.setText("Mantenimiento de Equipo");
+        cbRprt3.setText("Centro de Cómputo");
         cbRprt3.setOpaque(false);
-        jPanel2.add(cbRprt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 421, -1, -1));
+        jPanel2.add(cbRprt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 398, -1, -1));
+
+        groupSolictudAlDepto.add(cbRprt2);
+        cbRprt2.setText("Mantenimiento de Equipo");
+        cbRprt2.setOpaque(false);
+        jPanel2.add(cbRprt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 421, -1, -1));
 
         groupImprevisto.add(cbRprt4);
         cbRprt4.setText("Reparación");
@@ -1035,6 +1034,9 @@ public class ARegistro extends javax.swing.JFrame {
         hiddenIDRprt.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         hiddenIDRprt.setText("SoyID");
         jPanel2.add(hiddenIDRprt, new org.netbeans.lib.awtextra.AbsoluteConstraints(618, 199, -1, -1));
+
+        lblProfe.setText("jLabel5");
+        jPanel2.add(lblProfe, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 420, -1, -1));
 
         javax.swing.GroupLayout dlgRprtArtPryLayout = new javax.swing.GroupLayout(dlgRprtArtPry.getContentPane());
         dlgRprtArtPry.getContentPane().setLayout(dlgRprtArtPryLayout);
@@ -1149,6 +1151,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.setLayout(new java.awt.GridBagLayout());
 
         ico3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prestamo_32px.png"))); // NOI18N
+        ico3.setToolTipText("Prestamo");
         ico3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico3MouseClicked(evt);
@@ -1159,6 +1162,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.add(ico3, gridBagConstraints);
 
         ico4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/devolu_32px.png"))); // NOI18N
+        ico4.setToolTipText("Devolución");
         ico4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico4MouseClicked(evt);
@@ -1171,6 +1175,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.add(ico4, gridBagConstraints);
 
         ico5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prof_42px.png"))); // NOI18N
+        ico5.setToolTipText("Profesores");
         ico5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico5MouseClicked(evt);
@@ -1183,6 +1188,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.add(ico5, gridBagConstraints);
 
         ico6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/depart_42px.png"))); // NOI18N
+        ico6.setToolTipText("Departamentos");
         ico6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico6MouseClicked(evt);
@@ -1195,6 +1201,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.add(ico6, gridBagConstraints);
 
         ico7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/aul_42px.png"))); // NOI18N
+        ico7.setToolTipText("Aulas");
         ico7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico7MouseClicked(evt);
@@ -1207,6 +1214,7 @@ public class ARegistro extends javax.swing.JFrame {
         panelOPC.add(ico7, gridBagConstraints);
 
         ico8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Video Projector_42px.png"))); // NOI18N
+        ico8.setToolTipText("Videoproyectores");
         ico8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ico8MouseClicked(evt);
@@ -1341,6 +1349,14 @@ public class ARegistro extends javax.swing.JFrame {
         jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
         jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
         pnlBackground.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(915, 150, 80, -1));
+
+        jButton2.setText("Modificar Reportes Proyector");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        pnlBackground.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 120, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1516,8 +1532,10 @@ public class ARegistro extends javax.swing.JFrame {
                 gr.getRRTods(fch,2, opc);
             }else if(dRb1.isSelected()){ //departamentos
                 gr.getRRTods(fch,3, opc);
-            }else if(dRb4.isSelected()){ //departamentos
+            }else if(dRb4.isSelected()){ //articulos
                 gr.getRRTods(fch,4, opc);
+            }else if(dRb6.isSelected()){ //proyectores
+                gr.getRRTods(fch,5, opc);
             }
             try{new LogDB().log(usuario, "E_PRESTAMOS", 5);}catch(SQLException e){System.out.println("Error al generarLog:"+e);}
         }
@@ -1606,36 +1624,39 @@ public class ARegistro extends javax.swing.JFrame {
                 PrestamoDB press = new PrestamoDB();    
                 String[] arr = press.getReporte(Integer.parseInt(id));
                 System.out.println("Arr On clic: " + Arrays.toString(arr));
+                //profe
+                String[] profe = new ProfesorDB().getProfesor(arr[2]);
+                lblProfe.setText( profe[2] + " " + profe[3] + " " + profe[4]);
                 //titulo
-                txtRprt3.setText(arr[2]);
+                txtRprt3.setText(arr[3]);
                 //nombre_encargado
-                txtRprt1.setText(arr[3]);
+                txtRprt1.setText(arr[4]);
                 //area
-                txtRprt2.setText(arr[4]);
+                txtRprt2.setText(arr[5]);
                 //depto_reparador
-                if(arr[5] == null){
+                if(arr[6] == null){
                     cbRprt1.setSelected(true);
-                }else if(arr[5].equals("a")){
+                }else if(arr[6].equals("a")){
                     cbRprt1.setSelected(true);
-                }else if(arr[5].equals("b")){
-                    cbRprt2.setSelected(true);
-                }else if(arr[5].equals("c")){
+                }else if(arr[6].equals("b")){
                     cbRprt3.setSelected(true);
+                }else if(arr[6].equals("c")){
+                    cbRprt2.setSelected(true);
                 }
                 //imprevisto
-                if(arr[6] == null){
+                if(arr[7] == null){
                     cbRprt4.setSelected(true); //reparacion
-                }else if(arr[6].equals("a")){
+                }else if(arr[7].equals("a")){
                     cbRprt4.setSelected(true); //reparacion
-                }else if(arr[6].equals("b")){
+                }else if(arr[7].equals("b")){
                     cbRprt5.setSelected(true);  //mantenimiento
-                }else if(arr[6].equals("c")){
+                }else if(arr[7].equals("c")){
                     cbRprt6.setSelected(true);  //aplicar garantia
-                }else if(arr[6].equals("d")){
+                }else if(arr[7].equals("d")){
                     cbRprt7.setSelected(true);  //dar de baja
                 }
                 //detalles
-                jTextArea1.setText(arr[7]);
+                jTextArea1.setText(arr[8]);
             } catch (SQLException e) {
             }
             
@@ -1657,8 +1678,8 @@ public class ARegistro extends javax.swing.JFrame {
         String detalles = jTextArea1.getText().trim();
         
         if(cbRprt1.isSelected()){ deptoReparador = "a";} 
-        else if(cbRprt2.isSelected()){ deptoReparador = "b";} 
-        else if(cbRprt3.isSelected()){ deptoReparador = "c";}
+        else if(cbRprt3.isSelected()){ deptoReparador = "b";} 
+        else if(cbRprt2.isSelected()){ deptoReparador = "c";}
         if(cbRprt4.isSelected()){ imprevisto = "a";} 
         else if(cbRprt5.isSelected()){ imprevisto = "b";} 
         else if(cbRprt6.isSelected()){ imprevisto = "c";}
@@ -1699,7 +1720,7 @@ public class ARegistro extends javax.swing.JFrame {
             GenerarReportes genR = new GenerarReportes();    
             PrestamoDB pres = new PrestamoDB();
             String[] arr = pres.getReporte(Integer.parseInt(hiddenIDRprt.getText()));
-            String[] reporteDtos = {arr[4], arr[3], arr[7], arr[5], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
+            String[] reporteDtos = {arr[5], arr[4], arr[8], arr[6], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
             genR.getReporteFalloPry(reporteDtos);
             new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 5);
         } catch (SQLException e) {
@@ -1711,23 +1732,29 @@ public class ARegistro extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnRpImprimirActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dlgReporte.setVisible(false);
-        jDateChooser1.setCalendar(null);
-        jDateChooser2.setCalendar(null);
-        dlgReporte.dispose();
-        fillJTable3();
-        
-        dlgRprtArtPry.setLocationRelativeTo(this);
-        dlgRprtArtPry.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         Articulo art = new Articulo();
         art.setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+//        dlgReporte.setVisible(false);
+//        jDateChooser1.setCalendar(null);
+//        jDateChooser2.setCalendar(null);
+//        dlgReporte.dispose();
+        dlgConfirm.setLocationRelativeTo(pnlBackground);
+        dlgConfirm.setVisible(true);
+        
+        if(valido){
+            valido = false;
+            fillJTable3();
+
+            dlgRprtArtPry.setLocationRelativeTo(this);
+            dlgRprtArtPry.setVisible(true);        // TODO add your handling code here:
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     public void fillJTable3(){
         System.out.println("Llenando con reportes de Videoproyectores");
         try {
@@ -1750,8 +1777,8 @@ public class ARegistro extends javax.swing.JFrame {
         txtRprt2.setText("");
         txtRprt3.setText("");
         cbRprt1.setSelected(false);
-        cbRprt2.setSelected(false);
         cbRprt3.setSelected(false);
+        cbRprt2.setSelected(false);
         cbRprt4.setSelected(false);
         cbRprt5.setSelected(false);
         cbRprt6.setSelected(false);
@@ -1880,6 +1907,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton dRb3;
     private javax.swing.JRadioButton dRb4;
     private javax.swing.JRadioButton dRb5;
+    private javax.swing.JRadioButton dRb6;
     private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgReporte;
     private javax.swing.JDialog dlgRprtArtPry;
@@ -1892,7 +1920,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel ico6;
     private javax.swing.JLabel ico7;
     private javax.swing.JLabel ico8;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
@@ -1933,6 +1961,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIco2;
     private javax.swing.JLabel lblIni;
+    private javax.swing.JLabel lblProfe;
     private javax.swing.JLabel lblRprt1;
     private javax.swing.JLabel lblRprt2;
     private javax.swing.JLabel lblRprt3;

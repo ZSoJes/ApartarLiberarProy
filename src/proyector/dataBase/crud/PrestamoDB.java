@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import proyector.dataBase.Conexion;
 
 /**
@@ -23,175 +24,151 @@ public class PrestamoDB {
     }
 
     /**
-     * Generar un nuevo prestamo 
-     * inhabilita el video proyector en su tabla ev_estatus 
-     * inhabilita profesor colocando estatus false
-     * inhabilita aula colocando estatus false
+     * Generar un nuevo prestamo inhabilita los siguientes elementos:
+     * -videoproyector -profesor -aula
      *
-     * @param datos 
-     * - id usuario que autoriza el prestamo 
-     * - id videoproyector 
-     * - id profesor
-     * - id aula
+     * @param datos = { idUsuario, idProy, idProf, idAul }
      * @param accesorios
      */
     public void setPrestamo(String[] datos, int[] accesorios) {
         try {
-            int proye = Integer.parseInt(new VideoproyectorDB().getProyectorID(datos[1]));
-            String prof = datos[2];
-            int aula = Integer.parseInt(datos[3]);
-
+            datos[1] = new VideoproyectorDB().getProyectorID(datos[1]);
             PreparedStatement prep;
-            try{
-                prep = conn.prepareStatement("INSERT INTO E_PRESTAMOS(ID_SALIDA, ID_VIDEOPROYECTOR,ID_PROFESOR,ID_AULA) VALUES (?,?,?,?)");
+            try {
+                prep = conn.prepareStatement("CALL CREATE_PRESTAMO(?, ?, ?, ?)");
                 prep.setString(1, datos[0]);
-                prep.setInt(2, proye);//vid
-                prep.setString(3, prof);//prof
-                prep.setInt(4, aula);//aula
+                prep.setInt(2, Integer.parseInt(datos[1]));
+                prep.setString(3, datos[2]);
+                prep.setInt(4, Integer.parseInt(datos[3]));
                 prep.execute();
                 prep.close();
-            }catch(SQLException ex){
-                System.out.println("\nError al ingresar nueva informacion setPrestamo E_PRESTAMOS PrestamoDB:" + ex + "\n\n");
+            } catch (SQLException e) {
+                System.out.println("Error al realizar el prestamo con procedure PrestamoDB:" + e);
             }
-            
-            try{
-                prep = conn.prepareStatement("UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = ? WHERE ID_VIDEOPROYECTOR = ?");
-                prep.setString(1, "EN PRESTAMO");
-                prep.setBoolean(2, false);
-                prep.setInt(3, proye);
-                prep.executeUpdate();
-                prep.close();
-            }catch(SQLException ex){
-                System.out.println("\nError al ingresar nueva informacion setPrestamo EV_ESTATUS PrestamoDB:" + ex + "\n\n");
-            }
-            
-            try{
-                prep = conn.prepareStatement("UPDATE E_PROFESORES SET ESTATUS = FALSE WHERE ID_PROFESOR = ?");
-                prep.setString(1, prof);
-                prep.executeUpdate();
-                prep.close();
-            }catch(SQLException ex){
-                System.out.println("\nError al ingresar nueva informacion setPrestamo E_PROFESORES PrestamoDB:" + ex + "\n\n");
-            }
-            
-            try{
-                prep = conn.prepareStatement("UPDATE E_AULAS SET ESTATUS = FALSE WHERE ID_AULA = ?");
-                prep.setInt(1, aula);
-                prep.executeUpdate();
-                prep.close();
-            }catch(SQLException ex){
-                System.out.println("\nError al ingresar nueva informacion setPrestamo E_AULAS PrestamoDB:" + ex + "\n\n");
-            }
-            
-            int prestamo = 0;
-            try{
-                prep = conn.prepareStatement("SELECT ID_PRESTAMO FROM E_PRESTAMOS ORDER BY ID_PRESTAMO DESC LIMIT 1");
-                ResultSet rs = prep.executeQuery();
-                while (rs.next()) {
-                    prestamo = rs.getInt(1);
+
+            if (accesorios.length > 0) {
+                int prestamo = 0;
+                try {
+                    prep = conn.prepareStatement("SELECT ID_PRESTAMO FROM E_PRESTAMOS ORDER BY ID_PRESTAMO DESC LIMIT 1");
+                    ResultSet rs = prep.executeQuery();
+                    while (rs.next()) {
+                        prestamo = rs.getInt(1);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("\nError al ingresar nueva informacion setPrestamo obtener id prestamo: " + ex);
                 }
-            }catch(SQLException ex){ 
-                System.out.println("\nError al ingresar nueva informacion setPrestamo obtener id prestamo: " +ex);
-            }
-           if (accesorios.length > 0){
-               for(int acc : accesorios){
-                setPrestamoAccesorio(acc, prestamo);
                 AccesorioDB accesorioDB = new AccesorioDB();
-                accesorioDB.updAccesorioAR(false, acc);
-               }
-           }
-            
-            System.out.println("Se genero NUEVO PRESTAMO!!!");
+                for (int acc : accesorios) {
+                    accesorioDB.setPrestamoAccesorio(acc, prestamo);
+                    accesorioDB.updAccesorioAR(false, acc);
+                }
+            }
+            System.out.println("\n...: : : NUEVO PRESTAMO GENERADO EXITOSAMENTE : : :...\n");
         } catch (SQLException ex) {
             System.out.println("\nError al ingresar nueva informacion setPrestamo PrestamoDB:" + ex + "\n\n");
         }
     }
-    
+
     /**
-     * Metodo encargado de ingresar accesorios prestados al registro EPV_ACCESORIOS
-     * @param accesorioID
-     * @param prestamoID 
-     */
-    public void setPrestamoAccesorio(int accesorioID, int prestamoID){
-        PreparedStatement prep;
-        try{
-            prep = conn.prepareStatement("INSERT INTO EPV_ACCESORIOS(ID_ACCESORIO, ID_PRESTAMO) VALUES (?,?);");
-            prep.setInt(1, accesorioID);
-            prep.setInt(2, prestamoID);
-            prep.execute();
-            prep.close();
-        }catch(SQLException ex){
-            System.out.println("Error al insertar prestamo en registro");
-        }
-    }
-    /**
-     * Libera un prestamo 
-     * habilita videoproyector 
-     * habilita profesor 
-     * habilita aula
+     * Libera un prestamo QUE NO TENGA UN REPORTE habilita lo siguiente:
+     * -videoproyector -profesor -aula
+     *
      * @param noSerie
-     * @param credencialUsuario
+     * @param idUsuario
      */
-    public void updPrestamo(String noSerie, String credencialUsuario) {
-        String[] otros = getPrestamo(noSerie);
-        PreparedStatement prep;
-        try{
-            prep = conn.prepareStatement("UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE WHERE ID_PRESTAMO = ?");
-            prep.setString(1, credencialUsuario);
-            prep.setInt(2, Integer.parseInt(otros[0]));
-            prep.executeUpdate();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("\nError al actualizar PRESTAMO a updPrestamo E_PRESTAMOS:" + ex + "\n\n");
-        }
-        try{
-            prep = conn.prepareStatement("UPDATE EV_ESTATUS SET NOMBRE = 'DISPONIBLE', DISPONIBILIDAD = TRUE WHERE ID_VIDEOPROYECTOR = ?");
-            prep.setInt(1, Integer.parseInt(otros[1]));
-            prep.execute();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("\nError al actualizar PRESTAMO a updPrestamo EV_ESTATUS:" + ex + "\n\n");
-        }
-        try{
-            prep = conn.prepareStatement("UPDATE E_PROFESORES SET ESTATUS = TRUE WHERE ID_PROFESOR = ?");
-            prep.setString(1, otros[2]);
-            prep.executeUpdate();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("\nError al actualizar PRESTAMO a updPrestamo E_PROFESORES:" + ex + "\n\n");
-        }
-        try{
-            prep = conn.prepareStatement("UPDATE E_AULAS SET ESTATUS = TRUE WHERE ID_AULA = ?");
-            prep.setInt(1, Integer.parseInt(otros[3]));
-            prep.executeUpdate();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("\nError al actualizar PRESTAMO a updPrestamo E_AULAS:" + ex + "\n\n");
-        }
-        
-        
-        ArrayList<Integer> newAcc = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(otros[0])));
-        if (newAcc.size() > 0){
-            try{
-                AccesorioDB accesorioDB = new AccesorioDB();
-                for (int acc : newAcc) {
-                    accesorioDB.updAccesorioAR(true, acc);
-                }
-            }catch(SQLException ex){
-                System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
+    public void updPrestamo(String noSerie, String idUsuario) {
+        try {
+            String[] datos = getPrestamo(noSerie); // datos = { idPrest, idProy, idProf, idAul }
+            PreparedStatement prep;
+            try {
+                prep = conn.prepareStatement("CALL FREE_PRESTAMO_N(?, ?, ?, ?, ?)");
+                prep.setString(1, idUsuario);
+                prep.setInt(2, Integer.parseInt(datos[1]));
+                prep.setString(3, datos[2]);
+                prep.setInt(4, Integer.parseInt(datos[3]));
+                prep.setInt(5, Integer.parseInt(datos[0]));
+                prep.execute();
+                prep.close();
+            } catch (SQLException e) {
+                System.out.println("Error al liberar normal prestamo updPrestamo:" + e);
             }
+
+            ArrayList<Integer> articulosPrestados = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(datos[0])));
+            if (articulosPrestados.size() > 0) {
+                try {
+                    AccesorioDB accesorioDB = new AccesorioDB();
+                    for (Iterator<Integer> it = articulosPrestados.iterator(); it.hasNext();) {
+                        accesorioDB.updAccesorioAR(true, it.next());
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
+                }
+            }
+            System.out.println("\n...: : : PRESTAMO LIBERADO EXITOSAMENTE : : :...\n");
+        } catch (NumberFormatException e) {
+            System.out.println("\n\nError al momento de liberar el prestamo PrestamoDB:" + e);
         }
-        System.out.println("Se ACTUALIZO PRESTAMO YA SE LIBERO!!!");
     }
     
-    public ArrayList<Integer> getAccesoriosPrestamo(int prestamoID){
+    public void updPrestamoConReporte(String noSerie, String idUsuario, String[] datosR){
+        try{
+        String[] datosP = getPrestamo(noSerie); // datos = { idPrest, idProy, idProf, idAul }
+        PreparedStatement prep;
+        ResultSet rs;
+        int idReporte = 0;
+        try {
+            prep = conn.prepareStatement("CALL GEN_REP_PROY(?)");
+            prep.setObject(1, new String[]{datosP[1], datosP[2], datosR[0], datosR[1], datosR[2], datosR[3], datosR[4], datosR[5]  }); //idProy, idProf, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES
+            rs = prep.executeQuery();
+            while( rs.next()){
+                idReporte = rs.getInt(1);
+            }
+            rs.close();
+            prep.close();
+            System.out.println("\n..:::El id del reporte es:"+idReporte);
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar el ultimo reporte:"+e);
+        }
+        
+        //devolucion de proyector con su reporte asignado
+        try {
+                prep = conn.prepareStatement("CALL FREE_PRESTAMO_REPORT_PRY(?, ?, ?, ?, ?, ?)");
+                prep.setString(1, idUsuario);
+                prep.setInt(2, Integer.parseInt(datosP[1]));
+                prep.setString(3, datosP[2]);
+                prep.setInt(4, Integer.parseInt(datosP[3]));
+                prep.setInt(5, Integer.parseInt(datosP[0]));
+                prep.setInt(6, idReporte);
+                prep.execute();
+                prep.close();
+            } catch (SQLException e) {
+                System.out.println("Error al liberar con reporte prestamo updPrestamo:" + e);
+            }
+        //devolucion de articulos
+        ArrayList<Integer> articulosPrestados = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(datosP[0])));
+            if (articulosPrestados.size() > 0) {
+                try {
+                    AccesorioDB accesorioDB = new AccesorioDB();
+                    for (Iterator<Integer> it = articulosPrestados.iterator(); it.hasNext();) {
+                        accesorioDB.updAccesorioAR(true, it.next());
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
+                }
+            }
+        }catch(Exception e){
+            System.out.println("Error al generar el reporte junto a la liberacion del prestamo updPrestamoConReporte:"+e);
+        }
+    }
+
+    public ArrayList<Integer> getAccesoriosPrestamo(int prestamoID) {
         ArrayList<Integer> accesorioID = new ArrayList<>();
         try {
             PreparedStatement prep;
             prep = conn.prepareStatement("SELECT ID_ACCESORIO FROM EPV_ACCESORIOS WHERE ID_PRESTAMO = ?");
             prep.setInt(1, prestamoID);
             ResultSet rs = prep.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 accesorioID.add(rs.getInt(1));
             }
         } catch (SQLException ex) {
@@ -199,45 +176,22 @@ public class PrestamoDB {
         }
         return accesorioID;
     }
+
     /**
-     * Regresa los prestamos existentes 
-     * que se encuentren activos/inactivos cuando
-     * estatus sea true = activos / false = inactivos
-     * @param estatus
-     * @return 
-     */
-    public int getPrestamosCount(boolean estatus) {
-        int prestamo = 0;
-        try {
-            PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = ?");
-            prep.setBoolean(1, estatus);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                prestamo = rs.getInt(1);
-            }
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al recuperar dato getPrestamosCount PrestamoDB: " + ex);
-        }
-        return prestamo;
-    }
-    
-    /**
-     * A NOMBRE DE UN PROFESOR
-     * Regresa si cuenta con prestamos activos
+     * A NOMBRE DE UN PROFESOR Regresa si cuenta con prestamos activos EN OTRAS PALABRAS SI PROFESOR DISPONIBLE PARA SOLICITAR EL SERVICIO
+     *
      * @param idProfe
-     * @return 
+     * @return
      */
     public boolean getExistePrestamo(String idProfe) {
         boolean existe = false;
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND ID_PROFESOR = ?");
+            prep = conn.prepareStatement("SELECT COUNT(*)>0 FROM E_PROFESORES WHERE ESTATUS = TRUE AND ID_PROFESOR = ?");
             prep.setString(1, idProfe);
             ResultSet rs = prep.executeQuery();
             while (rs.next()) {
-                existe = rs.getInt(1) > 0;
+                existe = rs.getBoolean(1);
             }
             prep.close();
         } catch (SQLException ex) {
@@ -245,12 +199,12 @@ public class PrestamoDB {
         }
         return existe;
     }
-    
+
     /**
-     * A NOMBRE DE UN AULA esperando id
-     * Regresa si cuenta con prestamos activos
+     * A NOMBRE DE UN AULA esperando id Regresa si cuenta con prestamos activos
+     *
      * @param idAula
-     * @return 
+     * @return
      */
     public boolean getExistePrestamoAula(int idAula) {
         boolean existe = false;
@@ -268,12 +222,12 @@ public class PrestamoDB {
         }
         return existe;
     }
-    
+
     /**
-     * AL NO_SERIE DE UN VIDEOPROYECTOR
-     * Regresa si cuenta con prestamos activos
+     * AL NO_SERIE DE UN VIDEOPROYECTOR Regresa si cuenta con prestamos activos
+     *
      * @param proyectorNoSerie
-     * @return 
+     * @return
      */
     public boolean getExistePrestamoProy(String proyectorNoSerie) {
         boolean existe = false;
@@ -293,17 +247,17 @@ public class PrestamoDB {
         return existe;
     }
 
-    public boolean getExistePrestamoDep(int idDep){
+    public boolean getExistePrestamoDep(int idDep) {
         boolean existe = false;
         try {
             PreparedStatement prep;
-            String sql = "SELECT COUNT(*) FROM E_PRESTAMOS " +
-                         "WHERE ESTATUS = TRUE AND " +
-                         "E_PRESTAMOS.ID_PROFESOR IN (SELECT ID_PROFESOR FROM E_PROFESORES WHERE E_PROFESORES.ID_DEPARTAMENTO = ?);";
+            String sql = "SELECT COUNT(*) FROM E_PRESTAMOS "
+                    + "WHERE ESTATUS = TRUE AND "
+                    + "E_PRESTAMOS.ID_PROFESOR IN (SELECT ID_PROFESOR FROM E_PROFESORES WHERE E_PROFESORES.ID_DEPARTAMENTO = ?);";
             prep = conn.prepareStatement(sql);
             prep.setInt(1, idDep);
             ResultSet rs = prep.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 existe = rs.getInt(1) > 0;
             }
             prep.close();
@@ -312,9 +266,10 @@ public class PrestamoDB {
         }
         return existe;
     }
+
     /**
-     * Recupera un prestamo
-     * VERIFICA A PARTIR DEL NO_SERIE DE VIDEOPROYECTOR
+     * Recupera un prestamo VERIFICA A PARTIR DEL NO_SERIE DE VIDEOPROYECTOR
+     *
      * @param proyectorNoSerie
      * @return
      */
@@ -341,26 +296,41 @@ public class PrestamoDB {
     }
 
     /**
-     * Recupera los prestamos que estan 
-     * estatus = true >> activos
-     * y los guarda en un arreglo bidimensional, es necesario indicar si usar order by = true o no = false
+     * Recupera los prestamos que estan estatus = true >> activos y los guarda
+     * en un arreglo bidimensional, es necesario indicar si usar order by = true
+     * o no = false
+     *
      * @param estatus
      * @param order
      * @return
      */
     public String[][] getPrestamos(boolean estatus, boolean order) {
-        int cuantosPres = getPrestamosCount(estatus);
-        String[][] array = new String[cuantosPres][8];
+        PreparedStatement prep;
+        ResultSet rs;
+        int prestamos = 0;
+        int i = 0;
         try {
-            PreparedStatement prep;
-            if (order){
+            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = ?");
+            prep.setBoolean(1, estatus);
+            rs = prep.executeQuery();
+            while (rs.next()) {
+                prestamos = rs.getInt(1);
+            }
+            prep.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error al obtener la cantida de registros para getPrestamos PrestamoDB:" + e);
+        }
+
+        String[][] array = new String[prestamos][8];
+        try {
+            if (order) {
                 prep = conn.prepareStatement("SELECT * FROM E_PRESTAMOS WHERE ESTATUS = ? ORDER BY ID_PRESTAMO DESC");
-            }else{
+            } else {
                 prep = conn.prepareStatement("SELECT * FROM E_PRESTAMOS WHERE ESTATUS = ?");
             }
             prep.setBoolean(1, estatus);
-            ResultSet rs = prep.executeQuery();
-            int i = 0;
+            rs = prep.executeQuery();
             while (rs.next()) {
                 array[i][0] = rs.getString("ID_PRESTAMO");
                 array[i][1] = rs.getString("ID_SALIDA");
@@ -373,15 +343,14 @@ public class PrestamoDB {
                 i++;
             }
             rs.close();
-            prep.close();        
+            prep.close();
         } catch (SQLException ex) {
-            System.out.println("error al recibir datos getPrestamos PrestamoDB: " + ex);
+            System.out.println("Error al recibir datos getPrestamos PrestamoDB: " + ex);
         }
         return array;
     }
-    
-    
-    public int getCantPrestamosSQLA(String date1, String date2){
+
+    public int getCantPrestamosSQLA(String date1, String date2) {
         int cuantosPres = 0;
         try {
             PreparedStatement prep;
@@ -390,42 +359,44 @@ public class PrestamoDB {
             prep.setString(1, date1);//yyyy-mm-dd
             prep.setString(2, date2);//yyyy-mm-dd
             ResultSet rs = prep.executeQuery();
-            while (rs.next()) { cuantosPres = rs.getInt(1); }
+            while (rs.next()) {
+                cuantosPres = rs.getInt(1);
+            }
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error al recuperar la cantidad de registros existentes en prestamos entre una fecha definida getPrestamos date1Date2: " + e);
         }
         return cuantosPres;
     }
-    
-    public int getCantPrestamosSQLB(String date1, String date2, int eleccion, String texto){
+
+    public int getCantPrestamosSQLB(String date1, String date2, int eleccion, String texto) {
         int cuantosPres = 0;
         try {
             PreparedStatement prep;
             String sql = sqlCountForzada(eleccion);
             prep = conn.prepareStatement(sql);
-            prep.setString(1, "%%"+texto+"%%");
+            prep.setString(1, "%%" + texto + "%%");
             prep.setString(2, date1);//yyyy-mm-dd
             prep.setString(3, date2);//yyyy-mm-dd
             ResultSet rs = prep.executeQuery();
-            while (rs.next()) { cuantosPres = rs.getInt(1); }
+            while (rs.next()) {
+                cuantosPres = rs.getInt(1);
+            }
             prep.close();
         } catch (SQLException e) {
             System.out.println("Error al recuperar la cantidad de registros existentes en prestamos entre una fecha definida getPrestamos date1Date2: " + e);
         }
         return cuantosPres;
     }
-    
+
     /**
-     * Recupera los prestamos que estan 
-     * estatus = false >> inactivos
-     * y los guarda en un arreglo bidimensional, usa order by 
-     * ES IMPORTANTE INDICAR EL FILTRO
-     * 1 - DIA, 2 - MES, 3 - SEMESTRE, 4 - AÑO
-     * ES IMPORTANTE INDICAR QUE DATOS
-     * 0 - TODOS, 1 - QUIEN ENTREGO, 2 - QUIEN RECIBIO, 3- NOMBRE VIDEOPROYECTOR, 4 - ID PROFESOR, 5 - AULA
-     * Y UN TEXTO EN CASO DE ELEGIR DEL 1 AL 5 DEL MENU ANTERIOR
-     * 
+     * Recupera los prestamos que estan estatus = false >> inactivos y los
+     * guarda en un arreglo bidimensional, usa order by ES IMPORTANTE INDICAR EL
+     * FILTRO 1 - DIA, 2 - MES, 3 - SEMESTRE, 4 - AÑO ES IMPORTANTE INDICAR QUE
+     * DATOS 0 - TODOS, 1 - QUIEN ENTREGO, 2 - QUIEN RECIBIO, 3- NOMBRE
+     * VIDEOPROYECTOR, 4 - ID PROFESOR, 5 - AULA Y UN TEXTO EN CASO DE ELEGIR
+     * DEL 1 AL 5 DEL MENU ANTERIOR
+     *
      * @param date1
      * @param date2
      * @param eleccion
@@ -455,80 +426,82 @@ public class PrestamoDB {
                 i++;
             }
             rs.close();
-            prep.close();        
+            prep.close();
         } catch (SQLException ex) {
             System.out.println("error al recibir datos getPrestamos PrestamoDB: " + ex);
         }
         return array;
     }
-    
-    public String sqlCountForzada(int eleccion){
+
+    public String sqlCountForzada(int eleccion) {
         String sql = "SELECT * FROM E_PRESTAMOS";
-        switch(eleccion){
+        switch (eleccion) {
             case 0:
                 sql = "SELECT COUNT(ID_PRESTAMO) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ?";
-            break;
+                break;
             case 1: //Nombre del usuario que entrego   >>>indicar texto nombre usuario
-                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN " +
-                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
-            break;
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN "
+                        + "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+                break;
             case 2: //Nombre del usuario que recibio   >>>indicar texto nombre usuario
-                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN " +
-                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
-            break;
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN "
+                        + "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+                break;
             case 3: //Nombre de VideoProyector   >>>indicar texto nombre proyector
-                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN " +
-                "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES " +
-                "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
-            break;
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN "
+                        + "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES "
+                        + "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+                break;
             case 4:  //ID del Profesor   >>>indicar texto credencial
-                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN " +
-                "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ?";
-            break;
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN "
+                        + "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ?";
+                break;
             case 5:  //Aula   >>>indicar texto nombre aula
-                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN " +
-                "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
-            break;
+                sql = "SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN "
+                        + "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ?";
+                break;
         }
         return sql;
     }
-    
-    public String sqlForzada(int eleccion){
+
+    public String sqlForzada(int eleccion) {
         String sql = "SELECT COUNT(*) FROM E_PRESTAMOS";
-        switch(eleccion){
+        switch (eleccion) {
             case 0:
                 sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND CREADO BETWEEN ? AND ? ORDER BY CREADO DESC ";
-            break;
+                break;
             case 1: //Nombre del usuario que entrego   >>>indicar texto nombre usuario
-                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN " +
-                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
-            break;
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_SALIDA IN "
+                        + "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+                break;
             case 2: //Nombre del usuario que recibio   >>>indicar texto nombre usuario
-                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN " +
-                "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
-            break;
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_ENTRADA IN "
+                        + "(SELECT ID_USUARIO FROM E_USUARIOS WHERE LOWER(CONCAT(NOMBRE, ' ',A_PATERNO, ' ',A_MATERNO )) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+                break;
             case 3: //Nombre de VideoProyector   >>>indicar texto nombre proyector
-                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN " +
-                "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES " +
-                "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
-            break;
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND E_PRESTAMOS.ID_VIDEOPROYECTOR IN "
+                        + "(SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES "
+                        + "WHERE LOWER(NOMBRE) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+                break;
             case 4:  //ID del Profesor   >>>indicar texto credencial
-                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN " +
-                "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
-            break;
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_PROFESOR IN "
+                        + "(SELECT ID_PROFESOR FROM E_PROFESORES WHERE ID_PROFESOR LIKE '?') AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+                break;
             case 5:  //Aula   >>>indicar texto nombre aula
-                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN " +
-                "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
-            break;
+                sql = "SELECT * FROM E_PRESTAMOS WHERE ESTATUS = FALSE AND ID_AULA IN "
+                        + "(SELECT ID_AULA FROM E_AULAS WHERE LOWER(STRINGDECODE(NOMBRE)) LIKE LOWER('?')) AND CREADO BETWEEN ? AND ? ORDER BY CREADO";
+                break;
         }
         return sql;
     }
+
     /**
-     * Recupera cuantos prestamos se encuentran 
-     * estatusPrestamo = true >> activos
+     * Recupera cuantos prestamos se encuentran estatusPrestamo = true >>
+     * activos
+     *
      * @param idUusuario
      * @param estatusPrestamo
-     * @return 
+     * @return
      */
     public int getCantPrestamosUsuario(String idUusuario, boolean estatusPrestamo) {
         int cantidad = 0;
@@ -538,7 +511,7 @@ public class PrestamoDB {
             prep.setBoolean(1, estatusPrestamo);
             prep.setString(2, idUusuario);
             prep.setString(3, idUusuario);
-            
+
             ResultSet rs = prep.executeQuery();
             while (rs.next()) {
                 cantidad = rs.getInt(1);
@@ -549,10 +522,11 @@ public class PrestamoDB {
         }
         return cantidad;
     }
-    
+
     /**
-     * Recupera los prestamos esperando estatusPrestamo
-     * de acuerdo a un usuario especifico
+     * Recupera los prestamos esperando estatusPrestamo de acuerdo a un usuario
+     * especifico
+     *
      * @param idUsuario
      * @param estatusPrestamo
      * @return
@@ -561,8 +535,8 @@ public class PrestamoDB {
         int prestamos = getCantPrestamosUsuario(idUsuario, estatusPrestamo);
         System.out.println("Los prestamos de este usuario son: " + prestamos);
         String[][] array = new String[prestamos][7];
-        
-        try{
+
+        try {
             PreparedStatement prep;
             prep = conn.prepareStatement("SELECT ID_PRESTAMO, ID_SALIDA, ID_ENTRADA, ID_VIDEOPROYECTOR, ID_PROFESOR, ID_AULA, CREADO FROM E_PRESTAMOS WHERE ESTATUS = ? AND (ID_SALIDA = ? OR ID_ENTRADA = ?)");
             prep.setBoolean(1, estatusPrestamo);
@@ -588,21 +562,22 @@ public class PrestamoDB {
         }
         return array;
     }
-    
+
     /**
-     * Recupera el tiempo de un videoproyector en servicio
-     * los datos presentados son en minutos
+     * Recupera el tiempo de un videoproyector en servicio los datos presentados
+     * son en minutos
+     *
      * @param idProyector
-     * @return 
+     * @return
      */
-    public int[] getProyectorServicio(String idProyector){
+    public int[] getProyectorServicio(String idProyector) {
         int[] servicio = new int[5];
-        try{
+        try {
             PreparedStatement prep;
             prep = conn.prepareStatement("SELECT * FROM EV_HORASSERVICIO WHERE ID_VIDEOPROYECTOR = ?");
             prep.setString(1, idProyector);
             ResultSet rs = prep.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 servicio[0] = rs.getInt(1); //id
                 servicio[1] = rs.getInt(2); //id_proy
                 servicio[2] = rs.getInt(3); //total
@@ -611,18 +586,19 @@ public class PrestamoDB {
             }
             rs.close();
             prep.close();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error al recuperar las horas de servicio de videoproyector getProyectorServicio PrestamoDB: " + ex);
         }
         return servicio;
     }
-    
+
     /**
-     * Asigna el tiempo de un videoproyector en servicio suma en 
-     * prestamos realizados resolviendo en minutos
-     * @param idProye 
+     * Asigna el tiempo de un videoproyector en servicio suma en prestamos
+     * realizados resolviendo en minutos
+     *
+     * @param idProye
      */
-    public void setProyectorServicio(String idProye){
+    public void setProyectorServicio(String idProye) {
         PreparedStatement prep;
         int day;
         String miDate1, miDate2;
@@ -640,13 +616,13 @@ public class PrestamoDB {
             miDate1 = year + "-07-01";
             miDate2 = year + "-12-" + day;
         }
-        
+
         try {
-            prep = conn.prepareStatement("UPDATE EV_HORASSERVICIO " +
-            "SET TOTAL = (SELECT SUM ( DATEDIFF('MI', CREADO, ACTUALIZADO) ) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ?), " +
-            "SEMESTRE = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND CREADO BETWEEN ? AND ?), " +
-            "MES = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND E_PRESTAMOS.CREADO BETWEEN CONCAT(EXTRACT(YEAR FROM CURRENT_TIMESTAMP()),'-',EXTRACT(MONTH FROM CURRENT_TIMESTAMP()),'-01') AND DATEADD(M,1,CURRENT_TIMESTAMP()) - DAY(DATEADD(M,1,CURRENT_TIMESTAMP()))) " +
-            "WHERE EV_HORASSERVICIO.ID_VIDEOPROYECTOR = ?");
+            prep = conn.prepareStatement("UPDATE EV_HORASSERVICIO "
+                    + "SET TOTAL = (SELECT SUM ( DATEDIFF('MI', CREADO, ACTUALIZADO) ) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ?), "
+                    + "SEMESTRE = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND CREADO BETWEEN ? AND ?), "
+                    + "MES = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND E_PRESTAMOS.CREADO BETWEEN CONCAT(EXTRACT(YEAR FROM CURRENT_TIMESTAMP()),'-',EXTRACT(MONTH FROM CURRENT_TIMESTAMP()),'-01') AND DATEADD(M,1,CURRENT_TIMESTAMP()) - DAY(DATEADD(M,1,CURRENT_TIMESTAMP()))) "
+                    + "WHERE EV_HORASSERVICIO.ID_VIDEOPROYECTOR = ?");
             prep.setString(1, idProye);
             prep.setString(2, idProye);
             prep.setString(3, miDate1);
@@ -659,26 +635,25 @@ public class PrestamoDB {
             System.out.println("Error generando total, semestre, mes en tabla EV_HORASSERVICIO setProyectorServicio PrestamoDB: " + e);
         }
     }
-    
-    
-    public String[][] getReportejTable(){
+
+    public String[][] getReportejTable() {
         int rowSize = 0;
         String[][] miArr = null;
         try {
             PreparedStatement prep;
-            String sql ="SELECT " +
-                        "ID_REPORTE_VIDEOPROYECTOR, " +
-                        "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_REP_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR ) AS VIDEOPROYECTOR, " +
-                        "TITULO, " +
-                        "IMPREVISTO, " +
-                        "TO_CHAR(CREADO, 'dd/MM/yyyy HH:MI AM') as CREADO " +
-                        "FROM E_REP_VIDEOPROYECTORES " +
-                        "ORDER BY CREADO DESC";
+            String sql = "SELECT "
+                    + "ID_REPORTE_VIDEOPROYECTOR, "
+                    + "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_REP_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR ) AS VIDEOPROYECTOR, "
+                    + "TITULO, "
+                    + "IMPREVISTO, "
+                    + "TO_CHAR(CREADO, 'dd/MM/yyyy HH:MI AM') as CREADO "
+                    + "FROM E_REP_VIDEOPROYECTORES "
+                    + "ORDER BY CREADO DESC";
             prep = conn.prepareStatement(sql,
-                ResultSet.TYPE_SCROLL_INSENSITIVE, 
-                ResultSet.CONCUR_READ_ONLY);
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = prep.executeQuery();
-            
+
             try {
                 rs.last();
                 rowSize = rs.getRow();
@@ -688,11 +663,11 @@ public class PrestamoDB {
             }
             miArr = new String[rowSize][5];
             int i = 0;
-            while (rs.next() && (i < rowSize)){
-                for(int j = 0; j < 5; j++){
-                    miArr[i][j] = rs.getString(j+1);
-                    if(j == 3){
-                        miArr[i][j] = (miArr[i][j]==null?"":(miArr[i][j].equals("a")?"Reparación":(miArr[i][j].equals("b")?"Mantenimiento":(miArr[i][j].equals("c")?"en Garantía":"De baja"))));
+            while (rs.next() && (i < rowSize)) {
+                for (int j = 0; j < 5; j++) {
+                    miArr[i][j] = rs.getString(j + 1);
+                    if (j == 3) {
+                        miArr[i][j] = (miArr[i][j] == null ? "" : (miArr[i][j].equals("a") ? "Reparación" : (miArr[i][j].equals("b") ? "Mantenimiento" : (miArr[i][j].equals("c") ? "En Garantía" : "De baja"))));
                     }
                 }
                 System.out.println("Array: " + Arrays.toString(miArr[i]));
@@ -700,56 +675,53 @@ public class PrestamoDB {
             }
             prep.close();
             rs.close();
-            
+
         } catch (SQLException e) {
-            System.out.println("Error al crear arreglo de datos de reportes videoproyector: " +e);
+            System.out.println("Error al crear arreglo de datos de reportes videoproyector: " + e);
         }
         return miArr;
     }
-    
-    public String[] getReporte(int id){
+
+    public String[] getReporte(int id) {
         String[] miArr = new String[10];
         try {
             PreparedStatement prep;
-            String sql ="SELECT * " +
-                        "FROM E_REP_VIDEOPROYECTORES " +
-                        "WHERE ID_REPORTE_VIDEOPROYECTOR = ?";
-            prep = conn.prepareStatement(sql);
+            prep = conn.prepareStatement("SELECT * FROM E_REP_VIDEOPROYECTORES WHERE ID_REPORTE_VIDEOPROYECTOR = ?");
             prep.setInt(1, id);
             ResultSet rs = prep.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 for (int i = 0; i < 10; i++) {
-                    miArr[i] = rs.getString(i+1);
+                    miArr[i] = rs.getString(i + 1);
                 }
             }
             prep.close();
             rs.close();
         } catch (SQLException e) {
-            System.out.println("Error al crear arreglo de datos de reportes videoproyector getReporte: " +e);
+            System.out.println("Error al crear arreglo de datos de reportes videoproyector getReporte: " + e);
         }
         return miArr;
     }
-    
-    public void updReporte(int id, String[] datos){
+
+    public void updReporte(int id, String[] datos) {
         try {
             PreparedStatement prep;
-            String sql ="UPDATE E_REP_VIDEOPROYECTORES " +
-                        "SET TITULO = ?, " +
-                        "NOMBRE_ENCARGADO = ?, " +
-                        "AREA = ?, " +
-                        "DEPTO_REPARADOR = ?, " +
-                        "IMPREVISTO = ?, " +
-                        "DETALLES = ? " +
-                        "WHERE ID_REPORTE_VIDEOPROYECTOR = ?";
+            String sql = "UPDATE E_REP_VIDEOPROYECTORES "
+                    + "SET TITULO = ?, "
+                    + "NOMBRE_ENCARGADO = ?, "
+                    + "AREA = ?, "
+                    + "DEPTO_REPARADOR = ?, "
+                    + "IMPREVISTO = ?, "
+                    + "DETALLES = ? "
+                    + "WHERE ID_REPORTE_VIDEOPROYECTOR = ?";
             prep = conn.prepareStatement(sql);
             for (int i = 0; i < datos.length; i++) {
-                prep.setString(i+1, datos[i]);
+                prep.setString(i + 1, datos[i]);
             }
             prep.setInt(7, id);
             prep.executeUpdate();
             prep.close();
         } catch (SQLException e) {
-            System.out.println("Error al actualizar datos de reportes videoproyector updReporte: " +e);
+            System.out.println("Error al actualizar datos de reportes videoproyector updReporte: " + e);
         }
     }
 }

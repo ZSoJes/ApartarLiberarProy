@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteAccesoriosYPry_PRY" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bc973332-99ee-43b1-92b3-d5738dc4a92b">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="278"/>
+	<property name="ireport.x" value="5"/>
 	<property name="ireport.y" value="0"/>
 	<style name="bkBorder" mode="Opaque" backcolor="#CCCCFF">
 		<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1">
@@ -130,7 +130,7 @@ FROM E_REP_VIDEOPROYECTORES WHERE CREADO BETWEEN $P{date1} AND $P{date2}]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Reporte #"+$V{miCounter}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Reporte #"+$F{ID_REPORTE_VIDEOPROYECTOR}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="284" y="16" width="242" height="20" uuid="c3d1d005-f008-4d4c-ab09-b2d2d30885f0"/>

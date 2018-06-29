@@ -57,6 +57,10 @@ public class Conexion {
         Statement stat = conn.createStatement();
         stat.execute("CREATE ALIAS IF NOT EXISTS E_LOG FOR \"proyector.dataBase.StoredProcedure.insertarLog\" ");
         stat.execute("CREATE ALIAS IF NOT EXISTS E_SHOW_LOG FOR \"proyector.dataBase.StoredProcedure.consultarLog\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS CREATE_PRESTAMO FOR \"proyector.dataBase.StoredProcedure.crearPrestamo\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS FREE_PRESTAMO_N FOR \"proyector.dataBase.StoredProcedure.liberarPrestamoN\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS GEN_REP_PROY FOR \"proyector.dataBase.StoredProcedure.genReportProy\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS FREE_PRESTAMO_REPORT_PRY FOR \"proyector.dataBase.StoredProcedure.liberarPrestamoReport\" ");
     }
     
     /**
@@ -69,7 +73,7 @@ public class Conexion {
             Class.forName(JDBC_NAME).newInstance();
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("CONEXION A LA BASE DE DATOS...");
-            //crearProcedure(conn);
+            crearProcedure(conn);
         } catch (SQLException ex) {
             conn = DriverManager.getConnection(NEW_DB_URL, USER, PASS);
             System.out.println("CREANDO Y CONECTANDO A LA BASE DE DATOS...");
