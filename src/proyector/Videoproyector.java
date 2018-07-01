@@ -63,7 +63,7 @@ public final class Videoproyector extends javax.swing.JFrame {
         initComponents();
 
         panelOPC.setVisible(false);
-
+        new VideoproyectorDB().setProyectorServicio();
         dibujarProye();//enlista los videoproyectores
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(16);
         //LABELS CON INFO OCULTA
@@ -1995,7 +1995,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                 PrestamoDB prestamo = new PrestamoDB();
                 String pryNoSerie = proye.getProyectorNoSerie(hidenData.getText());
                 System.out.println("pryNoSerie a borrar: " + pryNoSerie);
-                if(!prestamo.getExistePrestamoProy(pryNoSerie)){
+                if(prestamo.getPrestamoActivo(pryNoSerie, 3)){
                     proye.destroyVideoproy(pryNoSerie);
                     tabbedPane.setSelectedIndex(0);
                     descVid.setVisible(false);
@@ -2602,18 +2602,15 @@ public final class Videoproyector extends javax.swing.JFrame {
                 lblData2.setText(info[5].substring(0, 16));
                 lblData4.setText(info[4]);
                 lblStatus.setText(estatus[2]);
-                try{
-                PrestamoDB misPrestamos = new PrestamoDB();
-                misPrestamos.setProyectorServicio(datos[0]);
-                int[] servicio = misPrestamos.getProyectorServicio(datos[0]);
-                lblServTotal.setText(servicioFormat(servicio[2]));
-                lblServMes.setText(servicioFormat(servicio[3]));
-                lblServSem.setText(servicioFormat(servicio[4]));
-                }catch(SQLException ex){ System.out.println("Error al generar datos de prestamoDB sobre videoproyector btn bot jpanel generado dinamicamente:" + ex);}
                 
-                //if((lblStatus.getText()).equals("MANTENIMIENTO")){
-                //new Videoproyector().showMeEvStatus(datos[0])[3]
-                boolean estadoBtnMant = Boolean.valueOf(new VideoproyectorDB().showMeEvStatus(datos[0])[3]);
+                String[] servicio = proy.getProyectorServicio(datos[0]);
+                lblServTotal.setText(servicio[1]);//servicioFormat(servicio[2]));
+                lblServMes.setText(servicio[1]);//servicioFormat(servicio[3]));
+                lblServSem.setText(servicio[1]);//servicioFormat(servicio[4]));
+                //}catch(SQLException ex){ System.out.println("Error al generar datos de prestamoDB sobre videoproyector btn bot jpanel generado dinamicamente:" + ex);}
+                
+                //boolean estadoBtnMant = Boolean.valueOf(new VideoproyectorDB().showMeEvStatus(datos[0])[3]);
+                boolean estadoBtnMant = new PrestamoDB().getPrestamoActivo(datos[4], 3);
                 if(!estadoBtnMant){ //verificar si esta disponible a traves de ev_estatus //si no esta disponible debe aparecer
                     btnMant.setVisible(true);
                 }else{
@@ -2624,7 +2621,6 @@ public final class Videoproyector extends javax.swing.JFrame {
                 descVid.setVisible(true);
             } catch (SQLException ex) {
                 System.out.println("Error al ejecutar accion boton detalles Videoproyector: " + ex);
-                ex.printStackTrace();
             }
         });
         
@@ -2634,23 +2630,17 @@ public final class Videoproyector extends javax.swing.JFrame {
         pnlContenedor.revalidate();   
     }
 
-    public String servicioFormat(int servicio){
-        String presente = "";
-                if (servicio < 59){
-                    presente = servicio + "min";
-                }else{// if (servicio < 1439){
-                    int hrs = (servicio / 60);
-                    int min = servicio - (hrs * 60);
-                    presente = hrs + " hrs " + min + " min ";
+//    public String servicioFormat(int servicio){
+//        String presente;
+//                if (servicio < 59){
+//                    presente = servicio + "min";
 //                }else{
-//                      int dias = (servicio / 1440); 
-//                      int minRest = servicio - (1440 * dias);
-//                      int horas = minRest / 60;
-//                      int minutos = minRest - (60 * horas);
-//                      presente = dias + "dia(s) " + horas + "hr(s) " + minutos + "min ";
-                }
-        return presente;
-    }
+//                    int hrs = (servicio / 60);
+//                    int min = servicio - (hrs * 60);
+//                    presente = hrs + " hrs " + min + " min ";
+//                }
+//        return presente;
+//    }
     /**
      * @param args the command line arguments
      */

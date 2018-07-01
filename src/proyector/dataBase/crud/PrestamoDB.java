@@ -156,7 +156,7 @@ public class PrestamoDB {
                     System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
                 }
             }
-        }catch(Exception e){
+        }catch(NumberFormatException e){
             System.out.println("Error al generar el reporte junto a la liberacion del prestamo updPrestamoConReporte:"+e);
         }
     }
@@ -177,94 +177,37 @@ public class PrestamoDB {
         return accesorioID;
     }
 
-    /**
-     * A NOMBRE DE UN PROFESOR Regresa si cuenta con prestamos activos EN OTRAS PALABRAS SI PROFESOR DISPONIBLE PARA SOLICITAR EL SERVICIO
-     *
-     * @param idProfe
-     * @return
-     */
-    public boolean getExistePrestamo(String idProfe) {
-        boolean existe = false;
-        try {
-            PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT COUNT(*)>0 FROM E_PROFESORES WHERE ESTATUS = TRUE AND ID_PROFESOR = ?");
-            prep.setString(1, idProfe);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                existe = rs.getBoolean(1);
-            }
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al recuperar dato getExistePrestamo PrestamoDB: " + ex);
-        }
-        return existe;
-    }
+
 
     /**
-     * A NOMBRE DE UN AULA esperando id Regresa si cuenta con prestamos activos
-     *
-     * @param idAula
+     *A NOMBRE DE UN AULA, PROFESOR, VIDEOPROYECTOR, DEPARTAMENTO con profesores que hayan solicitado prestamo, esperando EL ID CORRESPONDIENTE regresa si esta disponible para realizar un prestamo
+     * <p>se espera: <ul><li>{1, idAula int}</li><li>{2, idProfesor String}</li><li>{3, NoSerieProyector String}</li><li>{4, idDepto int}</li></ul><br>opcTabla se llena de acuerdo a la opciones anteriores 1 para indicar aula, 2 profesor y asi </p>
+     * REVISAR SI UN PROYECTOR SE ENCUENTRA DISPONIBLE DESDE E_PRESTAMOS INDICAR NumSerie y 5 para esta accion
+     * @param idElemento
+     * @param opcTabla
      * @return
      */
-    public boolean getExistePrestamoAula(int idAula) {
-        boolean existe = false;
+    public boolean getPrestamoActivo(String idElemento, int opcTabla) {
+        boolean disponible = false;
+        PreparedStatement prep;
+        ResultSet rs;
         try {
-            PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND ID_AULA = ?");
-            prep.setInt(1, idAula);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                existe = rs.getInt(1) > 0;
-            }
+            String prestAul = "SELECT COUNT(*)>0 FROM E_AULAS WHERE ESTATUS = TRUE AND ID_AULA = ?"; //PRESTAMO AULA
+            String prestProf = "SELECT COUNT(*)>0 FROM E_PROFESORES WHERE ESTATUS = TRUE AND ID_PROFESOR = ?";  //PRESTAMO PROFESOR
+            String prestProy = "SELECT DISPONIBILIDAD FROM  EV_ESTATUS WHERE ID_VIDEOPROYECTOR = (SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE  = ?)";  // PRESTAMO PROYECTOR DISPONIBLE
+            String prestDep = "SELECT COUNT(*)>0 FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND E_PRESTAMOS.ID_PROFESOR IN (SELECT ID_PROFESOR FROM E_PROFESORES WHERE E_PROFESORES.ID_DEPARTAMENTO = ?);"; //PRESTAMOS ACTIVOS DE PROFESORES PERTENECIENTES A UN DEPTO
+            String prestProyDisponible = "SELECT COUNT(*)>0 FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND ID_VIDEOPROYECTOR = (SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE  = ?)"; //SE ENCUENTRA PRESTADO EL PROYECTOR?
+            String prestamo = (opcTabla==1?prestAul:(opcTabla==2?prestProf:(opcTabla==3?prestProy:(opcTabla==4?prestDep:prestProyDisponible))));
+            prep = conn.prepareStatement(prestamo);
+            prep.setString(1, idElemento);
+            rs = prep.executeQuery();
+            while (rs.next()) { disponible = rs.getBoolean(1);}
             prep.close();
+            rs.close();
         } catch (SQLException ex) {
-            System.out.println("Error al recuperar dato getExistePrestamoAula PrestamoDB: " + ex);
+            System.out.println("Error al recuperar DISPONIBILIDAD getPrestamoActivo PrestamoDB: " + ex);
         }
-        return existe;
-    }
-
-    /**
-     * AL NO_SERIE DE UN VIDEOPROYECTOR Regresa si cuenta con prestamos activos
-     *
-     * @param proyectorNoSerie
-     * @return
-     */
-    public boolean getExistePrestamoProy(String proyectorNoSerie) {
-        boolean existe = false;
-        try {
-            PreparedStatement prep;
-            String proyectorId = new VideoproyectorDB().getProyectorID(proyectorNoSerie);
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND ID_VIDEOPROYECTOR = ?");
-            prep.setString(1, proyectorId);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                existe = rs.getInt(1) > 0;
-            }
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al recuperar dato getExistePrestamoProy PrestamoDB: " + ex);
-        }
-        return existe;
-    }
-
-    public boolean getExistePrestamoDep(int idDep) {
-        boolean existe = false;
-        try {
-            PreparedStatement prep;
-            String sql = "SELECT COUNT(*) FROM E_PRESTAMOS "
-                    + "WHERE ESTATUS = TRUE AND "
-                    + "E_PRESTAMOS.ID_PROFESOR IN (SELECT ID_PROFESOR FROM E_PROFESORES WHERE E_PROFESORES.ID_DEPARTAMENTO = ?);";
-            prep = conn.prepareStatement(sql);
-            prep.setInt(1, idDep);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                existe = rs.getInt(1) > 0;
-            }
-            prep.close();
-        } catch (SQLException e) {
-            System.out.println("Error al recuperar dato getExistePrestamoDep PrestamoDB: " + e);
-        }
-        return existe;
+        return disponible;
     }
 
     /**
@@ -561,79 +504,6 @@ public class PrestamoDB {
             System.out.println("error al recibir datos getPrestamosDeUsuario PrestamoDB: " + ex);
         }
         return array;
-    }
-
-    /**
-     * Recupera el tiempo de un videoproyector en servicio los datos presentados
-     * son en minutos
-     *
-     * @param idProyector
-     * @return
-     */
-    public int[] getProyectorServicio(String idProyector) {
-        int[] servicio = new int[5];
-        try {
-            PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT * FROM EV_HORASSERVICIO WHERE ID_VIDEOPROYECTOR = ?");
-            prep.setString(1, idProyector);
-            ResultSet rs = prep.executeQuery();
-            while (rs.next()) {
-                servicio[0] = rs.getInt(1); //id
-                servicio[1] = rs.getInt(2); //id_proy
-                servicio[2] = rs.getInt(3); //total
-                servicio[3] = rs.getInt(4); //semestre
-                servicio[4] = rs.getInt(5); //mes
-            }
-            rs.close();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al recuperar las horas de servicio de videoproyector getProyectorServicio PrestamoDB: " + ex);
-        }
-        return servicio;
-    }
-
-    /**
-     * Asigna el tiempo de un videoproyector en servicio suma en prestamos
-     * realizados resolviendo en minutos
-     *
-     * @param idProye
-     */
-    public void setProyectorServicio(String idProye) {
-        PreparedStatement prep;
-        int day;
-        String miDate1, miDate2;
-        Calendar c = Calendar.getInstance(); //calendar toma los meses del 0(enero) a 11(dic)
-        int actualMes = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        if (actualMes < 7) {
-            c.set(Calendar.MONTH, 05);
-            day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-            miDate1 = year + "-01-01";
-            miDate2 = year + "-06-" + day;
-        } else {
-            c.set(Calendar.MONTH, 11);
-            day = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-            miDate1 = year + "-07-01";
-            miDate2 = year + "-12-" + day;
-        }
-
-        try {
-            prep = conn.prepareStatement("UPDATE EV_HORASSERVICIO "
-                    + "SET TOTAL = (SELECT SUM ( DATEDIFF('MI', CREADO, ACTUALIZADO) ) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ?), "
-                    + "SEMESTRE = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND CREADO BETWEEN ? AND ?), "
-                    + "MES = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = ? AND E_PRESTAMOS.CREADO BETWEEN CONCAT(EXTRACT(YEAR FROM CURRENT_TIMESTAMP()),'-',EXTRACT(MONTH FROM CURRENT_TIMESTAMP()),'-01') AND DATEADD(M,1,CURRENT_TIMESTAMP()) - DAY(DATEADD(M,1,CURRENT_TIMESTAMP()))) "
-                    + "WHERE EV_HORASSERVICIO.ID_VIDEOPROYECTOR = ?");
-            prep.setString(1, idProye);
-            prep.setString(2, idProye);
-            prep.setString(3, miDate1);
-            prep.setString(4, miDate2);
-            prep.setString(5, idProye);
-            prep.setString(6, idProye);
-            prep.executeUpdate();
-            prep.close();
-        } catch (SQLException e) {
-            System.out.println("Error generando total, semestre, mes en tabla EV_HORASSERVICIO setProyectorServicio PrestamoDB: " + e);
-        }
     }
 
     public String[][] getReportejTable() {

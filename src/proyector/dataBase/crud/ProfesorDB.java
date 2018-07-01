@@ -235,6 +235,29 @@ public class ProfesorDB {
         }
     }
     
+//    /**
+//     * A NOMBRE DE UN PROFESOR Regresa si cuenta con prestamos activos EN OTRAS PALABRAS SI PROFESOR DISPONIBLE PARA SOLICITAR EL SERVICIO
+//     *
+//     * @param idProfe
+//     * @return
+//     */
+//    public boolean tienePrestamo(String idProfe) {
+//        boolean existe = false;
+//        try {
+//            PreparedStatement prep;
+//            prep = conn.prepareStatement("SELECT COUNT(*)>0 FROM E_PROFESORES WHERE ESTATUS = TRUE AND ID_PROFESOR = ?");
+//            prep.setString(1, idProfe);
+//            ResultSet rs = prep.executeQuery();
+//            while (rs.next()) {
+//                existe = rs.getBoolean(1);
+//            }
+//            prep.close();
+//        } catch (SQLException ex) {
+//            System.out.println("Error al recuperar dato getExistePrestamo PrestamoDB: " + ex);
+//        }
+//        return existe;
+//    }
+    
     public void bulkLoadProfe(String ruta){
         try {
             PreparedStatement prep;

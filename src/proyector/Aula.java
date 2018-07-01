@@ -1184,7 +1184,7 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
                 //lblSeleccion.setText(map.get(jComboBox1.getSelectedItem().toString()).toString());
                 int seleccion = map.get(jComboBox1.getSelectedItem().toString());
                 PrestamoDB prestamo = new PrestamoDB();
-                if(!prestamo.getExistePrestamoAula(seleccion)){
+                if(prestamo.getPrestamoActivo(String.valueOf(seleccion), 1)){
                     JOptionPane.showMessageDialog(null, "Los datos de han eliminado");
                     aula.destroyAula(seleccion);
                     dlgBorrar.setVisible(false);

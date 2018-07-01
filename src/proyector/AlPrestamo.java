@@ -1201,7 +1201,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                 ProfesorDB prof = new ProfesorDB();
                 if (prof.getExisteProfesor(profe)) {
                     PrestamoDB prestamo = new PrestamoDB();
-                    if ((prestamo.getExistePrestamo(profe))) { //si !true !(existe un prestamo) utilizar profesor
+                    if (prestamo.getPrestamoActivo(profe, 2)) { //si true (si diponible) utilizar profesor
                         DepartamentoDB depar = new DepartamentoDB();
                         String[] datos = prof.getProfesor(profe);
                         String[] depart = depar.getDepartamento(Integer.parseInt(datos[1]));
@@ -1241,7 +1241,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                 VideoproyectorDB vid = new VideoproyectorDB();
                 if (vid.getExisteProyector(proy)) {
                     PrestamoDB prestamo = new PrestamoDB();
-                    if (!(prestamo.getExistePrestamoProy(proy))) { //si !true !(existe un prestamo), si esta prestado no se vuelve a prestar el mismo proyector
+                    if (prestamo.getPrestamoActivo(proy, 3)) { //si true (esta disponible para prestamo), si esta prestado no se vuelve a prestar el mismo proyector
                         String[] data = vid.getProyector(proy);
                         if (Boolean.valueOf(vid.showMeEvStatus(data[0])[3])) {   // comprueba que el proyector en si mismo este disponible y no este reportado con falla o en prestamo
                             System.out.println(">>>disponible proyector");

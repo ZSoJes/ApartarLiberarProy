@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.HashMap;
 import proyector.comboItemProy;
 import proyector.dataBase.Conexion;
@@ -438,22 +439,15 @@ public class VideoproyectorDB {
     public String[][] hrsServicio(){
         PreparedStatement prep;
         ResultSet rs;
-        int cant = 0;
-        try {
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM EV_HORASSERVICIO");
-            rs = prep.executeQuery();
-            while(rs.next()){ cant = rs.getInt(1); }
-            rs.close();
-            prep.close();
-        } catch (Exception e) { System.out.println("Error al recuperar la cantidad de datos de ev_horasservicio hrsServicio: " + e);}
+        int cant = getCantProy();
         String[][] datos = new String[cant][4];
         try {
             prep = conn.prepareStatement("SELECT " +
-                                        "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR) AS PROYECTOR, " +
-                                        "(SELECT CONCAT((TOTAL/ 60), 'hrs ', (TOTAL % 60), 'min' )) AS TOTAL, " +
-                                        "(SELECT CONCAT((MES/ 60), 'hrs ', (MES % 60), 'min' )) AS MES, " +
-                                        "(SELECT CONCAT((SEMESTRE/ 60), 'hrs ', (SEMESTRE % 60), 'min' )) AS SEMESTRE " +
-                                        "FROM EV_HORASSERVICIO");
+                "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR) AS PROYECTOR, " +
+                "(SELECT CONCAT((TOTAL/ 60), 'hrs ', (TOTAL % 60), 'min' )) AS TOTAL, " +
+                "(SELECT CONCAT((MES/ 60), 'hrs ', (MES % 60), 'min' )) AS MES, " +
+                "(SELECT CONCAT((SEMESTRE/ 60), 'hrs ', (SEMESTRE % 60), 'min' )) AS SEMESTRE " +
+                "FROM EV_HORASSERVICIO");
             rs = prep.executeQuery();
             int i = 0;
             while (rs.next()) {
@@ -470,6 +464,76 @@ public class VideoproyectorDB {
         }
         return datos;
     } 
+    
+        /**
+     * Recupera el tiempo de un videoproyector en servicio los datos presentados
+     * con el formato hrs min o min de acuedo a la cantidad de tiempo que fue solicitado
+     * <p>El array presenta los datos de la siguiente forma { NombreProyector, Total, Semestre, Mes }</p>
+     * @param idProyector
+     * @return
+     */
+    public String[] getProyectorServicio(String idProyector) {
+        String[] servicio = new String[4]; // { Nombre proyector, total, semestre, mes }
+        try {
+            PreparedStatement prep;
+            prep = conn.prepareStatement("SELECT " +
+                "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR) AS PROYECTOR, " +
+                "(SELECT CONCAT((TOTAL/ 60), 'hrs ', (TOTAL % 60), 'min' )) AS TOTAL, " +
+                "(SELECT CONCAT((MES/ 60), 'hrs ', (MES % 60), 'min' )) AS MES, " +
+                "(SELECT CONCAT((SEMESTRE/ 60), 'hrs ', (SEMESTRE % 60), 'min' )) AS SEMESTRE " +
+                "FROM EV_HORASSERVICIO WHERE ID_VIDEOPROYECTOR = ?");
+            prep.setString(1, idProyector);
+            ResultSet rs = prep.executeQuery();
+            while (rs.next()) {
+                for (int i = 0; i < 4; i++) {
+                    servicio[i] = rs.getString(i+1);   
+                }
+            }
+            rs.close();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al recuperar las horas de servicio de videoproyector getProyectorServicio PrestamoDB: " + ex);
+        }
+        return servicio;
+    }
+    
+    /**
+     * Asigna el tiempo de los videoproyectores en servicio suma en prestamos
+     * realizados resolviendo en minutos
+     *
+     */
+    public void setProyectorServicio() {
+        PreparedStatement prep;
+        int day;
+        String miDate1, miDate2;
+        Calendar c = Calendar.getInstance(); //calendar toma los meses del 0(enero) a 11(dic)
+        int actualMes = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        if (actualMes < 7) {
+            c.set(Calendar.MONTH, 05);
+            miDate1 = year + "-01-01 00:00:00";
+            miDate2 = year + "-06-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+        } else {
+            c.set(Calendar.MONTH, 11);
+            miDate1 = year + "-07-01 00:00:00";
+            miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+        }
+        System.out.println("\n\n..::: Reportando Horas Servicio Proyector :::...\nTotal, Semetres y Mes, Semestre:"+ miDate1 + "  -  " + miDate2 + "\n");
+        try {
+            String sql = "UPDATE EV_HORASSERVICIO SET "+
+                "TOTAL = (SELECT SUM ( DATEDIFF('MI', CREADO, ACTUALIZADO) ) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR), "+
+                "SEMESTRE = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR AND CREADO BETWEEN ? AND ?), "+
+                "MES = (SELECT SUM(DATEDIFF('MI', CREADO, ACTUALIZADO)) FROM E_PRESTAMOS WHERE E_PRESTAMOS.ID_VIDEOPROYECTOR = EV_HORASSERVICIO.ID_VIDEOPROYECTOR AND E_PRESTAMOS.CREADO BETWEEN CONCAT(EXTRACT(YEAR FROM CURRENT_TIMESTAMP()),'-',EXTRACT(MONTH FROM CURRENT_TIMESTAMP()),'-01 00:00:00') AND CONCAT(SUBSTRING(DATEADD(M,1,CURRENT_TIMESTAMP()) - DAY(DATEADD(M,1,CURRENT_TIMESTAMP())), 1, 10), ' 23:59:59'))  "+
+                "WHERE EV_HORASSERVICIO.ID_VIDEOPROYECTOR IN (SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES);";
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, miDate1);
+            prep.setString(2, miDate2);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error generando total, semestre, mes en tabla EV_HORASSERVICIO setProyectorServicio PrestamoDB: " + e);
+        }
+    }
     
     /**
      * A partir de indicar el id del proyector  y del imprevisto indicado en a, b, c, d

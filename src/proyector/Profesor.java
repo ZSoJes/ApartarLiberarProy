@@ -192,17 +192,18 @@ public class Profesor extends javax.swing.JFrame {
         lblAMat2 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         lblHide = new javax.swing.JLabel();
-        fcProfCSV = new javax.swing.JFileChooser();
         pnlBkProfesor = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        lblTitulo = new javax.swing.JLabel();
+        lblInstrucciones = new javax.swing.JLabel();
+        cabecera = new javax.swing.JPanel();
         logo1 = new javax.swing.JLabel();
         logo2 = new javax.swing.JLabel();
         lblHora = new javax.swing.JLabel();
         labelHora = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
         labelFecha = new javax.swing.JLabel();
-        btnMenu = new javax.swing.JToggleButton();
-        btnRegresar = new javax.swing.JButton();
+        pnlBusqueda = new javax.swing.JPanel();
+        txtBusqueda = new javax.swing.JTextField();
         panelOPC = new javax.swing.JPanel();
         ico3 = new javax.swing.JLabel();
         ico4 = new javax.swing.JLabel();
@@ -211,7 +212,6 @@ public class Profesor extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        lblTitulo = new javax.swing.JLabel();
         pnlBtnNuevo = new javax.swing.JPanel();
         ico1 = new javax.swing.JLabel();
         lbl1 = new javax.swing.JLabel();
@@ -224,14 +224,13 @@ public class Profesor extends javax.swing.JFrame {
         ico6 = new javax.swing.JLabel();
         lbl3 = new javax.swing.JLabel();
         lblN3 = new javax.swing.JLabel();
-        lblInstrucciones = new javax.swing.JLabel();
+        comboFiltro = new javax.swing.JComboBox<>();
+        btnRegresar = new javax.swing.JButton();
+        btnMenu = new javax.swing.JToggleButton();
         btnBusqueda = new javax.swing.JButton();
+        btnBusquedaClear = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        comboFiltro = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        txtBusqueda = new javax.swing.JTextField();
 
         dlgNuevo.setMinimumSize(new java.awt.Dimension(700, 370));
         dlgNuevo.setModal(true);
@@ -487,9 +486,12 @@ public class Profesor extends javax.swing.JFrame {
         dlgBorrar.setMinimumSize(new java.awt.Dimension(599, 300));
         dlgBorrar.setModal(true);
         dlgBorrar.setUndecorated(true);
+        dlgBorrar.setPreferredSize(new java.awt.Dimension(599, 300));
         dlgBorrar.setResizable(false);
 
         pnlBkBorrar.setBackground(new java.awt.Color(255, 127, 80));
+        pnlBkBorrar.setMinimumSize(new java.awt.Dimension(599, 300));
+        pnlBkBorrar.setPreferredSize(new java.awt.Dimension(599, 300));
         pnlBkBorrar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnCerrar1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
@@ -575,7 +577,7 @@ public class Profesor extends javax.swing.JFrame {
         dlgBorrar.getContentPane().setLayout(dlgBorrarLayout);
         dlgBorrarLayout.setHorizontalGroup(
             dlgBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBkBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
+            .addComponent(pnlBkBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         dlgBorrarLayout.setVerticalGroup(
             dlgBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -923,11 +925,24 @@ public class Profesor extends javax.swing.JFrame {
         pnlBkProfesor.setPreferredSize(new java.awt.Dimension(1024, 600));
         pnlBkProfesor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(1, 200, 1));
-        jPanel1.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
-        jPanel1.setMaximumSize(new java.awt.Dimension(1024, 83));
-        jPanel1.setMinimumSize(new java.awt.Dimension(1024, 83));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 83));
+        lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
+        lblTitulo.setText("Profesores");
+        lblTitulo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTituloMouseClicked(evt);
+            }
+        });
+        pnlBkProfesor.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 109, -1, -1));
+
+        lblInstrucciones.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblInstrucciones.setText("Filtrar información:");
+        pnlBkProfesor.add(lblInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
+
+        cabecera.setBackground(new java.awt.Color(1, 200, 1));
+        cabecera.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
+        cabecera.setMaximumSize(new java.awt.Dimension(1024, 83));
+        cabecera.setMinimumSize(new java.awt.Dimension(1024, 83));
+        cabecera.setPreferredSize(new java.awt.Dimension(1024, 83));
 
         logo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tecnm2.png"))); // NOI18N
 
@@ -949,11 +964,11 @@ public class Profesor extends javax.swing.JFrame {
         labelFecha.setForeground(new java.awt.Color(255, 255, 255));
         labelFecha.setText("00-00-0000");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout cabeceraLayout = new javax.swing.GroupLayout(cabecera);
+        cabecera.setLayout(cabeceraLayout);
+        cabeceraLayout.setHorizontalGroup(
+            cabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cabeceraLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logo1)
                 .addGap(36, 36, 36)
@@ -968,49 +983,58 @@ public class Profesor extends javax.swing.JFrame {
                 .addComponent(logo2)
                 .addGap(82, 82, 82))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        cabeceraLayout.setVerticalGroup(
+            cabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cabeceraLayout.createSequentialGroup()
                 .addComponent(logo1)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(cabeceraLayout.createSequentialGroup()
+                .addGroup(cabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(cabeceraLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(cabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblHora)
                             .addComponent(labelHora)
                             .addComponent(lblFecha)
                             .addComponent(labelFecha)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(cabeceraLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(logo2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlBkProfesor.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        pnlBkProfesor.add(cabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checklist_24px.png"))); // NOI18N
-        btnMenu.setMaximumSize(new java.awt.Dimension(40, 37));
-        btnMenu.setMinimumSize(new java.awt.Dimension(40, 37));
-        btnMenu.setPreferredSize(new java.awt.Dimension(40, 37));
-        btnMenu.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                btnMenuItemStateChanged(evt);
+        pnlBusqueda.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 190, 190), 2, true));
+        pnlBusqueda.setPreferredSize(new java.awt.Dimension(204, 37));
+
+        txtBusqueda.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtBusqueda.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 5, 1, 1));
+        txtBusqueda.setMinimumSize(new java.awt.Dimension(200, 33));
+        txtBusqueda.setPreferredSize(new java.awt.Dimension(200, 33));
+        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
             }
         });
-        pnlBkProfesor.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
 
-        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Back To_35px.png"))); // NOI18N
-        btnRegresar.setMaximumSize(new java.awt.Dimension(40, 37));
-        btnRegresar.setMinimumSize(new java.awt.Dimension(40, 37));
-        btnRegresar.setPreferredSize(new java.awt.Dimension(40, 37));
-        btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnRegresarMouseClicked(evt);
-            }
-        });
-        pnlBkProfesor.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+        javax.swing.GroupLayout pnlBusquedaLayout = new javax.swing.GroupLayout(pnlBusqueda);
+        pnlBusqueda.setLayout(pnlBusquedaLayout);
+        pnlBusquedaLayout.setHorizontalGroup(
+            pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBusquedaLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        pnlBusquedaLayout.setVerticalGroup(
+            pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBusquedaLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pnlBkProfesor.add(pnlBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
 
         panelOPC.setBackground(new java.awt.Color(250, 250, 250));
         panelOPC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 173, 179), 1, true));
@@ -1108,15 +1132,6 @@ public class Profesor extends javax.swing.JFrame {
         panelOPC.add(jLabel11, gridBagConstraints);
 
         pnlBkProfesor.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
-
-        lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
-        lblTitulo.setText("Profesores");
-        lblTitulo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblTituloMouseClicked(evt);
-            }
-        });
-        pnlBkProfesor.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 109, -1, -1));
 
         pnlBtnNuevo.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnNuevo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
@@ -1247,9 +1262,32 @@ public class Profesor extends javax.swing.JFrame {
 
         pnlBkProfesor.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 440, -1, -1));
 
-        lblInstrucciones.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblInstrucciones.setText("Filtrar información:");
-        pnlBkProfesor.add(lblInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
+        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_PROFESOR", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "DEPARTAMENTO" }));
+        comboFiltro.setMinimumSize(new java.awt.Dimension(125, 30));
+        comboFiltro.setPreferredSize(new java.awt.Dimension(125, 30));
+        pnlBkProfesor.add(comboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 160, -1));
+
+        btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Back To_35px.png"))); // NOI18N
+        btnRegresar.setMaximumSize(new java.awt.Dimension(40, 37));
+        btnRegresar.setMinimumSize(new java.awt.Dimension(40, 37));
+        btnRegresar.setPreferredSize(new java.awt.Dimension(40, 37));
+        btnRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegresarMouseClicked(evt);
+            }
+        });
+        pnlBkProfesor.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+
+        btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checklist_24px.png"))); // NOI18N
+        btnMenu.setMaximumSize(new java.awt.Dimension(40, 37));
+        btnMenu.setMinimumSize(new java.awt.Dimension(40, 37));
+        btnMenu.setPreferredSize(new java.awt.Dimension(40, 37));
+        btnMenu.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                btnMenuItemStateChanged(evt);
+            }
+        });
+        pnlBkProfesor.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
 
         btnBusqueda.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_25px.png"))); // NOI18N
@@ -1260,6 +1298,15 @@ public class Profesor extends javax.swing.JFrame {
             }
         });
         pnlBkProfesor.add(btnBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, -1, -1));
+
+        btnBusquedaClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/borrar-búsqueda-24.png"))); // NOI18N
+        btnBusquedaClear.setPreferredSize(new java.awt.Dimension(45, 35));
+        btnBusquedaClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBusquedaClearActionPerformed(evt);
+            }
+        });
+        pnlBkProfesor.add(btnBusquedaClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, -1, -1));
 
         jTable1.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -1303,51 +1350,6 @@ public class Profesor extends javax.swing.JFrame {
         }
 
         pnlBkProfesor.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 824, 353));
-
-        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_PROFESOR", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "DEPARTAMENTO" }));
-        comboFiltro.setMinimumSize(new java.awt.Dimension(125, 30));
-        comboFiltro.setPreferredSize(new java.awt.Dimension(125, 30));
-        pnlBkProfesor.add(comboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 160, -1));
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/borrar-búsqueda-24.png"))); // NOI18N
-        jButton1.setPreferredSize(new java.awt.Dimension(45, 35));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        pnlBkProfesor.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, -1, -1));
-
-        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 190, 190), 2, true));
-        jPanel2.setPreferredSize(new java.awt.Dimension(204, 37));
-
-        txtBusqueda.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtBusqueda.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 5, 1, 1));
-        txtBusqueda.setMinimumSize(new java.awt.Dimension(200, 33));
-        txtBusqueda.setPreferredSize(new java.awt.Dimension(200, 33));
-        txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtBusquedaKeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        pnlBkProfesor.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1590,20 +1592,20 @@ public class Profesor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBorrarKeyTyped
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        String usuario = txtBorrar.getText().trim();
-        if (usuario.isEmpty()) {
+        String profesor = txtBorrar.getText().trim();
+        if (profesor.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Profesor no encontrado!!!\nRectifique el numero identificador.", "Error", JOptionPane.ERROR_MESSAGE);
             txtBorrar.setText("");
         } else {
             int opc = JOptionPane.showConfirmDialog(null, "Es una accion irreversible!!!\n\nSI HACE ESTO SE BORRARAN TODOS LOS REGISTROS QUE SE HICIERON CON ESTE VIDEOPROYECTOR\n\nEstá seguro que desea eliminar?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 
-            if (opc == JOptionPane.YES_OPTION && !usuario.isEmpty()) {
+            if (opc == JOptionPane.YES_OPTION && !profesor.isEmpty()) {
                 try {
                     ProfesorDB profe = new ProfesorDB();
                     PrestamoDB prestamo = new PrestamoDB();
-                    if (profe.getExisteProfesor(usuario)) {
-                        if(!prestamo.getExistePrestamo(usuario)){ //si profesor no tiene un prestamo vigente
-                            profe.destroyProf(usuario);
+                    if (profe.getExisteProfesor(profesor)) {
+                        if(prestamo.getPrestamoActivo(profesor, 2)){ //si profesor esta disponible
+                            profe.destroyProf(profesor);
                             JOptionPane.showMessageDialog(null, "Se ha eliminado el registro");
                             getTable();
                             
@@ -1824,13 +1826,13 @@ public class Profesor extends javax.swing.JFrame {
         jTable1.setRowSorter(trsFiltro);
     }//GEN-LAST:event_btnBusquedaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnBusquedaClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaClearActionPerformed
         txtBusqueda.setText("");
         TableRowSorter trsFiltro = new TableRowSorter(jTable1.getModel());
         trsFiltro.setRowFilter(RowFilter.regexFilter(txtBusqueda.getText(), 0));
         comboFiltro.setSelectedIndex(0);
         jTable1.setRowSorter(trsFiltro);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnBusquedaClearActionPerformed
 
     private void lblTituloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTituloMouseClicked
 
@@ -1896,6 +1898,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBusqueda;
+    private javax.swing.JButton btnBusquedaClear;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
@@ -1903,19 +1906,18 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JPanel cabecera;
     private javax.swing.JComboBox<String> comboFiltro;
     private javax.swing.JDialog dlgActualizar;
     private javax.swing.JDialog dlgBorrar;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JPanel dlgPnlFormulario;
-    private javax.swing.JFileChooser fcProfCSV;
     private javax.swing.JLabel ico1;
     private javax.swing.JLabel ico2;
     private javax.swing.JLabel ico3;
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
     private javax.swing.JLabel ico6;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -1929,8 +1931,6 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1970,6 +1970,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBtnActualizar;
     private javax.swing.JPanel pnlBtnBorrar;
     private javax.swing.JPanel pnlBtnNuevo;
+    private javax.swing.JPanel pnlBusqueda;
     private javax.swing.JPanel pnlColor1;
     private javax.swing.JPanel pnlColor2;
     private javax.swing.JPanel pnlColor3;

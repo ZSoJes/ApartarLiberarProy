@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package proyector;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -20,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
@@ -27,12 +22,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.general.DefaultPieDataset;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.LogDB;
@@ -40,24 +33,26 @@ import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
+import proyector.other.graphTheme;
 import proyector.reportes.GenerarReportes;
+
 /**
  *
  * @author JuanGSot
  */
-public class ARegistro extends javax.swing.JFrame {
+public final class ARegistro extends javax.swing.JFrame {
 
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
-    String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-    //DateFormat fecha = DateFormat.getDateInstance();
-    SimpleDateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
     private static Boolean valido = false;
     private static String usuario = "";
-    /**
-     * Creates new form ARegistro
-     */
+
     public ARegistro() {
-        initComponents();    
+        initComponents();
+        try {
+            new VideoproyectorDB().setProyectorServicio();
+        } catch (SQLException e) {
+            System.out.println("Error al cargar las horas de servicio de proyector:" + e);
+        }
         jdtChooser2.setVisible(false);
         jdtChooser1.setVisible(false);
         lblIni.setVisible(false);
@@ -72,7 +67,7 @@ public class ARegistro extends javax.swing.JFrame {
         jComboBox1.setSelectedIndex(3);
         jTable1.setFont(new java.awt.Font("SansSerif", 0, 11));
         jTable1.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 10));
-        labelFecha.setText(date);                                   //coloca la fecha
+        labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date())); 
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();                                                //coloca la hora
         });
@@ -80,27 +75,10 @@ public class ARegistro extends javax.swing.JFrame {
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
         timer.start();
+        
         graficas();
-//        try{
-//        UsuarioReadDB ini = new UsuarioReadDB();
-//        int[] meses = ini.leerMeses(2018);
-//        System.out.println("meses resultado: " + Arrays.toString(meses));
-//        }catch(SQLException ex){
-//            System.out.println("error al imprimir meses : " + ex);
-//        }
-//SELECT  SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 01  THEN 1 ELSE 0 END)  AS ENE,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 02  THEN 1 ELSE 0 END)  AS FEB,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 03  THEN 1 ELSE 0 END)  AS MAR,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 04  THEN 1 ELSE 0 END)  AS ABR,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 05  THEN 1 ELSE 0 END)  AS MAY,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 06  THEN 1 ELSE 0 END)  AS JUN,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 07  THEN 1 ELSE 0 END)  AS JUL,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 08  THEN 1 ELSE 0 END)  AS AGO,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 09  THEN 1 ELSE 0 END)  AS SEP,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 10  THEN 1 ELSE 0 END)  AS OCT,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 11  THEN 1 ELSE 0 END)  AS NOV,
-//	SUM( CASE WHEN EXTRACT(MONTH FROM CREADO) = 12  THEN 1 ELSE 0 END)  AS DIC
-//FROM (SELECT *  FROM E_PRESTAMOS  WHERE ESTATUS = FALSE)
+        graficaPastelProy();
+        graficaBarrasSolicitudes();
         jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
     }
 
@@ -112,7 +90,7 @@ public class ARegistro extends javax.swing.JFrame {
     }
 
     /**
-     * Introduce la informacion en un jTable indicado
+     * Introduce la informacion al jtable de registros generales sobre prestamos
      *
      * @param opc
      * @param miDate1
@@ -126,10 +104,9 @@ public class ARegistro extends javax.swing.JFrame {
         Calendar c = Calendar.getInstance(); //calendar toma los meses del 0(enero) a 11(dic)
         Calendar c1 = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
-        
+
         String[][] data = datosRegistros(opc, miDate1, miDate2);//prestamos que estan entre fechas de dos dias especificos
-        
-        
+
         int count = data.length;
         String[][] data2 = new String[count][9];
 
@@ -171,9 +148,9 @@ public class ARegistro extends javax.swing.JFrame {
                     long end = c1.getTimeInMillis();
                     long start = c.getTimeInMillis();
                     long diferencia = TimeUnit.MILLISECONDS.toMinutes(Math.abs(end - start));
-                    int horas =(int) (diferencia/60);
-                    int minutos =(int) (diferencia%60);
-                    data2[i][8] = (horas>0?horas+"hrs ":"0hrs ")+(minutos>0?minutos+"min ":"0min ");
+                    int horas = (int) (diferencia / 60);
+                    int minutos = (int) (diferencia % 60);
+                    data2[i][8] = (horas > 0 ? horas + "hrs " : "0hrs ") + (minutos > 0 ? minutos + "min " : "0min ");
                 }
             }
         }
@@ -189,8 +166,8 @@ public class ARegistro extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(7).setPreferredWidth(118);
         jTable1.getColumnModel().getColumn(8).setPreferredWidth(94);
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model);
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
         jTable1.setRowSorter(sorter);
     }
 
@@ -204,24 +181,27 @@ public class ARegistro extends javax.swing.JFrame {
         return res;
     }
 
-    public String[][] datosRegistros(int opc, String miDate1, String miDate2) throws SQLException{
+    public String[][] datosRegistros(int opc, String miDate1, String miDate2) throws SQLException {
         PrestamoDB reg = new PrestamoDB();
         String[][] data = new String[0][8];
         Calendar c = Calendar.getInstance();
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
-        if(opc == 0){   //todos
+        if (opc == 0) {   //todos
             data = reg.getPrestamos(false, true);
-        }if(opc == 1){  //hoy
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd"); 
+        }
+        if (opc == 1) {  //hoy
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
             miDate1 = dt.format(c.getTime()).concat(" 00:00:00");
             miDate2 = dt.format(c.getTime()).concat(" 23:59:59");
-        }if(opc == 2){  //mes
+        }
+        if (opc == 2) {  //mes
             c.set(Calendar.DAY_OF_MONTH, 1);
             DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
             miDate1 = df.format(c.getTime()) + " 00:00:00";
             miDate2 = miDate1.substring(0, 8) + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";;
-        }if(opc == 3){  //semestre
+        }
+        if (opc == 3) {  //semestre
             if (month < 6) {
                 c.set(Calendar.MONTH, 05);
                 miDate1 = year + "-01-01 00:00:00";
@@ -231,75 +211,126 @@ public class ARegistro extends javax.swing.JFrame {
                 miDate1 = year + "-07-01 00:00:00";
                 miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
             }
-        }if(opc == 4){  //año
+        }
+        if (opc == 4) {  //año
             c.set(Calendar.MONTH, 11);
             miDate1 = year + "-01-01 00:00:00";
             miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
         }
-        if(opc >= 1 && opc <= 5){
+        if (opc >= 1 && opc <= 5) {
             data = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
         }
         System.out.println("Registros existentes:" + data.length + "\nEntre las fechas: " + miDate1 + miDate2);
         return data;
     }
-    
-    public void graficas(){
+
+    public void graficas() {
         DefaultCategoryDataset dtsc = new DefaultCategoryDataset();
         String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
-        try{
-        UsuarioReadDB ini = new UsuarioReadDB();
-        Calendar c = Calendar.getInstance();
-        int[] meses = ini.leerMeses(c.get(Calendar.YEAR));
-        System.out.println("meses resultado: " + Arrays.toString(meses));
-        for(int i = 0; i < 12; i++){
-            dtsc.setValue(meses[i], mesN[i], mesN[i]+"("+meses[i]+")");
-        }
-        final JFreeChart ch = ChartFactory.createBarChart("Prestamos realizados durante el presente año " + String.valueOf(c.get(Calendar.YEAR)),  "Meses", "Cantidad", dtsc, PlotOrientation.VERTICAL, true, true, false); //domain axis label - range axis label - data - orientation - include legend - tooltips - urls
-        StandardChartTheme theme = (StandardChartTheme)org.jfree.chart.StandardChartTheme.createJFreeTheme();
-        String fontName = "Lucida Sans";
-        theme.setTitlePaint( Color.decode( "#4572a7" ) );
-        theme.setExtraLargeFont( new Font(fontName,Font.BOLD, 17) ); //title
-        theme.setLargeFont( new Font(fontName,Font.BOLD, 15)); //axis-title
-        theme.setRegularFont( new Font(fontName,Font.PLAIN, 11));
-        theme.setRangeGridlinePaint( Color.decode("#C0C0C0"));
-        theme.setPlotBackgroundPaint( Color.white );
-        theme.setChartBackgroundPaint( Color.white );
-        theme.setGridBandPaint( Color.red );
-        theme.setAxisOffset( new RectangleInsets(0,0,0,0) );
-        theme.setBarPainter(new StandardBarPainter());
-        theme.setAxisLabelPaint( Color.decode("#666666")  );
-        theme.apply( ch );
-        
-        ch.getCategoryPlot().setOutlineVisible( false );
-        ch.getCategoryPlot().getRangeAxis().setAxisLineVisible( false );
-        ch.getCategoryPlot().getRangeAxis().setTickMarksVisible( false );
-        ch.getCategoryPlot().setRangeGridlineStroke( new java.awt.BasicStroke() );
-        ch.getCategoryPlot().getRangeAxis().setTickLabelPaint( Color.decode("#666666") );
-        ch.getCategoryPlot().getDomainAxis().setTickLabelPaint( Color.decode("#666666") );
-        ch.setTextAntiAlias( true );
-        ch.setAntiAlias( true );
-        int count = 0;
-        String[] colorM = {"#2196F3", "#FFC107", "#FF5722" , "#8BC34A", "#E91E63", "#26A69A" , "#96492D", "#FFEB3B", "#673AB7", "#00BCD4" , "#8BC34A", "#F44336"};
-        for(String code : colorM){
-            ch.getCategoryPlot().getRenderer().setSeriesPaint( count, Color.decode( code ));
-            count++;
-        }
-        BarRenderer rend = (BarRenderer) ch.getCategoryPlot().getRenderer();
-        rend.setShadowVisible( true );
-        rend.setShadowXOffset( 4);
-        rend.setShadowYOffset( 2);
-        rend.setShadowPaint( Color.decode( "#C0C0C0"));
-        rend.setMaximumBarWidth(0.1);
-        rend.setItemMargin(-7);
-        
-        
-        
-        BufferedImage image = ch.createBufferedImage(880, 300);
-        jMiLabel.setIcon(new ImageIcon(image));
-        }catch(SQLException ex){
+        try {
+            UsuarioReadDB ini = new UsuarioReadDB();
+            Calendar c = Calendar.getInstance();
+            int[] meses = ini.leerMeses(c.get(Calendar.YEAR));
+            System.out.println("meses resultado: " + Arrays.toString(meses));
+            for (int i = 0; i < 12; i++) {
+                dtsc.setValue(meses[i], mesN[i], mesN[i] + "(" + meses[i] + ")");
+            }
+            final JFreeChart ch = ChartFactory.createBarChart("Prestamos realizados durante el presente año " + String.valueOf(c.get(Calendar.YEAR)), "Meses", "Cantidad", dtsc, PlotOrientation.VERTICAL, true, true, false); //domain axis label - range axis label - data - orientation - include legend - tooltips - urls
+            
+            new graphTheme().themeBarChart(ch);
+
+            BufferedImage image = ch.createBufferedImage(880, 300);
+            jMiLabel.setIcon(new ImageIcon(image));
+        } catch (SQLException ex) {
             System.out.println("error al imprimir meses : " + ex);
         }
     }
+
+    public void graficaPastelProy() {
+        DefaultPieDataset dtTotal = new DefaultPieDataset();
+        DefaultPieDataset dtSmstr = new DefaultPieDataset();
+        DefaultPieDataset dtMes = new DefaultPieDataset();
+        try {
+            UsuarioReadDB ini = new UsuarioReadDB();
+            String[][] pry = ini.getProyServicioGrafica();
+            int cant = pry.length;
+            String lblPry;
+            for (int i = 0; i < cant; i++) {
+                for (int j = 1; j < 4; j++) {
+                    pry[i][j] = (pry[i][j] == null ? "0" : pry[i][j]);  //comprueba que el proyector no tenga datos null y si es asi asigna 0
+                    int min = Integer.parseInt(pry[i][j]);
+                    lblPry = pry[i][0] + ": " + (min / 60) + "hrs " + (min % 60) + "min";
+                    switch (j) {
+                        case 1:
+                            dtTotal.setValue(lblPry, Integer.parseInt(pry[i][1]));
+                            break;
+                        case 2:
+                            dtSmstr.setValue(lblPry, Integer.parseInt(pry[i][2]));
+                            break;
+                        case 3:
+                            dtMes.setValue(lblPry, Integer.parseInt(pry[i][3]));
+                            break;
+                    }
+                }
+            }
+
+            JFreeChart chT = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores", dtTotal, true, true, false);
+            JFreeChart chS = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores del Semestre", dtSmstr, true, true, false);
+            JFreeChart chM = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores del Mes", dtMes, true, true, false);
+
+            final PiePlot pie = (PiePlot) chT.getPlot();
+            final PiePlot pie2 = (PiePlot) chS.getPlot();
+            final PiePlot pie3 = (PiePlot) chM.getPlot();
+            
+            new graphTheme().themePieChart(chT, pie, cant);
+            new graphTheme().themePieChart(chS, pie2, cant);
+            new graphTheme().themePieChart(chM, pie3, cant);
+            
+            BufferedImage imgT = chT.createBufferedImage(870, 350);
+            BufferedImage imgS = chS.createBufferedImage(870, 350);
+            BufferedImage imgM = chM.createBufferedImage(870, 350);
+
+            jMiLabel1.setIcon(new ImageIcon(imgT));
+            jMiLabel2.setIcon(new ImageIcon(imgS));
+            jMiLabel3.setIcon(new ImageIcon(imgM));
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar informacion proyectores: " + e);
+        }
+    }
+
+    public void graficaBarrasSolicitudes() {
+        DefaultCategoryDataset dtSol = new DefaultCategoryDataset();
+        
+        String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
+        try {
+            UsuarioReadDB ini = new UsuarioReadDB();
+            Calendar c = Calendar.getInstance();
+            String[][] meses = ini.getProySolicitudes(c.get(Calendar.YEAR));
+            int cant = meses.length;
+            for (int proyector = 0; proyector < cant; proyector++) {
+                System.out.println("\t : : : : Arrray meses proy " + meses[proyector][0]+ ":  " + Arrays.toString(meses[proyector]));
+                for (int i = 0; i < 12; i++) {
+                        dtSol.setValue(Integer.parseInt(meses[proyector][i+1]), mesN[i], mesN[i] + "(" + meses[proyector][i+1] + ")");
+                }
+                String titulo = "Solicitudes del Videoproyector " + meses[proyector][0] + " en " + String.valueOf(c.get(Calendar.YEAR));
+                final JFreeChart ch = ChartFactory.createBarChart(titulo, "Meses", "Cantidad", dtSol, PlotOrientation.VERTICAL, true, true, false);
+                new graphTheme().themeBarChart(ch);
+                BufferedImage img1 = ch.createBufferedImage(870, 350);
+                
+                JLabel label=new JLabel();
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setVerticalAlignment(JLabel.CENTER);
+                label.setBorder(new javax.swing.border.LineBorder(new Color(153,153,153)));
+                label.setSize(870, 350);
+                label.setIcon(new ImageIcon(img1));
+                jTabbedPane2.addTab(meses[proyector][0], label);
+                dtSol.clear();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar informacion proyectores: " + e);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -402,19 +433,26 @@ public class ARegistro extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        btnFiltrar = new javax.swing.JButton();
+        jdtChooser1 = new com.toedter.calendar.JDateChooser();
+        jdtChooser2 = new com.toedter.calendar.JDateChooser();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jMiLabel = new javax.swing.JLabel();
-        jdtChooser2 = new com.toedter.calendar.JDateChooser();
+        btnFiltrar = new javax.swing.JButton();
         lblIni = new javax.swing.JLabel();
-        jdtChooser1 = new com.toedter.calendar.JDateChooser();
         lblFn = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        tabbedContainer = new javax.swing.JTabbedPane();
+        jMiLabel = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMiLabel1 = new javax.swing.JLabel();
+        jMiLabel2 = new javax.swing.JLabel();
+        jMiLabel3 = new javax.swing.JLabel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jLabel5 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnReportePry = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1053,12 +1091,10 @@ public class ARegistro extends javax.swing.JFrame {
         setTitle("[Registros]");
         setIconImage(img.getImage());
         setMinimumSize(new java.awt.Dimension(1024, 600));
-        setResizable(false);
 
         pnlBackground.setBackground(new java.awt.Color(255, 255, 255));
         pnlBackground.setMinimumSize(new java.awt.Dimension(1024, 600));
         pnlBackground.setPreferredSize(new java.awt.Dimension(1024, 600));
-        pnlBackground.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlCabecera.setBackground(new java.awt.Color(1, 200, 1));
         pnlCabecera.setMinimumSize(new java.awt.Dimension(1024, 83));
@@ -1120,8 +1156,6 @@ public class ARegistro extends javax.swing.JFrame {
                         .addComponent(labelFecha))))
         );
 
-        pnlBackground.add(pnlCabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
         btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checklist_24px.png"))); // NOI18N
         btnMenu.setMaximumSize(new java.awt.Dimension(40, 37));
         btnMenu.setMinimumSize(new java.awt.Dimension(40, 37));
@@ -1131,7 +1165,6 @@ public class ARegistro extends javax.swing.JFrame {
                 btnMenuItemStateChanged(evt);
             }
         });
-        pnlBackground.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 85, -1, -1));
 
         btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Back To_35px.png"))); // NOI18N
         btnRegresar.setMaximumSize(new java.awt.Dimension(40, 37));
@@ -1142,10 +1175,10 @@ public class ARegistro extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-        pnlBackground.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 125, -1, -1));
 
         panelOPC.setBackground(new java.awt.Color(250, 250, 250));
         panelOPC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 173, 179), 1, true));
+        panelOPC.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelOPC.setMinimumSize(new java.awt.Dimension(376, 44));
         panelOPC.setPreferredSize(new java.awt.Dimension(376, 44));
         panelOPC.setLayout(new java.awt.GridBagLayout());
@@ -1239,11 +1272,8 @@ public class ARegistro extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 15);
         panelOPC.add(jLabel13, gridBagConstraints);
 
-        pnlBackground.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 87, -1, -1));
-
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 3, 24)); // NOI18N
         lblTitulo.setText("Registros");
-        pnlBackground.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, -1, -1));
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(null);
@@ -1252,16 +1282,16 @@ public class ARegistro extends javax.swing.JFrame {
         jScrollPane2.setPreferredSize(new java.awt.Dimension(1024, 450));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 900));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 1289));
 
-        btnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_25px.png"))); // NOI18N
-        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFiltrarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 5, -1, -1));
+        jdtChooser1.setToolTipText("Fecha de inicio");
+        jdtChooser1.setDateFormatString("dd/MM/yyyy");
+        jdtChooser1.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
+
+        jdtChooser2.setToolTipText("Fecha de fin");
+        jdtChooser2.setDateFormatString("dd/MM/yyyy");
+        jdtChooser2.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
 
         jComboBox1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos los registros", "Registros de Hoy", "Registros del Mes", "Registros del Semestre", "Registros del Año", "Personalizado" }));
@@ -1270,11 +1300,6 @@ public class ARegistro extends javax.swing.JFrame {
                 jComboBox1ItemStateChanged(evt);
             }
         });
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 180, -1));
-
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel3.setText("Filtro:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1302,32 +1327,128 @@ public class ARegistro extends javax.swing.JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1010, 360));
-
-        jMiLabel.setText("jMiLabel");
-        jMiLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        jMiLabel.setPreferredSize(new java.awt.Dimension(880, 300));
-        jPanel1.add(jMiLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 550, -1, -1));
-
-        jdtChooser2.setToolTipText("Fecha de fin");
-        jdtChooser2.setDateFormatString("dd/MM/yyyy");
-        jdtChooser2.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
-        jPanel1.add(jdtChooser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(575, 10, 150, -1));
+        btnFiltrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_25px.png"))); // NOI18N
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
 
         lblIni.setText("Inicio:");
-        jPanel1.add(lblIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 14, -1, -1));
-
-        jdtChooser1.setToolTipText("Fecha de inicio");
-        jdtChooser1.setDateFormatString("dd/MM/yyyy");
-        jdtChooser1.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
-        jPanel1.add(jdtChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 150, -1));
 
         lblFn.setText("Fin:");
-        jPanel1.add(lblFn, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 14, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel3.setText("Filtro:");
+
+        jMiLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jMiLabel.setPreferredSize(new java.awt.Dimension(880, 300));
+        tabbedContainer.addTab("*", jMiLabel);
+
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(870, 350));
+
+        jMiLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jMiLabel1.setMaximumSize(new java.awt.Dimension(870, 350));
+        jMiLabel1.setMinimumSize(new java.awt.Dimension(870, 350));
+        jMiLabel1.setPreferredSize(new java.awt.Dimension(870, 350));
+        jTabbedPane1.addTab("Total", jMiLabel1);
+
+        jMiLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jMiLabel2.setMaximumSize(new java.awt.Dimension(870, 350));
+        jMiLabel2.setMinimumSize(new java.awt.Dimension(870, 350));
+        jMiLabel2.setPreferredSize(new java.awt.Dimension(870, 350));
+        jTabbedPane1.addTab("Semestre", jMiLabel2);
+
+        jMiLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jMiLabel3.setMaximumSize(new java.awt.Dimension(870, 350));
+        jMiLabel3.setMinimumSize(new java.awt.Dimension(870, 350));
+        jMiLabel3.setPreferredSize(new java.awt.Dimension(870, 350));
+        jTabbedPane1.addTab("Mes", jMiLabel3);
+        jMiLabel3.getAccessibleContext().setAccessibleName("");
+
+        tabbedContainer.addTab("Horas de Servicio General", jTabbedPane1);
+        jTabbedPane1.getAccessibleContext().setAccessibleName("");
+
+        tabbedContainer.addTab("Solicitudes por Proyector", jTabbedPane2);
+
+        jLabel5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        jLabel5.setText("Graficas de los Registros");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane3)
+                .addGap(14, 14, 14))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(56, 56, 56)
+                            .addComponent(tabbedContainer))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addComponent(jLabel3)
+                            .addGap(8, 8, 8)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(10, 10, 10)
+                            .addComponent(btnFiltrar)
+                            .addGap(28, 28, 28)
+                            .addComponent(lblIni)
+                            .addGap(6, 6, 6)
+                            .addComponent(jdtChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(20, 20, 20)
+                            .addComponent(lblFn)
+                            .addGap(7, 7, 7)
+                            .addComponent(jdtChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(235, 235, 235)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(426, 426, 426)
+                        .addComponent(jLabel5)))
+                .addGap(64, 64, 64))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnFiltrar)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(lblIni))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jdtChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(lblFn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jdtChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabbedContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(410, Short.MAX_VALUE))
+        );
+
+        tabbedContainer.getAccessibleContext().setAccessibleName("");
 
         jScrollPane2.setViewportView(jPanel1);
-
-        pnlBackground.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, -1, 430));
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafico-60.png"))); // NOI18N
@@ -1340,7 +1461,6 @@ public class ARegistro extends javax.swing.JFrame {
                 jLabel12MouseClicked(evt);
             }
         });
-        pnlBackground.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 95, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1348,15 +1468,66 @@ public class ARegistro extends javax.swing.JFrame {
         jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
         jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
         jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
-        pnlBackground.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(915, 150, 80, -1));
 
-        jButton2.setText("Modificar Reportes Proyector");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnReportePry.setText("Modificar Reportes Proyector");
+        btnReportePry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnReportePryActionPerformed(evt);
             }
         });
-        pnlBackground.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 120, -1, -1));
+
+        javax.swing.GroupLayout pnlBackgroundLayout = new javax.swing.GroupLayout(pnlBackground);
+        pnlBackground.setLayout(pnlBackgroundLayout);
+        pnlBackgroundLayout.setHorizontalGroup(
+            pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlCabecera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(panelOPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(lblTitulo)
+                .addGap(163, 163, 163)
+                .addComponent(btnReportePry)
+                .addGap(18, 18, 18)
+                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        pnlBackgroundLayout.setVerticalGroup(
+            pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                .addComponent(pnlCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                                .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(panelOPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(lblTitulo))
+                            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(btnReportePry))))
+                    .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(2, 2, 2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1450,35 +1621,41 @@ public class ARegistro extends javax.swing.JFrame {
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         try {
             int i = jComboBox1.getSelectedIndex();
-            System.out.println("opcion: " + i);
-            if(i != 5){
+            System.out.println(": : : : Filtrar jable opcion: " + i + "\n");
+            if (i != 5) {
                 getTable(i, "", "");
-            }else{
-                 if(jdtChooser2.getDate() != null && jdtChooser1.getDate() != null){
-                    String fch1 = fecha.format(jdtChooser1.getDate());
-                    String fch2 = fecha.format(jdtChooser2.getDate());
-                    if(jdtChooser2.getDate().after(jdtChooser1.getDate())){  //comprobar que la fecha1 no es menor a la fecha2
+            } else {
+                if (jdtChooser2.getDate() != null && jdtChooser1.getDate() != null) {
+                    String fch1 = new SimpleDateFormat("yyyy-MM-dd").format(jdtChooser1.getDate());
+                    String fch2 = new SimpleDateFormat("yyyy-MM-dd").format(jdtChooser2.getDate());
+                    if (jdtChooser2.getDate().after(jdtChooser1.getDate())) {  //comprobar que la fecha1 no es menor a la fecha2
                         System.out.println("fecha 1 es menor que fecha 2");
-                        if(!fch1.equals(fch2)){
-                            System.out.println("datos : "+fch1 + " : "+fch2);
+                        if (!fch1.equals(fch2)) {
+                            System.out.println("datos : " + fch1 + " : " + fch2);
                             getTable(i, fch1, fch2);
-                        }else{ JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE); }
-                    }else{ JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE); }
-                }else{ JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE); }
-                 
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ARegistro.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al indicar un filtro de busqueda sobre registros:" + ex);
         }
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        if (jComboBox1.getSelectedIndex() == 5){
+        if (jComboBox1.getSelectedIndex() == 5) {
             jdtChooser2.setVisible(true);
             jdtChooser1.setVisible(true);
             lblIni.setVisible(true);
             lblFn.setVisible(true);
-        }else{
+        } else {
             jdtChooser2.setVisible(false);
             jdtChooser1.setVisible(false);
             lblIni.setVisible(false);
@@ -1496,9 +1673,9 @@ public class ARegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarRRActionPerformed
 
     private void rb6ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rb6ItemStateChanged
-        if(rb6.isSelected()){
+        if (rb6.isSelected()) {
             pnlFechasFiltro.setVisible(true);
-        }else{
+        } else {
             pnlFechasFiltro.setVisible(false);
         }
     }//GEN-LAST:event_rb6ItemStateChanged
@@ -1508,44 +1685,54 @@ public class ARegistro extends javax.swing.JFrame {
         int opc = 6;
         dlgReporte.setVisible(false);
         dlgReporte.dispose();
-        
-        if(rb6.isSelected()){
+
+        if (rb6.isSelected()) {
             fch = rbFechaEsp();
-        }else{
-            if(rb1.isSelected()){ opc = 1;}
-            else if(rb2.isSelected()){ opc = 2;}
-            else if(rb3.isSelected()){ opc = 3;}
-            else if(rb4.isSelected()){ opc = 4;}
-            else if(rb5.isSelected()){ opc = 5;}
-            fch = rbFechasOpc(opc);
-        }    
-        if(fch.length > 0){
-            GenerarReportes gr = new GenerarReportes();
-            if(dRb5.isSelected()){
-                gr.getRRTods(fch,1, opc);
-                gr.getRRTods(fch,2, opc);
-                gr.getRRTods(fch,3, opc);
-                gr.getRRTods(fch,4, opc);
-            }else if(dRb3.isSelected()){ //videoproyector
-                gr.getRRTods(fch,1, opc);
-            }else if(dRb2.isSelected()){ //profesores
-                gr.getRRTods(fch,2, opc);
-            }else if(dRb1.isSelected()){ //departamentos
-                gr.getRRTods(fch,3, opc);
-            }else if(dRb4.isSelected()){ //articulos
-                gr.getRRTods(fch,4, opc);
-            }else if(dRb6.isSelected()){ //proyectores
-                gr.getRRTods(fch,5, opc);
+        } else {
+            if (rb1.isSelected()) {
+                opc = 1;
+            } else if (rb2.isSelected()) {
+                opc = 2;
+            } else if (rb3.isSelected()) {
+                opc = 3;
+            } else if (rb4.isSelected()) {
+                opc = 4;
+            } else if (rb5.isSelected()) {
+                opc = 5;
             }
-            try{new LogDB().log(usuario, "E_PRESTAMOS", 5);}catch(SQLException e){System.out.println("Error al generarLog:"+e);}
+            fch = rbFechasOpc(opc);
+        }
+        if (fch.length > 0) {
+            GenerarReportes gr = new GenerarReportes();
+            if (dRb5.isSelected()) {
+                gr.getRRTods(fch, 1, opc);
+                gr.getRRTods(fch, 2, opc);
+                gr.getRRTods(fch, 3, opc);
+                gr.getRRTods(fch, 4, opc);
+            } else if (dRb3.isSelected()) { //videoproyector
+                gr.getRRTods(fch, 1, opc);
+            } else if (dRb2.isSelected()) { //profesores
+                gr.getRRTods(fch, 2, opc);
+            } else if (dRb1.isSelected()) { //departamentos
+                gr.getRRTods(fch, 3, opc);
+            } else if (dRb4.isSelected()) { //articulos
+                gr.getRRTods(fch, 4, opc);
+            } else if (dRb6.isSelected()) { //proyectores
+                gr.getRRTods(fch, 5, opc);
+            }
+            try {
+                new LogDB().log(usuario, "E_PRESTAMOS", 5);
+            } catch (SQLException e) {
+                System.out.println("Error al generarLog:" + e);
+            }
         }
     }//GEN-LAST:event_btnGenerarRRActionPerformed
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
         dlgConfirm.setLocationRelativeTo(pnlBackground);
         dlgConfirm.setVisible(true);
-        
-        if(valido){
+
+        if (valido) {
             valido = false;
             //inicializar
             pnlFechasFiltro.setVisible(false);
@@ -1566,30 +1753,30 @@ public class ARegistro extends javax.swing.JFrame {
                 String hashed = leer.getPass(crdncial);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
                     System.out.println("Es valido: " + leer.getEsAdminUsuario(crdncial));
-                    if(leer.getEsAdminUsuario(crdncial)){
+                    if (leer.getEsAdminUsuario(crdncial)) {
                         valido = true;
                         usuario = crdncial;
                         txtUsuario.setText("");
                         txtPass.setText("");
                         dlgConfirm.setVisible(false);
                         dlgConfirm.dispose();
-                    }else{
+                    } else {
                         throw new Exception();
                     }
-                }else{
+                } else {
                     throw new Exception();
                 }
-            }else{
+            } else {
                 throw new Exception();
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error al comprobar usuario:" + ex);
-        }catch(Exception e){
+        } catch (Exception e) {
             txtUsuario.setText("");
             txtPass.setText("");
             valido = false;
             usuario = "";
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+            JOptionPane.showMessageDialog(null, "Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 
@@ -1612,7 +1799,7 @@ public class ARegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPassKeyTyped
 
     private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
-        if(evt.getClickCount() == 2 && jTable3.getSelectedRow() != -1 && jTable3.isEnabled()){
+        if (evt.getClickCount() == 2 && jTable3.getSelectedRow() != -1 && jTable3.isEnabled()) {
             int row = jTable3.getSelectedRow();
             String id = jTable3.getValueAt(row, 0).toString();
             hiddenIDRprt.setText(id);
@@ -1621,12 +1808,12 @@ public class ARegistro extends javax.swing.JFrame {
             btnRpCancelar.setEnabled(true);
             btnRpImprimir.setEnabled(true);
             try {
-                PrestamoDB press = new PrestamoDB();    
+                PrestamoDB press = new PrestamoDB();
                 String[] arr = press.getReporte(Integer.parseInt(id));
                 System.out.println("Arr On clic: " + Arrays.toString(arr));
                 //profe
                 String[] profe = new ProfesorDB().getProfesor(arr[2]);
-                lblProfe.setText( profe[2] + " " + profe[3] + " " + profe[4]);
+                lblProfe.setText(profe[2] + " " + profe[3] + " " + profe[4]);
                 //titulo
                 txtRprt3.setText(arr[3]);
                 //nombre_encargado
@@ -1634,32 +1821,32 @@ public class ARegistro extends javax.swing.JFrame {
                 //area
                 txtRprt2.setText(arr[5]);
                 //depto_reparador
-                if(arr[6] == null){
+                if (arr[6] == null) {
                     cbRprt1.setSelected(true);
-                }else if(arr[6].equals("a")){
+                } else if (arr[6].equals("a")) {
                     cbRprt1.setSelected(true);
-                }else if(arr[6].equals("b")){
+                } else if (arr[6].equals("b")) {
                     cbRprt3.setSelected(true);
-                }else if(arr[6].equals("c")){
+                } else if (arr[6].equals("c")) {
                     cbRprt2.setSelected(true);
                 }
                 //imprevisto
-                if(arr[7] == null){
+                if (arr[7] == null) {
                     cbRprt4.setSelected(true); //reparacion
-                }else if(arr[7].equals("a")){
+                } else if (arr[7].equals("a")) {
                     cbRprt4.setSelected(true); //reparacion
-                }else if(arr[7].equals("b")){
+                } else if (arr[7].equals("b")) {
                     cbRprt5.setSelected(true);  //mantenimiento
-                }else if(arr[7].equals("c")){
+                } else if (arr[7].equals("c")) {
                     cbRprt6.setSelected(true);  //aplicar garantia
-                }else if(arr[7].equals("d")){
+                } else if (arr[7].equals("d")) {
                     cbRprt7.setSelected(true);  //dar de baja
                 }
                 //detalles
                 jTextArea1.setText(arr[8]);
             } catch (SQLException e) {
             }
-            
+
         }
     }//GEN-LAST:event_jTable3MouseClicked
 
@@ -1676,14 +1863,23 @@ public class ARegistro extends javax.swing.JFrame {
         String deptoReparador = "";
         String imprevisto = "";
         String detalles = jTextArea1.getText().trim();
-        
-        if(cbRprt1.isSelected()){ deptoReparador = "a";} 
-        else if(cbRprt3.isSelected()){ deptoReparador = "b";} 
-        else if(cbRprt2.isSelected()){ deptoReparador = "c";}
-        if(cbRprt4.isSelected()){ imprevisto = "a";} 
-        else if(cbRprt5.isSelected()){ imprevisto = "b";} 
-        else if(cbRprt6.isSelected()){ imprevisto = "c";}
-        else if(cbRprt7.isSelected()){ imprevisto = "d";}
+
+        if (cbRprt1.isSelected()) {
+            deptoReparador = "a";
+        } else if (cbRprt3.isSelected()) {
+            deptoReparador = "b";
+        } else if (cbRprt2.isSelected()) {
+            deptoReparador = "c";
+        }
+        if (cbRprt4.isSelected()) {
+            imprevisto = "a";
+        } else if (cbRprt5.isSelected()) {
+            imprevisto = "b";
+        } else if (cbRprt6.isSelected()) {
+            imprevisto = "c";
+        } else if (cbRprt7.isSelected()) {
+            imprevisto = "d";
+        }
         String[] datos = {
             titulo,
             nombreEncargado,
@@ -1692,18 +1888,22 @@ public class ARegistro extends javax.swing.JFrame {
             imprevisto,
             detalles
         };
-        if(!titulo.isEmpty() && !nombreEncargado.isEmpty() && !area.isEmpty() && !deptoReparador.isEmpty() && !imprevisto.isEmpty() && !detalles.isEmpty()){
+        if (!titulo.isEmpty() && !nombreEncargado.isEmpty() && !area.isEmpty() && !deptoReparador.isEmpty() && !imprevisto.isEmpty() && !detalles.isEmpty()) {
             try {
                 PrestamoDB pres = new PrestamoDB();
                 int id = Integer.parseInt(hiddenIDRprt.getText());
-                System.out.println("Arr to "+ id +" upd: " + Arrays.toString(datos));
+                System.out.println("Arr to " + id + " upd: " + Arrays.toString(datos));
                 pres.updReporte(id, datos);
                 new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 2);
                 fillJTable3();
                 clearUpdReprt();
                 JOptionPane.showMessageDialog(this, "Reporte actualizado!!!");
-            } catch (SQLException e) {System.out.println("Error al generar actualizacion de datos del reporte: " + e);}
-        }else{JOptionPane.showMessageDialog(this, "Recuerde llenar completamente el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);}
+            } catch (SQLException e) {
+                System.out.println("Error al generar actualizacion de datos del reporte: " + e);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Recuerde llenar completamente el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnRpActualizarActionPerformed
 
     private void btnRpCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRpCancelarActionPerformed
@@ -1715,9 +1915,9 @@ public class ARegistro extends javax.swing.JFrame {
     }//GEN-LAST:event_dlgRprtArtPryWindowClosing
 
     private void btnRpImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRpImprimirActionPerformed
-        
+
         try {
-            GenerarReportes genR = new GenerarReportes();    
+            GenerarReportes genR = new GenerarReportes();
             PrestamoDB pres = new PrestamoDB();
             String[] arr = pres.getReporte(Integer.parseInt(hiddenIDRprt.getText()));
             String[] reporteDtos = {arr[5], arr[4], arr[8], arr[6], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
@@ -1729,7 +1929,7 @@ public class ARegistro extends javax.swing.JFrame {
         clearUpdReprt();
         dlgRprtArtPry.setVisible(false);
         dlgRprtArtPry.dispose();
-        
+
     }//GEN-LAST:event_btnRpImprimirActionPerformed
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
@@ -1739,40 +1939,36 @@ public class ARegistro extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        dlgReporte.setVisible(false);
-//        jDateChooser1.setCalendar(null);
-//        jDateChooser2.setCalendar(null);
-//        dlgReporte.dispose();
+    private void btnReportePryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportePryActionPerformed
         dlgConfirm.setLocationRelativeTo(pnlBackground);
         dlgConfirm.setVisible(true);
-        
-        if(valido){
+
+        if (valido) {
             valido = false;
             fillJTable3();
-
             dlgRprtArtPry.setLocationRelativeTo(this);
-            dlgRprtArtPry.setVisible(true);        // TODO add your handling code here:
+            dlgRprtArtPry.setVisible(true);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
-    public void fillJTable3(){
+    }//GEN-LAST:event_btnReportePryActionPerformed
+    public void fillJTable3() {
         System.out.println("Llenando con reportes de Videoproyectores");
         try {
             PrestamoDB pres = new PrestamoDB();
             DefaultTableModel modelPryRprt = (DefaultTableModel) jTable3.getModel();
-            String[] cols = {jTable3.getColumnName(0),jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3), jTable3.getColumnName(4)};
+            String[] cols = {jTable3.getColumnName(0), jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3), jTable3.getColumnName(4)};
             String[][] datos = pres.getReportejTable();
             modelPryRprt.setDataVector(datos, cols);
         } catch (SQLException ex) {
             System.out.println("Error al llenar tabla con los reportes realizados: " + ex);
         }
     }
-    public void clearUpdReprt(){
+
+    public void clearUpdReprt() {
         jTable3.setEnabled(true);
         btnRpActualizar.setEnabled(false);
         btnRpCancelar.setEnabled(false);
         btnRpImprimir.setEnabled(false);
-        
+
         txtRprt1.setText("");
         txtRprt2.setText("");
         txtRprt3.setText("");
@@ -1785,17 +1981,18 @@ public class ARegistro extends javax.swing.JFrame {
         cbRprt7.setSelected(false);
         jTextArea1.setText("");
     }
-    public String[] rbFechasOpc(int opc){
+
+    public String[] rbFechasOpc(int opc) {
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         String[] fechas = new String[2];
         String date1 = "", date2 = "";
         int year = c.get(Calendar.YEAR);
-        switch(opc){
+        switch (opc) {
             case 1: //hoy
                 date1 = dt.format(c.getTime());
                 date2 = date1;
-            break;
+                break;
             case 2: //semana
                 c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 Date d1Semana = c.getTime();
@@ -1803,7 +2000,7 @@ public class ARegistro extends javax.swing.JFrame {
                 Date d2Semana = c.getTime();
                 date1 = dt.format(d1Semana);
                 date2 = dt.format(d2Semana);
-            break;
+                break;
             case 3: //mes
                 c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
                 Date d1Mes = c.getTime();
@@ -1811,7 +2008,7 @@ public class ARegistro extends javax.swing.JFrame {
                 c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
                 Date d2Mes = c.getTime();
                 date2 = dt.format(d2Mes);
-            break;
+                break;
             case 4: //semestre
                 if (c.get(Calendar.MONTH) < 6) { //si actual mes es inferior a julio
                     c.set(Calendar.MONTH, 05);
@@ -1822,38 +2019,48 @@ public class ARegistro extends javax.swing.JFrame {
                     date1 = year + "-07-01";
                     date2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH);
                 }
-            break;
+                break;
             case 5: //año
                 c.set(Calendar.MONTH, 11);
                 date1 = year + "-01-01";
                 date2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH);
-            break;
+                break;
         }
-        
+
         fechas[0] = date1.concat("T00:00:00Z");
         fechas[1] = date2.concat("T23:59:59Z");
         System.out.println("fechas: " + Arrays.toString(fechas));
         return fechas;
     }
-    
-    public String[] rbFechaEsp(){
+
+    public String[] rbFechaEsp() {
         DateFormat dateJC = new SimpleDateFormat("yyyy-MM-dd");//DateFormat.getDateInstance();
         String[] fechas = new String[2];
-        if(jDateChooser2.getDate() != null && jDateChooser1.getDate() != null){
+        if (jDateChooser2.getDate() != null && jDateChooser1.getDate() != null) {
             String dateJC1 = dateJC.format(jDateChooser1.getDate());
             String dateJC2 = dateJC.format(jDateChooser2.getDate());
-            if(jDateChooser2.getDate().after(jDateChooser1.getDate())){  //comprobar que la fecha1 no es menor a la fecha2
+            if (jDateChooser2.getDate().after(jDateChooser1.getDate())) {  //comprobar que la fecha1 no es menor a la fecha2
                 System.out.println("fecha 1 es menor que fecha 2");
-                if(!dateJC1.equals(dateJC2)){
+                if (!dateJC1.equals(dateJC2)) {
                     fechas[0] = dateJC1.concat("T00:00:00Z");
                     fechas[1] = dateJC2.concat("T23:59:59Z");
-                    System.out.println("datos : "+Arrays.toString(fechas));
-                }else{ JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
-            }else{ JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
-        }else{ JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE); btnCerrarRR.doClick();}
+                    System.out.println("datos : " + Arrays.toString(fechas));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ambas fechas no pueden ser la misma", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    btnCerrarRR.doClick();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "La fecha fin no puede ser menos actual a la fecha inicio", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                btnCerrarRR.doClick();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No olvide indicar fecha de inicio y fin", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            btnCerrarRR.doClick();
+        }
         System.out.println("Arrays fechas de rb6: " + Arrays.toString(fechas));
         return fechas;
     }
+
     /**
      * @param args the command line arguments
      */
@@ -1874,7 +2081,7 @@ public class ARegistro extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ARegistro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -1892,6 +2099,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGroupFecha;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReportePry;
     private javax.swing.JButton btnRpActualizar;
     private javax.swing.JButton btnRpCancelar;
     private javax.swing.JButton btnRpImprimir;
@@ -1920,7 +2128,6 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel ico6;
     private javax.swing.JLabel ico7;
     private javax.swing.JLabel ico8;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
@@ -1936,11 +2143,15 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jMiLabel;
+    private javax.swing.JLabel jMiLabel1;
+    private javax.swing.JLabel jMiLabel2;
+    private javax.swing.JLabel jMiLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
@@ -1949,6 +2160,8 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
@@ -1984,6 +2197,7 @@ public class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton rb4;
     private javax.swing.JRadioButton rb5;
     private javax.swing.JRadioButton rb6;
+    private javax.swing.JTabbedPane tabbedContainer;
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtRprt1;
     private javax.swing.JTextField txtRprt2;

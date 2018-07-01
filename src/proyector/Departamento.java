@@ -1189,7 +1189,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
                        try {
                            DepartamentoDB depart = new DepartamentoDB();
                            PrestamoDB prestamo = new PrestamoDB();
-                           if(!prestamo.getExistePrestamoDep(Integer.parseInt(datos[i][3]))){
+                           if(prestamo.getPrestamoActivo(datos[i][3], 4)){
                             depart.destroyDepartamento(Integer.parseInt(datos[i][3]));
                             JOptionPane.showMessageDialog(null, "Se ha eliminado el departamento");
                             pnlContenedor.removeAll();

@@ -1246,24 +1246,8 @@ public class ADevolucion extends javax.swing.JFrame {
 
     private void btnDevolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolverMouseClicked
         btnDevolver.setBackground(new Color(239,239,239));
-        String datos = txtNSerie.getText().trim();
-        if (!datos.isEmpty()){
-            //comprobar que exisa un prestamo
-            try{
-                PrestamoDB dev = new PrestamoDB();
-                if (dev.getExistePrestamoProy(datos)){
-                    dlgUsuario.setLocationRelativeTo(pnlBackground);
-                    dlgUsuario.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(null, "El videoproyector indicado\nno tiene registro de que haya sido prestado");
-                    txtNSerie.setText("");
-                }
-            }catch(SQLException ex){
-                System.out.println("Error al cargar si existen prestamos: " + ex);
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Cuadro de texto vacio!!!");
-        }
+        String noSerie = txtNSerie.getText().trim();
+        revisarProyectorPrestado(noSerie);
     }//GEN-LAST:event_btnDevolverMouseClicked
 
     private void btnDevolverMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolverMouseEntered
@@ -1304,7 +1288,7 @@ public class ADevolucion extends javax.swing.JFrame {
                         if (leer.getExisteUsuario(credencial)){
                             //comprobar que exisa un prestamo
                             PrestamoDB dev = new PrestamoDB();
-                            if (dev.getExistePrestamoProy(proyector)){
+                            if (!dev.getPrestamoActivo(proyector, 3)){
                                 // generar actualizacion
                                 // liberar distintos articulos
                                 dev.updPrestamo(proyector, credencial);
@@ -1345,12 +1329,17 @@ public class ADevolucion extends javax.swing.JFrame {
         }
         
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            String datos = txtNSerie.getText().trim();
-            if (!datos.isEmpty()){
+            String noSerie = txtNSerie.getText().trim();
+            revisarProyectorPrestado(noSerie);
+        }
+    }//GEN-LAST:event_txtNSerieKeyTyped
+
+    public void revisarProyectorPrestado(String noSerie){
+         if (!noSerie.isEmpty()){
                 //comprobar que exisa un prestamo
                 try{
                     PrestamoDB dev = new PrestamoDB();
-                    if (dev.getExistePrestamoProy(datos)){
+                    if (dev.getPrestamoActivo(noSerie, 5)){
                         dlgUsuario.setLocationRelativeTo(pnlBackground);
                         dlgUsuario.setVisible(true);
                     }else{
@@ -1363,9 +1352,8 @@ public class ADevolucion extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(null, "Cuadro de texto vacio!!!");
             }
-        }
-    }//GEN-LAST:event_txtNSerieKeyTyped
-
+    }
+    
     private void txtUsuarioValKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioValKeyTyped
 //        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
 //            accionarLiberacion();
