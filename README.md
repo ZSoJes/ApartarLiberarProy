@@ -40,9 +40,6 @@ java -jar ./Proyector.jar
 
 ## Base de datos:
 
-<svg id="sir" height="447" width="800"
-xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g transform="scale(0.47)">
-  <image x="0" y="0" height="100%" width="auto"  xlink:href="https://rawgit.com/ZSoJes/ApartarLiberarProy/master/ultimate.svg?sanitize=true"/>
-</g>
-</svg>
+<div style="display:flex;height: 100%;width: 100%;justify-content:center;align-items: center;">
+    <img src="ultimate.png" width="100%" height="100%"/>
+</div>
