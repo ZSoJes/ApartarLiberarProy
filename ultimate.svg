@@ -1,0 +1,1372 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="v-470"><rect id="svg-background" width="100%" height="100%" fill="#F5F6F6"></rect><g id="v-471" class="viewport" transform="translate(83 180) scale(1 1)"><g id="j_1721" model-id="102ecb62-85ba-4b8e-9ce7-62202f41466e" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 1102 550 1010 550 S 1000 550 1000 540 L 1000 340 S 1000 330 992 329 L 984 328" id="v-29728" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29729" stroke-width="1" transform="translate(1107,555) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29730" stroke-width="1" transform="translate(978.6755487779885,322.04584396941044) scale(1,1) rotate(7.765167236328139)"></path><g class="labels" id="v-29732"></g></g><g id="j_1718" model-id="b02580e0-6db8-4736-bb4d-b9f24a65f1fc" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 706 570 713 570 S 720 570 720 560 L 720 340 S 720 330 729 329 L 738 328" id="v-29688" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29689" stroke-width="1" transform="translate(701,565) scale(1,1) rotate(0)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29690" stroke-width="1" transform="translate(744.620200575146,331.9613860783157) scale(1,1) rotate(-187.12501525878903)"></path><g class="labels" id="v-29692"></g></g><g id="j_1717" model-id="5354db32-1e8b-471e-84ee-4e4e94027ec0" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 432 280 420 280 S 410 280 410 290 L 410 330 S 410 340 401 340 L 391 340" id="v-29674" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29675" stroke-width="1" transform="translate(437,285) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29676" stroke-width="1" transform="translate(385,335) scale(1,1) rotate(0)"></path><g class="labels" id="v-29678"></g></g><g id="j_1716" model-id="308776f0-da4e-418e-b5a7-c97b5cc95822" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 432 257 420 259 S 410 260 410 250 L 410 -80 S 410 -90 402 -91 L 394 -92" id="v-29660" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29661" stroke-width="1" transform="translate(437.6587783148785,261.58156761802405) scale(1,1) rotate(-187.12501525878903)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29662" stroke-width="1" transform="translate(388.6755792955666,-97.95414840119503) scale(1,1) rotate(7.765167236328139)"></path><g class="labels" id="v-29664"></g></g><g id="j_1719" model-id="4f13ff03-01f5-4916-a8a8-76eae4c06d2b" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 1360 -20 420 -20 S 410 -20 410 -30 L 410 -80 S 410 -90 402 -91 L 394 -92" id="v-29701" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29702" stroke-width="1" transform="translate(1365,-15) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29703" stroke-width="1" transform="translate(388.6755792955666,-97.95414840119503) scale(1,1) rotate(7.765167236328139)"></path><g class="labels" id="v-29705"></g></g><g id="j_1714" model-id="7cab98ab-7980-4902-b544-cd2412a5e148" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 432 205 220 210 S 210 210 210 200 L 210 200 S 210 190 205 190 L 199 190" id="v-29633" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29634" stroke-width="1" transform="translate(437.1088935067247,210.10656625803597) scale(1,1) rotate(-181.23463439941406)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29635" stroke-width="1" transform="translate(193,185) scale(1,1) rotate(0)"></path><g class="labels" id="v-29637"></g></g><g id="j_1713" model-id="62719510-67eb-4e8f-9667-f04198c29f1e" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 432 180 220 180 S 210 180 210 185 L 210 185 S 210 190 205 190 L 199 190" id="v-29619" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29620" stroke-width="1" transform="translate(437,185) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29621" stroke-width="1" transform="translate(193,185) scale(1,1) rotate(0)"></path><g class="labels" id="v-29623"></g></g><g id="j_1712" model-id="91bc7f5e-28a8-4d0b-8953-dfd8c757ba1b" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 171 -70 166 -70 S 160 -70 160 -80 L 160 -80 S 160 -90 154 -90 L 148 -90" id="v-29605" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29606" stroke-width="1" transform="translate(176,-65) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29607" stroke-width="1" transform="translate(142,-95) scale(1,1) rotate(0)"></path><g class="labels" id="v-29609"></g></g><g id="j_1711" model-id="0709e2f8-08e3-490f-a19a-8bf07d5d51be" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 676 155 655 155" id="v-29591" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29592" stroke-width="1" transform="translate(681,160) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29593" stroke-width="1" transform="translate(649,150) scale(1,1) rotate(0)"></path><g class="labels" id="v-29595"></g></g><g id="j_1710" model-id="5b279090-e48c-4c21-be13-9830e6161d35" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 878 130 884 130 S 890 130 890 120 L 890 90 S 890 80 897 80 L 904 80" id="v-29577" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29578" stroke-width="1" transform="translate(873,125) scale(1,1) rotate(0)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29579" stroke-width="1" transform="translate(910,85) scale(1,1) rotate(-180)"></path><g class="labels" id="v-29581"></g></g><g id="j_1720" model-id="38fcc75a-8a3c-4e1a-987f-74b7d4429cb6" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 1097 326 984 326" id="v-29714" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29715" stroke-width="1" transform="translate(1102,331) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29716" stroke-width="1" transform="translate(978,321) scale(1,1) rotate(0)"></path><g class="labels" id="v-29718"></g></g><g id="j_1709" model-id="9f79c70b-dce0-4691-85ce-e69ed4773014" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 1340 130 1345 130 S 1350 130 1350 120 L 1350 -30 S 1350 -40 1357 -40 L 1364 -40" id="v-29563" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29564" stroke-width="1" transform="translate(1335,125) scale(1,1) rotate(0)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29565" stroke-width="1" transform="translate(1370,-35) scale(1,1) rotate(-180)"></path><g class="labels" id="v-29567"></g></g><g id="j_1715" model-id="61ed440d-e92a-4a17-b101-579753d0f60b" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 659 230 710 230 S 720 230 720 240 L 720 320 S 720 330 729 329 L 738 328" id="v-29646" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29647" stroke-width="1" transform="translate(654,225) scale(1,1) rotate(0)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29648" stroke-width="1" transform="translate(744.620200575146,331.9613860783157) scale(1,1) rotate(-187.12501525878903)"></path><g class="labels" id="v-29650"></g></g><g id="j_1708" model-id="724e03ad-de32-41c4-8c70-2080e4f125fb" class="link joint-theme-default"><path class="connection" stroke="#d2d2dc" d="M 1104 110 1097 110 S 1090 110 1090 100 L 1090 90 S 1090 80 1084 80 L 1078 80" id="v-29549" stroke-width="1" fill="none"></path><path class="marker-source" fill="white" stroke="#d2d2dc" d="M -5 0 L 5 5 M -5 5 L 5 5 M -5 10 L 5 5 M 5 5" id="v-29550" stroke-width="1" transform="translate(1109,115) scale(1,1) rotate(-180)"></path><path class="marker-target" fill="white" stroke="#d2d2dc" d="M 6 0 L 6 10 M 6 5 L 0 5 z" id="v-29551" stroke-width="1" transform="translate(1072,75) scale(1,1) rotate(0)"></path><g class="labels" id="v-29553"></g></g><g id="j_1695" model-id="5aef1354-b3bf-4ef3-84fb-8770883ac14d" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(910,28)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29273">
+          <rect x="0" y="0" width="162" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(10)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29284" pointer-events="none" font-size="14px">E_ACCESORIOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(12)">
+          <rect x="0" y="38" class="joint-table-row" width="162" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29285" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_ACCESORIO
+            </tspan>
+            <tspan x="148" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(13)">
+          <rect x="0" y="63" class="joint-table-row" width="162" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29286" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="148" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(20)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(14)">
+          <rect x="0" y="88" class="joint-table-row" width="162" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29287" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              EXISTENCIAS
+            </tspan>
+            <tspan x="148" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(15)">
+          <rect x="0" y="113" class="joint-table-row" width="162" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29288" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              DISPONIBLE
+            </tspan>
+            <tspan x="148" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(16)">
+          <rect x="0" y="138" class="joint-table-row" width="162" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29289" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              DESCRIPCION
+            </tspan>
+            <tspan x="148" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              CLOB?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="169" class="joint-table-row" width="162" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1705" model-id="7dc09f0d-7def-479e-bafb-7521f43724b9" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(1370,-97)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29498">
+          <rect x="0" y="0" width="216" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(126)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29509" pointer-events="none" font-size="14px">E_REP_ACCESORIOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(128)">
+          <rect x="0" y="38" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-14733" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_REPORTE_ACCESORIO
+            </tspan>
+            <tspan x="202" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(86)">
+          <rect x="0" y="63" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-14734" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_PROFESOR
+            </tspan>
+            <tspan x="202" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(12)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(87)">
+          <rect x="0" y="88" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-14735" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              TITULO
+            </tspan>
+            <tspan x="202" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(50)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(88)">
+          <rect x="0" y="113" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-14736" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              DETALLES
+            </tspan>
+            <tspan x="202" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              CLOB?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(89)">
+          <rect x="0" y="138" class="joint-table-row" width="216" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-14737" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="202" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="169" class="joint-table-row" width="216" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1704" model-id="fbc105ad-df33-42c2-ba30-1f3d903df0da" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(-2,523)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29480">
+          <rect x="0" y="0" width="221" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(112)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29491" pointer-events="none" font-size="14px">E_LOG_MOVIMIENTOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(115)">
+          <rect x="0" y="38" class="joint-table-row" width="221" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29492" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_LOG
+            </tspan>
+            <tspan x="207" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          <rect class="idx-key" x="178.5" y="50" width="2.5" height="1.5" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <path class="idx-key" transform="matrix(0.7, 0, 0, 0.49999999999999994, 170, 47)" d="M13.971,8.922l0,13.932 M4.086,22.854l0,-5.759l20.081,-0.078l-0.156,5.837" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></path>
+                  <rect class="idx-key" x="171.8" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="178.7" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="186" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(116)">
+          <rect x="0" y="63" class="joint-table-row" width="221" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29493" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              ID_USUARIO
+            </tspan>
+            <tspan x="207" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(117)">
+          <rect x="0" y="88" class="joint-table-row" width="221" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29494" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              ACCION
+            </tspan>
+            <tspan x="207" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              CHAR(6)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(118)">
+          <rect x="0" y="113" class="joint-table-row" width="221" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29495" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              TABLA
+            </tspan>
+            <tspan x="207" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(40)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(119)">
+          <rect x="0" y="138" class="joint-table-row" width="221" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29496" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              FECHA
+            </tspan>
+            <tspan x="207" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="169" class="joint-table-row" width="221" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1703" model-id="7f20ca02-a338-4361-b3e2-4994403383d4" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(390,493)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29456">
+          <rect x="0" y="0" width="306" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(92)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29471" pointer-events="none" font-size="14px">E_REP_VIDEOPROYECTORES</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(95)">
+          <rect x="0" y="38" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29472" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_REPORTE_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="292" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          <rect class="idx-key" x="263.5" y="50" width="2.5" height="1.5" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <path class="idx-key" transform="matrix(0.7, 0, 0, 0.49999999999999994, 255, 47)" d="M13.971,8.922l0,13.932 M4.086,22.854l0,-5.759l20.081,-0.078l-0.156,5.837" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></path>
+                  <rect class="idx-key" x="256.8" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="263.7" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="271" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(96)">
+          <rect x="0" y="63" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29473" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="292" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(97)">
+          <rect x="0" y="88" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29474" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              TITULO
+            </tspan>
+            <tspan x="292" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(50)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(98)">
+          <rect x="0" y="113" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29475" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              FOLIO
+            </tspan>
+            <tspan x="292" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(20)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(99)">
+          <rect x="0" y="138" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29476" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              DETALLES
+            </tspan>
+            <tspan x="292" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              CLOB?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(100)">
+          <rect x="0" y="163" class="joint-table-row" width="306" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29477" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="292" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(101)">
+          <rect x="0" y="188" class="joint-table-row" width="306" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="210" class="joint-field-text" id="v-29478" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="210" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="292" y="210" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="219" class="joint-table-row" width="306" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1702" model-id="998e0039-84f2-46e2-ae2c-109e8f621a81" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(442,99)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29426">
+          <rect x="0" y="0" width="207" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(78)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29445" pointer-events="none" font-size="14px">E_PRESTAMOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(82)">
+          <rect x="0" y="38" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29446" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_PRESTAMO
+            </tspan>
+            <tspan x="193" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BIGINT
+            </tspan>
+          </text>
+          <rect class="idx-key" x="137.5" y="50" width="2.5" height="1.5" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <path class="idx-key" transform="matrix(0.7, 0, 0, 0.49999999999999994, 129, 47)" d="M13.971,8.922l0,13.932 M4.086,22.854l0,-5.759l20.081,-0.078l-0.156,5.837" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></path>
+                  <rect class="idx-key" x="130.8" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="137.7" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+                  <rect class="idx-key" x="145" y="58.5" width="2" height="1.8" fill="none" stroke="rgba(173, 177, 181, 0.7)" stroke-width="2px"></rect>
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(83)">
+          <rect x="0" y="63" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29447" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_SALIDA
+            </tspan>
+            <tspan x="193" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(84)">
+          <rect x="0" y="88" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29448" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_ENTRADA
+            </tspan>
+            <tspan x="193" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(85)">
+          <rect x="0" y="113" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29449" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="193" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(86)">
+          <rect x="0" y="138" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29450" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_PROFESOR
+            </tspan>
+            <tspan x="193" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(12)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(87)">
+          <rect x="0" y="163" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29451" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_AULA
+            </tspan>
+            <tspan x="193" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(88)">
+          <rect x="0" y="188" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="210" class="joint-field-text" id="v-29452" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="210" text-anchor="start" class="joint-field-name ">
+              ESTATUS
+            </tspan>
+            <tspan x="193" y="210" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(89)">
+          <rect x="0" y="213" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="235" class="joint-field-text" id="v-29453" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="235" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="193" y="235" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(90)">
+          <rect x="0" y="238" class="joint-table-row" width="207" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="260" class="joint-field-text" id="v-29454" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="260" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="193" y="260" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="269" class="joint-table-row" width="207" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1706" model-id="332a7762-fe89-4ce0-9d6b-b3970e7a9412" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(1107,245)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29516">
+          <rect x="0" y="0" width="224" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(135)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29527" pointer-events="none" font-size="14px">EV_HORASSERVICIO</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(137)">
+          <rect x="0" y="38" class="joint-table-row" width="224" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29528" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_HORAS_SERVICIO
+            </tspan>
+            <tspan x="205" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(138)">
+          <rect x="0" y="63" class="joint-table-row" width="224" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29529" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="205" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(139)">
+          <rect x="0" y="88" class="joint-table-row" width="224" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29530" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              TOTAL
+            </tspan>
+            <tspan x="205" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(140)">
+          <rect x="0" y="113" class="joint-table-row" width="224" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29531" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              MES
+            </tspan>
+            <tspan x="205" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(141)">
+          <rect x="0" y="138" class="joint-table-row" width="224" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29532" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              SEMESTRE
+            </tspan>
+            <tspan x="205" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="169" class="joint-table-row" width="224" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1700" model-id="c367d918-1431-468b-a2e6-f2ee944cc372" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(-5,133)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29375">
+          <rect x="0" y="0" width="198" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(57)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29392" pointer-events="none" font-size="14px">E_USUARIOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(59)">
+          <rect x="0" y="38" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29393" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_USUARIO
+            </tspan>
+            <tspan x="184" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(60)">
+          <rect x="0" y="63" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29394" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="184" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(25)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(61)">
+          <rect x="0" y="88" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29395" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              A_PATERNO
+            </tspan>
+            <tspan x="184" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(62)">
+          <rect x="0" y="113" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29396" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              A_MATERNO
+            </tspan>
+            <tspan x="184" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(63)">
+          <rect x="0" y="138" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29397" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              PASSWORD
+            </tspan>
+            <tspan x="184" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(60)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(64)">
+          <rect x="0" y="163" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29398" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name ">
+              ADMINDR
+            </tspan>
+            <tspan x="184" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(65)">
+          <rect x="0" y="188" class="joint-table-row" width="198" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="210" class="joint-field-text" id="v-29399" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="210" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="184" y="210" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(66)">
+          <rect x="0" y="213" class="joint-table-row" width="198" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="235" class="joint-field-text" id="v-29400" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="235" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="184" y="235" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="244" class="joint-table-row" width="198" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1699" model-id="4ae1db6b-4775-4b86-a562-d1e2d72235a6" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(205,284)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29357">
+          <rect x="0" y="0" width="180" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(49)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29368" pointer-events="none" font-size="14px">E_AULAS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(51)">
+          <rect x="0" y="38" class="joint-table-row" width="180" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29369" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_AULA
+            </tspan>
+            <tspan x="166" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(52)">
+          <rect x="0" y="63" class="joint-table-row" width="180" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29370" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="166" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(25)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(53)">
+          <rect x="0" y="88" class="joint-table-row" width="180" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29371" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              ESTATUS
+            </tspan>
+            <tspan x="166" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(54)">
+          <rect x="0" y="113" class="joint-table-row" width="180" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29372" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="166" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(55)">
+          <rect x="0" y="138" class="joint-table-row" width="180" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29373" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="166" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="169" class="joint-table-row" width="180" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1698" model-id="2f18acf2-ad5b-49b0-85b2-a3bcffa51417" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(181,-150)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29327">
+          <rect x="0" y="0" width="207" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(36)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29346" pointer-events="none" font-size="14px">E_PROFESORES</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(38)">
+          <rect x="0" y="38" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29347" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_PROFESOR
+            </tspan>
+            <tspan x="193" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(12)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(39)">
+          <rect x="0" y="63" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29348" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_DEPARTAMENTO
+            </tspan>
+            <tspan x="193" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(40)">
+          <rect x="0" y="88" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29349" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="193" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(25)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(41)">
+          <rect x="0" y="113" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29350" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              A_PATERNO
+            </tspan>
+            <tspan x="193" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(25)
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(42)">
+          <rect x="0" y="138" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29351" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              A_MATERNO
+            </tspan>
+            <tspan x="193" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(25)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(43)">
+          <rect x="0" y="163" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29352" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name ">
+              ESTATUS_ESCOLAR
+            </tspan>
+            <tspan x="193" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(45)">
+          <rect x="0" y="188" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="210" class="joint-field-text" id="v-29353" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="210" text-anchor="start" class="joint-field-name ">
+              ESTATUS
+            </tspan>
+            <tspan x="193" y="210" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(46)">
+          <rect x="0" y="213" class="joint-table-row" width="207" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="235" class="joint-field-text" id="v-29354" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="235" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="193" y="235" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(47)">
+          <rect x="0" y="238" class="joint-table-row" width="207" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="260" class="joint-field-text" id="v-29355" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="260" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="193" y="260" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="269" class="joint-table-row" width="207" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1697" model-id="c5587f70-274a-43ec-aa20-4dbf52950d9a" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(-53,-148)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29306">
+          <rect x="0" y="0" width="195" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(27)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29319" pointer-events="none" font-size="14px">E_DEPARTAMENTOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(29)">
+          <rect x="0" y="38" class="joint-table-row" width="195" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29320" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_DEPARTAMENTO
+            </tspan>
+            <tspan x="181" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(30)">
+          <rect x="0" y="63" class="joint-table-row" width="195" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29321" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="181" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(40)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(31)">
+          <rect x="0" y="88" class="joint-table-row" width="195" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29322" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              ABBREV
+            </tspan>
+            <tspan x="181" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(32)">
+          <rect x="0" y="113" class="joint-table-row" width="195" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29323" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              ENCARGADO
+            </tspan>
+            <tspan x="181" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(50)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(33)">
+          <rect x="0" y="138" class="joint-table-row" width="195" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29324" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="181" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(34)">
+          <rect x="0" y="163" class="joint-table-row" width="195" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29325" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="181" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="194" class="joint-table-row" width="195" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1696" model-id="6668bc4e-93e0-4ac2-968a-b5e4edb7b7f6" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(686,51)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29291">
+          <rect x="0" y="0" width="182" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(18)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29300" pointer-events="none" font-size="14px">EPV_ACCESORIOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(20)">
+          <rect x="0" y="38" class="joint-table-row" width="182" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29301" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_EPV_ACCESORIO
+            </tspan>
+            <tspan x="168" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(21)">
+          <rect x="0" y="63" class="joint-table-row" width="182" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29302" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_ACCESORIO
+            </tspan>
+            <tspan x="168" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(22)">
+          <rect x="0" y="88" class="joint-table-row" width="182" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29303" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_PRESTAMO
+            </tspan>
+            <tspan x="168" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BIGINT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(23)">
+          <rect x="0" y="113" class="joint-table-row" width="182" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29304" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="168" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="144" class="joint-table-row" width="182" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1707" model-id="027e7756-2003-40af-9b4e-475a2db8a52c" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(1112,468)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29534">
+          <rect x="0" y="0" width="204" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(143)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29543" pointer-events="none" font-size="14px">EV_ESTATUS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(145)">
+          <rect x="0" y="38" class="joint-table-row" width="204" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29544" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_ESTATUS
+            </tspan>
+            <tspan x="190" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(146)">
+          <rect x="0" y="63" class="joint-table-row" width="204" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29545" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="190" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(147)">
+          <rect x="0" y="88" class="joint-table-row" width="204" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29546" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="190" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(148)">
+          <rect x="0" y="113" class="joint-table-row" width="204" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29547" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              DISPONIBILIDAD
+            </tspan>
+            <tspan x="190" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              BOOLEAN?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="144" class="joint-table-row" width="204" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1694" model-id="8387ca53-ee56-4603-9a45-cf180913ad76" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(1114,27)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29258">
+          <rect x="0" y="0" width="216" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(3)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29267" pointer-events="none" font-size="14px">EREPA_ACCESORIOS</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(5)">
+          <rect x="0" y="38" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29268" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name ">
+              ID_EREPA_ACCESORIO
+            </tspan>
+            <tspan x="202" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(6)">
+          <rect x="0" y="63" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29269" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_ACCESORIO
+            </tspan>
+            <tspan x="202" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(7)">
+          <rect x="0" y="88" class="joint-table-row" width="216" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29270" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_REPORTE_ACCESORIO
+            </tspan>
+            <tspan x="202" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(8)">
+          <rect x="0" y="113" class="joint-table-row" width="216" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29271" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="202" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="144" class="joint-table-row" width="216" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g><g id="j_1701" model-id="a8722906-9e72-4306-b15a-47ed03f8e1a4" class="element basic newt joint-theme-default" magnet="false" fill="#ffffff" stroke="none" transform="translate(744,270)" font-family="Roboto,'Helvetica Neue', sans-serif"><g class="joint-table" onmousedown="QdbdJS.onTableMouseDown(this)" onmouseup="QdbdJS.onTableMouseUp(this)" id="v-29402">
+          <rect x="0" y="0" width="234" height="38" class="joint-table-title" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(68)" fill="#005aa0" stroke="#005aa0"></rect>
+          <text x="14" y="24" text-anchor="start" class="joint-table-title-text" id="v-29417" pointer-events="none" font-size="14px">E_VIDEOPROYECTORES</text>
+          <g class="joint-table-rows">
+            
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(70)">
+          <rect x="0" y="38" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="60" class="joint-field-text" id="v-29418" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="60" text-anchor="start" class="joint-field-name fk" fill="#222" font-weight="bold">
+              ID_VIDEOPROYECTOR
+            </tspan>
+            <tspan x="220" y="60" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              INT
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(71)">
+          <rect x="0" y="63" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="85" class="joint-field-text" id="v-29419" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="85" text-anchor="start" class="joint-field-name ">
+              NOMBRE
+            </tspan>
+            <tspan x="220" y="85" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(72)">
+          <rect x="0" y="88" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="110" class="joint-field-text" id="v-29420" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="110" text-anchor="start" class="joint-field-name ">
+              MARCA
+            </tspan>
+            <tspan x="220" y="110" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(15)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(73)">
+          <rect x="0" y="113" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="135" class="joint-field-text" id="v-29421" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="135" text-anchor="start" class="joint-field-name ">
+              MODELO
+            </tspan>
+            <tspan x="220" y="135" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(20)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(74)">
+          <rect x="0" y="138" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="160" class="joint-field-text" id="v-29422" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="160" text-anchor="start" class="joint-field-name ">
+              NO_SERIE
+            </tspan>
+            <tspan x="220" y="160" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              VARCHAR(20)?
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(75)">
+          <rect x="0" y="163" class="joint-table-row" width="234" height="25" stroke="none"></rect>
+          
+          
+          <text x="0" y="185" class="joint-field-text" id="v-29423" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="185" text-anchor="start" class="joint-field-name ">
+              CREADO
+            </tspan>
+            <tspan x="220" y="185" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME
+            </tspan>
+          </text>
+          
+          
+        </g>
+        <g class="joint-table-row-group" onmousedown="QdbdJS.onRowMouseDown()" onmousemove="QdbdJS.onRowMouseMove()" onmouseup="QdbdJS.onRowMouseUp(76)">
+          <rect x="0" y="188" class="joint-table-row" width="234" height="31" stroke="none"></rect>
+          
+          
+          <text x="0" y="210" class="joint-field-text" id="v-29424" pointer-events="none" fill="#333" font-size="12px">
+            <tspan x="14" y="210" text-anchor="start" class="joint-field-name ">
+              ACTUALIZADO
+            </tspan>
+            <tspan x="220" y="210" text-anchor="end" class="joint-field-type" fill="#adb1b5">
+              DATETIME?
+            </tspan>
+          </text>
+          
+          
+        <rect x="0" y="219" class="joint-table-row" width="234" height="6" stroke="none"></rect>
+        
+        </g>
+          </g>
+        </g></g></g><defs id="v-472"></defs>
+        <!--<text class="qdbd-link" x="10" y="20" font-family="Roboto,'Helvetica Neue', sans-serif">www.quickdatabasediagrams.com</text>-->
+        </svg>

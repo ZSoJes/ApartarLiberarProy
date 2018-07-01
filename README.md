@@ -37,3 +37,6 @@ En el archivo deberá indicar los siguientes comandos (recuerde indicar la ubica
 cd $HOME/Documentos/ProyectorADM
 java -jar ./Proyector.jar
 ```
+
+## Base de datos:
+![Alt bd](./ultimate.svg)
