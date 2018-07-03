@@ -3,29 +3,23 @@ package proyector;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.LogDB;
@@ -33,7 +27,7 @@ import proyector.dataBase.crud.UsuarioReadDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
 import proyector.dataBase.crud.VideoproyectorDB;
-import proyector.other.graphTheme;
+import proyector.other.GraphGen;
 import proyector.reportes.GenerarReportes;
 
 /**
@@ -43,11 +37,13 @@ import proyector.reportes.GenerarReportes;
 public final class ARegistro extends javax.swing.JFrame {
 
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
+    javax.swing.Icon loadingIMG = new ImageIcon("./src/imagenes/spinner.gif");
     private static Boolean valido = false;
     private static String usuario = "";
 
     public ARegistro() {
         initComponents();
+        lblLoadingIcon.setIcon(loadingIMG);
         try {
             new VideoproyectorDB().setProyectorServicio();
         } catch (SQLException e) {
@@ -67,7 +63,7 @@ public final class ARegistro extends javax.swing.JFrame {
         jComboBox1.setSelectedIndex(3);
         jTable1.setFont(new java.awt.Font("SansSerif", 0, 11));
         jTable1.getTableHeader().setFont(new java.awt.Font("SansSerif", 0, 10));
-        labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date())); 
+        labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();                                                //coloca la hora
         });
@@ -75,10 +71,14 @@ public final class ARegistro extends javax.swing.JFrame {
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
         timer.start();
-        
-        graficas();
-        graficaPastelProy();
-        graficaBarrasSolicitudes();
+
+        tabbedContainer.setVisible(false);
+//        dlgLoading.setContentPane(new ShadowPane());
+//        dlgLoading.getRootPane().setOpaque(false);
+//        graficas();
+//        graficaPastelProy();
+//        graficaBarrasSolicitudes();
+//        graficaBarrasSolDepto();
         jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
     }
 
@@ -187,148 +187,60 @@ public final class ARegistro extends javax.swing.JFrame {
         Calendar c = Calendar.getInstance();
         int month = c.get(Calendar.MONTH);
         int year = c.get(Calendar.YEAR);
-        if (opc == 0) {   //todos
-            data = reg.getPrestamos(false, true);
-        }
-        if (opc == 1) {  //hoy
-            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-            miDate1 = dt.format(c.getTime()).concat(" 00:00:00");
-            miDate2 = dt.format(c.getTime()).concat(" 23:59:59");
-        }
-        if (opc == 2) {  //mes
-            c.set(Calendar.DAY_OF_MONTH, 1);
-            DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            miDate1 = df.format(c.getTime()) + " 00:00:00";
-            miDate2 = miDate1.substring(0, 8) + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";;
-        }
-        if (opc == 3) {  //semestre
-            if (month < 6) {
-                c.set(Calendar.MONTH, 05);
-                miDate1 = year + "-01-01 00:00:00";
-                miDate2 = year + "-06-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
-            } else {
+        switch (opc) {
+            case 0:   //todos
+                data = reg.getPrestamos(false, true);
+                break;
+            case 1: //hoy
+                SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+                miDate1 = dt.format(c.getTime()).concat(" 00:00:00");
+                miDate2 = dt.format(c.getTime()).concat(" 23:59:59");
+                break;
+            case 2:  //mes
+                c.set(Calendar.DAY_OF_MONTH, 1);
+                DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                miDate1 = df.format(c.getTime()) + " 00:00:00";
+                miDate2 = miDate1.substring(0, 8) + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+                break;
+            case 3:  //semestre
+                if (month < 6) {
+                    c.set(Calendar.MONTH, 05);
+                    miDate1 = year + "-01-01 00:00:00";
+                    miDate2 = year + "-06-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+                } else {
+                    c.set(Calendar.MONTH, 11);
+                    miDate1 = year + "-07-01 00:00:00";
+                    miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+                }
+                break;
+            case 4:  //año
                 c.set(Calendar.MONTH, 11);
-                miDate1 = year + "-07-01 00:00:00";
+                miDate1 = year + "-01-01 00:00:00";
                 miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
-            }
-        }
-        if (opc == 4) {  //año
-            c.set(Calendar.MONTH, 11);
-            miDate1 = year + "-01-01 00:00:00";
-            miDate2 = year + "-12-" + c.getActualMaximum(Calendar.DAY_OF_MONTH) + " 23:59:59";
+                break;
         }
         if (opc >= 1 && opc <= 5) {
             data = reg.getPrestamos(miDate1, miDate2); //prestamos que estan entre fechas de dos dias especificos
         }
-        System.out.println("Registros existentes:" + data.length + "\nEntre las fechas: " + miDate1 + miDate2);
+        System.out.println("\n    : : : : : Registros existentes:" + data.length + "\n    : : : Entre las fechas: " + miDate1 + " - " + miDate2);
         return data;
     }
 
     public void graficas() {
-        DefaultCategoryDataset dtsc = new DefaultCategoryDataset();
-        String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
-        try {
-            UsuarioReadDB ini = new UsuarioReadDB();
-            Calendar c = Calendar.getInstance();
-            int[] meses = ini.leerMeses(c.get(Calendar.YEAR));
-            System.out.println("meses resultado: " + Arrays.toString(meses));
-            for (int i = 0; i < 12; i++) {
-                dtsc.setValue(meses[i], mesN[i], mesN[i] + "(" + meses[i] + ")");
-            }
-            final JFreeChart ch = ChartFactory.createBarChart("Prestamos realizados durante el presente año " + String.valueOf(c.get(Calendar.YEAR)), "Meses", "Cantidad", dtsc, PlotOrientation.VERTICAL, true, true, false); //domain axis label - range axis label - data - orientation - include legend - tooltips - urls
-            
-            new graphTheme().themeBarChart(ch);
-
-            BufferedImage image = ch.createBufferedImage(880, 300);
-            jMiLabel.setIcon(new ImageIcon(image));
-        } catch (SQLException ex) {
-            System.out.println("error al imprimir meses : " + ex);
-        }
+        new GraphGen().solicitudesDelAnio(jMiLabel);
     }
 
     public void graficaPastelProy() {
-        DefaultPieDataset dtTotal = new DefaultPieDataset();
-        DefaultPieDataset dtSmstr = new DefaultPieDataset();
-        DefaultPieDataset dtMes = new DefaultPieDataset();
-        try {
-            UsuarioReadDB ini = new UsuarioReadDB();
-            String[][] pry = ini.getProyServicioGrafica();
-            int cant = pry.length;
-            String lblPry;
-            for (int i = 0; i < cant; i++) {
-                for (int j = 1; j < 4; j++) {
-                    pry[i][j] = (pry[i][j] == null ? "0" : pry[i][j]);  //comprueba que el proyector no tenga datos null y si es asi asigna 0
-                    int min = Integer.parseInt(pry[i][j]);
-                    lblPry = pry[i][0] + ": " + (min / 60) + "hrs " + (min % 60) + "min";
-                    switch (j) {
-                        case 1:
-                            dtTotal.setValue(lblPry, Integer.parseInt(pry[i][1]));
-                            break;
-                        case 2:
-                            dtSmstr.setValue(lblPry, Integer.parseInt(pry[i][2]));
-                            break;
-                        case 3:
-                            dtMes.setValue(lblPry, Integer.parseInt(pry[i][3]));
-                            break;
-                    }
-                }
-            }
-
-            JFreeChart chT = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores", dtTotal, true, true, false);
-            JFreeChart chS = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores del Semestre", dtSmstr, true, true, false);
-            JFreeChart chM = ChartFactory.createPieChart("Tiempo Solicitado en Hrs Min de Videoproyectores del Mes", dtMes, true, true, false);
-
-            final PiePlot pie = (PiePlot) chT.getPlot();
-            final PiePlot pie2 = (PiePlot) chS.getPlot();
-            final PiePlot pie3 = (PiePlot) chM.getPlot();
-            
-            new graphTheme().themePieChart(chT, pie, cant);
-            new graphTheme().themePieChart(chS, pie2, cant);
-            new graphTheme().themePieChart(chM, pie3, cant);
-            
-            BufferedImage imgT = chT.createBufferedImage(870, 350);
-            BufferedImage imgS = chS.createBufferedImage(870, 350);
-            BufferedImage imgM = chM.createBufferedImage(870, 350);
-
-            jMiLabel1.setIcon(new ImageIcon(imgT));
-            jMiLabel2.setIcon(new ImageIcon(imgS));
-            jMiLabel3.setIcon(new ImageIcon(imgM));
-        } catch (SQLException e) {
-            System.out.println("Error al recuperar informacion proyectores: " + e);
-        }
+        new GraphGen().servicioPorProyector(jMiLabel1, jMiLabel2, jMiLabel3);
     }
 
     public void graficaBarrasSolicitudes() {
-        DefaultCategoryDataset dtSol = new DefaultCategoryDataset();
-        
-        String[] mesN = {"Ene ", "Feb ", "Mar ", "Abr ", "May ", "Jun ", "Jul ", "Ago ", "Sep ", "Oct ", "Nov ", "Dic "};
-        try {
-            UsuarioReadDB ini = new UsuarioReadDB();
-            Calendar c = Calendar.getInstance();
-            String[][] meses = ini.getProySolicitudes(c.get(Calendar.YEAR));
-            int cant = meses.length;
-            for (int proyector = 0; proyector < cant; proyector++) {
-                System.out.println("\t : : : : Arrray meses proy " + meses[proyector][0]+ ":  " + Arrays.toString(meses[proyector]));
-                for (int i = 0; i < 12; i++) {
-                        dtSol.setValue(Integer.parseInt(meses[proyector][i+1]), mesN[i], mesN[i] + "(" + meses[proyector][i+1] + ")");
-                }
-                String titulo = "Solicitudes del Videoproyector " + meses[proyector][0] + " en " + String.valueOf(c.get(Calendar.YEAR));
-                final JFreeChart ch = ChartFactory.createBarChart(titulo, "Meses", "Cantidad", dtSol, PlotOrientation.VERTICAL, true, true, false);
-                new graphTheme().themeBarChart(ch);
-                BufferedImage img1 = ch.createBufferedImage(870, 350);
-                
-                JLabel label=new JLabel();
-                label.setHorizontalAlignment(JLabel.CENTER);
-                label.setVerticalAlignment(JLabel.CENTER);
-                label.setBorder(new javax.swing.border.LineBorder(new Color(153,153,153)));
-                label.setSize(870, 350);
-                label.setIcon(new ImageIcon(img1));
-                jTabbedPane2.addTab(meses[proyector][0], label);
-                dtSol.clear();
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al recuperar informacion proyectores: " + e);
-        }
+        new GraphGen().solicitudesPorProyector(jTabbedPane2);
+    }
+
+    public void graficaBarrasSolDepto() {
+        new GraphGen().solicitudesYservicioPorDepartamento(jMiLabel5, jMiLabel6);
+        new GraphGen().solicitudesYservicioPorDepartamentoPie(jMiLabel7, jMiLabel8);
     }
 
     /**
@@ -412,6 +324,8 @@ public final class ARegistro extends javax.swing.JFrame {
         lblProfe = new javax.swing.JLabel();
         groupSolictudAlDepto = new javax.swing.ButtonGroup();
         groupImprevisto = new javax.swing.ButtonGroup();
+        dlgLoading = new javax.swing.JDialog();
+        lblLoadingIcon = new javax.swing.JLabel();
         pnlBackground = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblIco1 = new javax.swing.JLabel();
@@ -449,7 +363,15 @@ public final class ARegistro extends javax.swing.JFrame {
         jMiLabel2 = new javax.swing.JLabel();
         jMiLabel3 = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jMiLabel6 = new javax.swing.JLabel();
+        jMiLabel5 = new javax.swing.JLabel();
+        jTabbedPane5 = new javax.swing.JTabbedPane();
+        jMiLabel8 = new javax.swing.JLabel();
+        jMiLabel7 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        btnShowGraph = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnReportePry = new javax.swing.JButton();
@@ -1087,6 +1009,17 @@ public final class ARegistro extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        dlgLoading.setMinimumSize(new java.awt.Dimension(600, 300));
+        dlgLoading.setModal(true);
+        dlgLoading.setUndecorated(true);
+        dlgLoading.setPreferredSize(new java.awt.Dimension(600, 300));
+        dlgLoading.setResizable(false);
+        dlgLoading.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblLoadingIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLoadingIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Add New_36px.png"))); // NOI18N
+        dlgLoading.getContentPane().add(lblLoadingIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 300));
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Registros]");
         setIconImage(img.getImage());
@@ -1273,6 +1206,7 @@ public final class ARegistro extends javax.swing.JFrame {
         panelOPC.add(jLabel13, gridBagConstraints);
 
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 3, 24)); // NOI18N
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitulo.setText("Registros");
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1282,8 +1216,9 @@ public final class ARegistro extends javax.swing.JFrame {
         jScrollPane2.setPreferredSize(new java.awt.Dimension(1024, 450));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setMinimumSize(new java.awt.Dimension(0, 0));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 1289));
+        jPanel1.setMaximumSize(new java.awt.Dimension(1024, 989));
+        jPanel1.setMinimumSize(new java.awt.Dimension(1024, 989));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1024, 989));
 
         jdtChooser1.setToolTipText("Fecha de inicio");
         jdtChooser1.setDateFormatString("dd/MM/yyyy");
@@ -1339,6 +1274,7 @@ public final class ARegistro extends javax.swing.JFrame {
         lblFn.setText("Fin:");
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel3.setText("Filtro:");
 
         jMiLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1361,57 +1297,86 @@ public final class ARegistro extends javax.swing.JFrame {
         jMiLabel2.setMaximumSize(new java.awt.Dimension(870, 350));
         jMiLabel2.setMinimumSize(new java.awt.Dimension(870, 350));
         jMiLabel2.setPreferredSize(new java.awt.Dimension(870, 350));
-        jTabbedPane1.addTab("Semestre", jMiLabel2);
+        jTabbedPane1.addTab("Mes", jMiLabel2);
 
         jMiLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jMiLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         jMiLabel3.setMaximumSize(new java.awt.Dimension(870, 350));
         jMiLabel3.setMinimumSize(new java.awt.Dimension(870, 350));
         jMiLabel3.setPreferredSize(new java.awt.Dimension(870, 350));
-        jTabbedPane1.addTab("Mes", jMiLabel3);
-        jMiLabel3.getAccessibleContext().setAccessibleName("");
+        jTabbedPane1.addTab("Semestre", jMiLabel3);
 
         tabbedContainer.addTab("Horas de Servicio General", jTabbedPane1);
         jTabbedPane1.getAccessibleContext().setAccessibleName("");
 
         tabbedContainer.addTab("Solicitudes por Proyector", jTabbedPane2);
 
-        jLabel5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        jMiLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jTabbedPane4.addTab("Servicio por Departamento", jMiLabel6);
+
+        jMiLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jTabbedPane4.addTab("Solicitudes por Departamento", jMiLabel5);
+
+        jTabbedPane3.addTab("Barras", jTabbedPane4);
+
+        jMiLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jTabbedPane5.addTab("Servicio por Departamento", jMiLabel8);
+
+        jMiLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jMiLabel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jTabbedPane5.addTab("Solicitudes por Departamento", jMiLabel7);
+
+        jTabbedPane3.addTab("Pastel", jTabbedPane5);
+
+        tabbedContainer.addTab("por Departamento", jTabbedPane3);
+
+        jLabel5.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Graficas de los Registros");
+
+        btnShowGraph.setText("Generar Graficas");
+        btnShowGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowGraphActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
-                .addGap(14, 14, 14))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(56, 56, 56)
-                            .addComponent(tabbedContainer))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addComponent(jLabel3)
-                            .addGap(8, 8, 8)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(10, 10, 10)
-                            .addComponent(btnFiltrar)
-                            .addGap(28, 28, 28)
-                            .addComponent(lblIni)
-                            .addGap(6, 6, 6)
-                            .addComponent(jdtChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(20, 20, 20)
-                            .addComponent(lblFn)
-                            .addGap(7, 7, 7)
-                            .addComponent(jdtChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(235, 235, 235)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(426, 426, 426)
-                        .addComponent(jLabel5)))
+                .addGap(10, 10, 10)
+                .addComponent(jLabel3)
+                .addGap(8, 8, 8)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnFiltrar)
+                .addGap(28, 28, 28)
+                .addComponent(lblIni)
+                .addGap(6, 6, 6)
+                .addComponent(jdtChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(lblFn)
+                .addGap(7, 7, 7)
+                .addComponent(jdtChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(299, 299, 299))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tabbedContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 904, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(448, 448, 448)
+                .addComponent(btnShowGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(463, 463, 463))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3))
+                .addGap(14, 14, 14))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1439,18 +1404,20 @@ public final class ARegistro extends javax.swing.JFrame {
                         .addComponent(jdtChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(btnShowGraph)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabbedContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
 
         tabbedContainer.getAccessibleContext().setAccessibleName("");
 
         jScrollPane2.setViewportView(jPanel1);
 
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafico-60.png"))); // NOI18N
         jLabel12.setToolTipText("Reportes");
         jLabel12.setMaximumSize(new java.awt.Dimension(70, 60));
@@ -1463,13 +1430,14 @@ public final class ARegistro extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Reportes");
         jLabel4.setMaximumSize(new java.awt.Dimension(70, 19));
         jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
         jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
 
-        btnReportePry.setText("Modificar Reportes Proyector");
+        btnReportePry.setText("<html>Modificar/Reimprimir<br>Reportes Proyector</html>");
+        btnReportePry.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         btnReportePry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReportePryActionPerformed(evt);
@@ -1490,12 +1458,12 @@ public final class ARegistro extends javax.swing.JFrame {
                 .addComponent(panelOPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(lblTitulo)
-                .addGap(163, 163, 163)
-                .addComponent(btnReportePry)
-                .addGap(18, 18, 18)
-                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReportePry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -1516,10 +1484,9 @@ public final class ARegistro extends javax.swing.JFrame {
                                 .addComponent(panelOPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlBackgroundLayout.createSequentialGroup()
                                 .addGap(25, 25, 25)
-                                .addComponent(lblTitulo))
-                            .addGroup(pnlBackgroundLayout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(btnReportePry))))
+                                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblTitulo)
+                                    .addComponent(btnReportePry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(pnlBackgroundLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1950,6 +1917,41 @@ public final class ARegistro extends javax.swing.JFrame {
             dlgRprtArtPry.setVisible(true);
         }
     }//GEN-LAST:event_btnReportePryActionPerformed
+
+    private void btnShowGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGraphActionPerformed
+        dlgLoading.setLocationRelativeTo(this);
+
+        System.out.println("\n\n>>> Dibujando y generando imagenes de Grafias. . . \n");
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                /**
+                 * Execute some operation
+                 */
+                graficas();
+                graficaPastelProy();
+                graficaBarrasSolicitudes();
+                graficaBarrasSolDepto();
+                Thread.sleep(500);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                btnShowGraph.setVisible(false);
+                tabbedContainer.setVisible(true);
+                dlgLoading.dispose();
+            }
+        };
+        worker.execute();
+        dlgLoading.setVisible(true);
+        try {
+            worker.get();
+        } catch (InterruptedException | ExecutionException e1) {
+            e1.printStackTrace();
+        }
+    }//GEN-LAST:event_btnShowGraphActionPerformed
+
     public void fillJTable3() {
         System.out.println("Llenando con reportes de Videoproyectores");
         try {
@@ -2103,6 +2105,7 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JButton btnRpActualizar;
     private javax.swing.JButton btnRpCancelar;
     private javax.swing.JButton btnRpImprimir;
+    private javax.swing.JButton btnShowGraph;
     private javax.swing.JCheckBox cbRprt1;
     private javax.swing.JCheckBox cbRprt2;
     private javax.swing.JCheckBox cbRprt3;
@@ -2117,6 +2120,7 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JRadioButton dRb5;
     private javax.swing.JRadioButton dRb6;
     private javax.swing.JDialog dlgConfirm;
+    private javax.swing.JDialog dlgLoading;
     private javax.swing.JDialog dlgReporte;
     private javax.swing.JDialog dlgRprtArtPry;
     private javax.swing.ButtonGroup groupImprevisto;
@@ -2152,6 +2156,10 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jMiLabel1;
     private javax.swing.JLabel jMiLabel2;
     private javax.swing.JLabel jMiLabel3;
+    private javax.swing.JLabel jMiLabel5;
+    private javax.swing.JLabel jMiLabel6;
+    private javax.swing.JLabel jMiLabel7;
+    private javax.swing.JLabel jMiLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
@@ -2162,6 +2170,9 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JTabbedPane jTabbedPane4;
+    private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
@@ -2174,6 +2185,7 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel lblIco1;
     private javax.swing.JLabel lblIco2;
     private javax.swing.JLabel lblIni;
+    private javax.swing.JLabel lblLoadingIcon;
     private javax.swing.JLabel lblProfe;
     private javax.swing.JLabel lblRprt1;
     private javax.swing.JLabel lblRprt2;

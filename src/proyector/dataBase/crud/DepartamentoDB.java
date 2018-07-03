@@ -67,6 +67,27 @@ public class DepartamentoDB {
         }
         return datos;
     }
+    
+    public String[] getDepartamentoAbb(String ab) {
+        String[] datos = new String[3];
+        PreparedStatement prep;
+        ResultSet rs;
+        try {
+            prep = conn.prepareStatement("SELECT * FROM E_DEPARTAMENTOS WHERE LOWER(ABBREV) = LOWER(?)");
+            prep.setString(1, ab);
+            rs = prep.executeQuery();
+            while (rs.next()) {
+                datos[0] = rs.getString("NOMBRE");
+                datos[1] = rs.getString("ABBREV");
+                datos[2] = rs.getString("ENCARGADO");
+            }
+            rs.close();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al recuperar departamento: " + ex);
+        }
+        return datos;
+    }
 
     /**
      * Recupera los departamentos con los siguientes datos

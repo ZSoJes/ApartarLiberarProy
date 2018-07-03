@@ -13,8 +13,10 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -29,9 +31,10 @@ import org.jfree.ui.VerticalAlignment;
  *
  * @author JuanGS
  */
-public class graphTheme {
-
-    public void themeBarChart(JFreeChart ch) {
+public class GraphTheme {
+    private static final String[] COLORIDO = {"#2196F3", "#FFC107", "#FF5722", "#8BC34A", "#E91E63", "#26A69A", "#96492D", "#FFEB3B", "#673AB7", "#00BCD4", "#B70D6B", "#FF1E36", "#FEDFC3", "#B8DA91"};
+    
+    public void themeBarChart(JFreeChart ch, boolean barRender, boolean labelLegend) {
         StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
         String fontName = "Lucida Sans";
         theme.setTitlePaint(Color.decode("#4572a7"));
@@ -56,20 +59,29 @@ public class graphTheme {
         ch.setTextAntiAlias(true);
         ch.setAntiAlias(true);
 
-        String[] colorM = {"#2196F3", "#FFC107", "#FF5722", "#8BC34A", "#E91E63", "#26A69A", "#96492D", "#FFEB3B", "#673AB7", "#00BCD4", "#8BC34A", "#F44336"};
         int i = 0;
-        for (String color : colorM) {
-            ch.getCategoryPlot().getRenderer().setSeriesPaint(i, Color.decode(color));
+        for (String color : COLORIDO) {
+            ch.getCategoryPlot().getRenderer().setSeriesPaint(i, Color.decode(i <= COLORIDO.length ? COLORIDO[i] : generateColor()));
             i++;
         }
+        if (barRender) {
+            BarRenderer rend = (BarRenderer) ch.getCategoryPlot().getRenderer();
+            rend.setShadowVisible(true);
+            rend.setShadowXOffset(4);
+            rend.setShadowYOffset(2);
+            rend.setShadowPaint(Color.decode("#C0C0C0"));
+            rend.setMaximumBarWidth(0.1);
+            rend.setItemMargin(-7);
+            rend.setBaseLegendShape(new Rectangle(20,9));
+        }
 
-        BarRenderer rend = (BarRenderer) ch.getCategoryPlot().getRenderer();
-        rend.setShadowVisible(true);
-        rend.setShadowXOffset(4);
-        rend.setShadowYOffset(2);
-        rend.setShadowPaint(Color.decode("#C0C0C0"));
-        rend.setMaximumBarWidth(0.1);
-        rend.setItemMargin(-7);
+        if (labelLegend) {
+            LegendTitle legend = ch.getLegend();
+            legend.setPosition(RectangleEdge.RIGHT);
+            legend.setVerticalAlignment(VerticalAlignment.CENTER);
+        }
+        NumberAxis rangeAxis = (NumberAxis) ((CategoryPlot) ch.getPlot()).getRangeAxis(); //no decimales en eje y
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());                        //no decimales en eje y
     }
 
     public void themePieChart(JFreeChart ch, PiePlot p, int cantReg) {
@@ -90,20 +102,22 @@ public class graphTheme {
         p.setLabelGenerator(labelGenerator);
         p.setShadowGenerator(new DefaultShadowGenerator());
         p.setLabelLinkStroke(new BasicStroke(2.0f));
+        p.setLabelOutlinePaint(Color.lightGray);
         p.setBaseSectionOutlinePaint(Color.white);
-        p.setBaseSectionOutlineStroke(new BasicStroke(1.5f));
-        p.setLegendItemShape(new Rectangle(8, 6));
+//        p.setsetSeparatorStroke(new BasicStroke(5));
+//        p.setBaseSectionOutlineStroke(new BasicStroke(1.5f));
+        p.setLegendItemShape(new Rectangle(16, 8));
         p.setLabelBackgroundPaint(Color.white);
 
         //p.setLabelOutlinePaint(null);//Color.lightGray);
-        p.setInteriorGap(0.12);
+        p.setInteriorGap(0.10);
         p.setLabelLinkStyle(PieLabelLinkStyle.CUBIC_CURVE);
-
-        String[] colorM = {"#2196F3", "#FFC107", "#FF5722", "#8BC34A", "#E91E63", "#26A69A", "#96492D", "#FFEB3B", "#673AB7", "#00BCD4", "#8BC34A", "#F44336"};
+        
+        
         for (int i = 0; i < cantReg; i++) {
-            p.setSectionPaint(i, Color.decode(i < colorM.length ? colorM[i] : generateColor()));
+            p.setSectionPaint(i, Color.decode(i <= COLORIDO.length ? COLORIDO[i] : generateColor()));
         }
-
+        ch.setTextAntiAlias(true);
         ch.setAntiAlias(true);
         ch.getTitle().setPadding(2, 2, 15, 2);
         LegendTitle legend = ch.getLegend();
