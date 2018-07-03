@@ -80,6 +80,16 @@ public class GraphGen {
             lbl1.setIcon(new ImageIcon(imgT));
             lbl2.setIcon(new ImageIcon(imgM));
             lbl3.setIcon(new ImageIcon(imgS));
+            String nom1 = "proyServicioTotal";
+            String nom2 = "proyServicioSemestre"+semestre;
+            String nom3 = "proyServicioMes"+(MESES[c.get(Calendar.MONTH)].trim()).toUpperCase();
+            try {
+                    genPng(chT, nom1);
+                    genPng(chS, nom2);
+                    genPng(chM, nom3);
+                } catch (IOException ex) {
+                    System.out.println("Error al generar imagen de " + nom1 + " " + nom2 + " " + nom3 + " "+ ": "+ex);
+                }
         } catch (SQLException e) {
             System.out.println("Error al recuperar informacion proyectores: " + e);
         }
@@ -104,6 +114,12 @@ public class GraphGen {
 
             BufferedImage image = ch.createBufferedImage(880, 300);
             lbl.setIcon(new ImageIcon(image));
+            String nom = "proyPrestamosGeneral";
+            try {
+                    genPng(ch, nom);
+                } catch (IOException ex) {
+                    System.out.println("Error al generar imagen de " + nom + " : "+ex);
+                }
         } catch (SQLException ex) {
             System.out.println("error al imprimir meses : " + ex);
         }
@@ -138,6 +154,12 @@ public class GraphGen {
                 lbl.setIcon(new ImageIcon(img1));
 
                 tabbedPn.addTab(mesesD[proyector][0], lbl);
+                String nom = "proyPrestamos" + mesesD[proyector][0].replaceAll("[\\\\/:*?\"<>|]", "_").replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+                try {
+                    genPng(ch, "proyPrestamos/"+nom);
+                } catch (IOException ex) {
+                    System.out.println("Error al generar imagen de " + nom + " : "+ex);
+                }
                 dtSol.clear();
             }
         } catch (SQLException e) {
@@ -183,7 +205,14 @@ public class GraphGen {
 
             lbl2.setSize(890, 300);
             lbl2.setIcon(new ImageIcon(img2));
-//            genPng(ch);
+            String nom = "deptoPrestamos";
+            String nom2 = "deptoServicio";
+            try {
+                genPng(ch, nom);
+                genPng(chS, nom2);
+            } catch (IOException ex) {
+                System.out.println("Error al generar imagen de " + nom + " " +nom2 +": "+ex);
+            }
         } catch (SQLException e) {
             System.out.println("Error al recuperar informacion proyectores: " + e);
         }
@@ -220,14 +249,22 @@ public class GraphGen {
 
             lbl1.setIcon(new ImageIcon(imgT));
             lbl2.setIcon(new ImageIcon(imgS));
-
+            String nom = "deptoPiePrestamos";
+            String nom2 = "deptoPieServicio";
+            try {
+                genPng(ch, nom);
+                genPng(chS, nom2);
+            } catch (IOException ex) {
+                System.out.println("Error al generar imagen de " + nom + " " +nom2 +": "+ex);
+            }
         } catch (SQLException e) {
             System.out.println("Error al recuperar informacion departamentos: " + e);
         }
     }
 
-    public static void genPng(JFreeChart ch) {
-        File a = new File("D:\\JuanGS\\Documents\\Ejecutables\\imagen.png");
+    public static void genPng(JFreeChart ch, String nom) throws IOException {
+        String ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "imagenes" + File.separator + "Graficas" + File.separator + nom;
+        File a = new File(ruta +".png");
         try {
             ChartUtilities.saveChartAsPNG(a, ch, 890, 300);
         } catch (IOException ex) {

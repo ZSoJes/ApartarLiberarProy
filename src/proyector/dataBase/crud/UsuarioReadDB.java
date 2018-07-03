@@ -30,14 +30,16 @@ public class UsuarioReadDB {
 
     /**
      * Recuperar la cantidad de registros en usuarios
+     * @param usuariosDispNODisp
      * @return 
      */
-    public int getRegistros(){
+    public int getCountUsuarios(boolean usuariosDispNODisp){
         int registros = 0;
         PreparedStatement prep;
         ResultSet rs;
         try{
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS");
+            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE DISPONIBLE = ?");
+            prep.setBoolean(1, usuariosDispNODisp);
             rs = prep.executeQuery();
             while (rs.next()) registros = rs.getInt(1);
             rs.close();
@@ -49,12 +51,12 @@ public class UsuarioReadDB {
     }
     
     public String[][] getUsuarios(){
-        String[][] array = new String[getRegistros()][6];
+        String[][] array = new String[getCountUsuarios(true)][7];
         int i = 0;
         PreparedStatement prep;
         ResultSet rs;
         try{
-            prep = conn.prepareStatement("SELECT ID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, ADMINDR, CREADO FROM E_USUARIOS");
+            prep = conn.prepareStatement("SELECT ID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, ADMINDR, CREADO, DISPONIBLE FROM E_USUARIOS where DISPONIBLE = TRUE");
             rs = prep.executeQuery();
             while (rs.next()) {
                 array[i][0] = rs.getString("ID_USUARIO");
@@ -63,6 +65,7 @@ public class UsuarioReadDB {
                 array[i][3] = rs.getString("A_MATERNO");
                 array[i][4] = rs.getString("ADMINDR");
                 array[i][5] = rs.getString("CREADO");
+                array[i][6] = rs.getString("DISPONIBLE");
                 i++;
             }
             rs.close();
@@ -189,11 +192,11 @@ public class UsuarioReadDB {
         PreparedStatement prep;
         ResultSet rs;
         try {
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE ID_USUARIO = ?");
+            prep = conn.prepareStatement("SELECT COUNT(*)>0 FROM E_USUARIOS WHERE ID_USUARIO = ? and DISPONIBLE = TRUE");
             prep.setString(1, id);
             rs = prep.executeQuery();
             while (rs.next()) {
-                existe = rs.getInt(1) > 0;
+                existe = rs.getBoolean(1);
             }
             //cerrar conexiones
             prep.close();

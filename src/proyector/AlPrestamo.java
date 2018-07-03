@@ -1520,7 +1520,7 @@ public class AlPrestamo extends javax.swing.JFrame {
                     }
                     limpiarChkB();                              //limpia los ArrayList de los nombres y checkbox id obtenidos
                 } else {
-                    JOptionPane.showMessageDialog(null, "El usuario que trata de validar no esta registrado en el sistema\n\nCompruebe que su usuario esta registrado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El usuario que trata de validar no esta registrado en el sistema o fue dado de baja\n\nConsulte con el administrador.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Es importante escanee su credencial\n\npara validar este prestamo.", "Advertencia", JOptionPane.WARNING_MESSAGE);

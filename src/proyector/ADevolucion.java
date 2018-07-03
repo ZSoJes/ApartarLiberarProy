@@ -1306,7 +1306,7 @@ public class ADevolucion extends javax.swing.JFrame {
                             }
 
                         }else{
-                            JOptionPane.showMessageDialog(null, "Este usuario indicado no se encuentra registrado", "Información", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Este usuario indicado no se encuentra registrado o fue dado de baja", "Información", JOptionPane.INFORMATION_MESSAGE);
                         }
                 }else{
                     JOptionPane.showMessageDialog(null, "El videoproyector indicado no se ha prestado");
@@ -1555,7 +1555,7 @@ public class ADevolucion extends javax.swing.JFrame {
                             hiddenNSerie.setText(proyector);
                             fallosReporte.setLocationRelativeTo(pnlBackground);
                             fallosReporte.setVisible(true);
-                        }else{JOptionPane.showMessageDialog(this, "El usuario indicado no se encuentra registrado");}
+                        }else{JOptionPane.showMessageDialog(this, "El usuario indicado no se encuentra registrado o fue dado de baja");}
                 }else{JOptionPane.showMessageDialog(this, "El videoproyector indicado no existe");}
             }catch(SQLException e){System.out.println("Error al cargar reigstros de  db:"+e);}
         }else{

@@ -1263,6 +1263,20 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JFileChooser" name="fileCGraph">
+      <Properties>
+        <Property name="approveButtonText" type="java.lang.String" value="Guardar"/>
+        <Property name="approveButtonToolTipText" type="java.lang.String" value="Guardar en el directorio mostrado"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="cc" red="cc" type="rgb"/>
+        </Property>
+        <Property name="dialogTitle" type="java.lang.String" value="Guardar graficas en. . ."/>
+        <Property name="fileSelectionMode" type="int" value="1"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[645, 320]"/>
+        </Property>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>

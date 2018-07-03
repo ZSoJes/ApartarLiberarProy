@@ -3,6 +3,7 @@ package proyector;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -321,6 +322,7 @@ public final class ARegistro extends javax.swing.JFrame {
         groupImprevisto = new javax.swing.ButtonGroup();
         dlgLoading = new javax.swing.JDialog();
         lblLoadingIcon = new javax.swing.JLabel();
+        fileCGraph = new javax.swing.JFileChooser();
         pnlBackground = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         lblIco1 = new javax.swing.JLabel();
@@ -821,7 +823,6 @@ public final class ARegistro extends javax.swing.JFrame {
         dlgRprtArtPry.setTitle("[Reimprimir/Modificar Solicitud de Mantenimiento VideoProyector]");
         dlgRprtArtPry.setMinimumSize(new java.awt.Dimension(715, 580));
         dlgRprtArtPry.setModal(true);
-        dlgRprtArtPry.setPreferredSize(new java.awt.Dimension(715, 580));
         dlgRprtArtPry.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 dlgRprtArtPryWindowClosing(evt);
@@ -1018,6 +1019,13 @@ public final class ARegistro extends javax.swing.JFrame {
         lblLoadingIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLoadingIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Add New_36px.png"))); // NOI18N
         dlgLoading.getContentPane().add(lblLoadingIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 300));
+
+        fileCGraph.setApproveButtonText("Guardar");
+        fileCGraph.setApproveButtonToolTipText("Guardar en el directorio mostrado");
+        fileCGraph.setBackground(new java.awt.Color(204, 204, 204));
+        fileCGraph.setDialogTitle("Guardar graficas en. . .");
+        fileCGraph.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        fileCGraph.setPreferredSize(new java.awt.Dimension(645, 320));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Registros]");
@@ -1940,6 +1948,8 @@ public final class ARegistro extends javax.swing.JFrame {
                 graficaBarrasSolicitudes();
                 graficaBarrasSolDepto();
                 Thread.sleep(500);
+                
+                
                 return null;
             }
 
@@ -1948,6 +1958,16 @@ public final class ARegistro extends javax.swing.JFrame {
                 btnShowGraph.setVisible(false);
                 tabbedContainer.setVisible(true);
                 dlgLoading.dispose();
+                JOptionPane.showMessageDialog(pnlBackground, "Se mostraran las graficas en formato de imagen y en el programa");
+                try{
+                    String ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "imagenes" + File.separator + "Graficas";
+//                    int seleccion  = fileCGraph.showOpenDialog(pnlBackground);
+//                    if(seleccion == fileCGraph.APPROVE_OPTION){
+//                        java.io.File aGenerar = new java.io.File(fileCGraph.getCurrentDirectory());
+                        java.awt.Desktop.getDesktop().open(new java.io.File(ruta));
+                }catch (java.io.IOException e){
+                    System.out.println("Error al abrir explorar de archivos: " + e);
+                }
             }
         };
         worker.execute();
@@ -2131,6 +2151,7 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JDialog dlgLoading;
     private javax.swing.JDialog dlgReporte;
     private javax.swing.JDialog dlgRprtArtPry;
+    private javax.swing.JFileChooser fileCGraph;
     private javax.swing.ButtonGroup groupImprevisto;
     private javax.swing.ButtonGroup groupSolictudAlDepto;
     private javax.swing.JLabel hiddenIDRprt;

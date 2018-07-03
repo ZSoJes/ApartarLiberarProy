@@ -7,7 +7,6 @@ package proyector.dataBase.crud;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
@@ -42,6 +41,7 @@ public class UsuarioCreateDB {
      * Devuelve un identificador aleatorio irrepetible
      * @param datos
      * @return 
+     * @throws java.sql.SQLException 
      */
     public String getID(String[] datos) throws SQLException{
         Random randomGenerator = new Random();
@@ -89,6 +89,7 @@ public class UsuarioCreateDB {
      * @param datos
      * @param nvlAcceso 
      * @return  
+     * @throws java.sql.SQLException  
      */
     public String  setUsuario(String[] datos, boolean nvlAcceso) throws SQLException{
         String id = getID(datos);
@@ -138,6 +139,7 @@ public class UsuarioCreateDB {
      * este debe recibir un array con NOMBRE, APATERNO, AMATERNO
      * @param id 
      * @param datos
+     * @throws java.sql.SQLException
      */
     public void updUsuario(String id, String[] datos) throws SQLException{
         try{
@@ -158,6 +160,7 @@ public class UsuarioCreateDB {
      * Control de actualizacion de usuario CAMBIAR CREDENCIAL
      * se solicita [newId, oldId]
      * @param id 
+     * @throws java.sql.SQLException 
      */
     public void  updUsuario(String[] id) throws SQLException{
         try{
@@ -180,6 +183,7 @@ public class UsuarioCreateDB {
      * se solicita el password
      * @param id
      * @param pass 
+     * @throws java.sql.SQLException 
      */
     public void  updUsuario(String id, String pass) throws SQLException{
         try{
@@ -191,6 +195,19 @@ public class UsuarioCreateDB {
             prep.close();          
         }catch(SQLException ex){
             System.out.println("Error al actualizar a administrador/usuario CrearInicio updUsuario CAMBIAR CONTRASEÑA:" + ex);
+        }
+    }
+    
+    public void deleteRelifeUsuario(String id, boolean estatus){
+        PreparedStatement prep;
+        try {
+            prep = conn.prepareStatement("UPDATE E_USUARIOS SET DISPONIBLE = ?  WHERE ID_USUARIO = ?");
+            prep.setBoolean(1, estatus);
+            prep.setString(2, id);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar usuario de la base de datos: " + e);
         }
     }
 }

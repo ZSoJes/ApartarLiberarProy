@@ -72,7 +72,7 @@ public class Conexion {
         try {
             Class.forName(JDBC_NAME).newInstance();
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.print("CONEXION A LA BASE DE DATOS...");
+            System.out.println("CONEXION A LA BASE DE DATOS...");
             crearProcedure(conn);
         } catch (SQLException ex) {
             conn = DriverManager.getConnection(NEW_DB_URL, USER, PASS);

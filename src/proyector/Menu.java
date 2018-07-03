@@ -1,6 +1,7 @@
 package proyector;
 
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -18,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
@@ -53,7 +55,7 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
         labelFecha.setText(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         lblAjustes.setToolTipText("Ajustes");
-
+        btnUsuarioDLT.setVisible(false);
         //visibilidad
         lblUsuarioHidenID.setVisible(false);
         hdnIDCopy.setVisible(false);
@@ -107,15 +109,15 @@ public class Menu extends javax.swing.JFrame {
         try {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
-            String[] cols = {jTable1.getColumnName(0), jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3), jTable1.getColumnName(4), jTable1.getColumnName(5)};
+            String[] cols = {jTable1.getColumnName(0), jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3), jTable1.getColumnName(4), jTable1.getColumnName(5), jTable1.getColumnName(6)};
 
             UsuarioReadDB leer = new UsuarioReadDB();
-            int count = leer.getRegistros();
-            String[][] data = new String[count][6];
+            int count = leer.getCountUsuarios(true);
+            String[][] data = new String[count][7];
             data = leer.getUsuarios();
 
             for (int i = 0; i < count; i++) {
-                for (int j = 0; j < 7; j++) {
+                for (int j = 0; j < 8; j++) {
 
                     if (j == 4) {
                         if (Boolean.valueOf(data[i][j])) {
@@ -127,9 +129,18 @@ public class Menu extends javax.swing.JFrame {
                     if (j == 5) {
                         data[i][j] = data[i][j].substring(0, 16);
                     }
+                    if(j == 6){
+                        data[i][j] = Boolean.valueOf(data[i][j])?"SI":"NO";
+                    }
                 }
             }
             model.setDataVector(data, cols);
+//            for (int i = 0; i < count; i++) {
+//                if(!Boolean.valueOf(data[i][6])){
+//                DefaultTableCellRenderer f = new DefaultTableCellRenderer();
+//                f.setBackground(Color.YELLOW);
+//                }
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -145,7 +156,7 @@ public class Menu extends javax.swing.JFrame {
             int count = prestamos.getCantPrestamosUsuario(usuario, presActivInact);
             String[][] dataTabla = new String[count][8];
             String[][] dataDB = prestamos.getPrestamosUsuario(usuario, presActivInact);
-
+            
             for (int i = 0; i < count; i++) {
                 for (int j = 0; j < 8; j++) {
 //                    if (j == 0) {
@@ -288,6 +299,7 @@ public class Menu extends javax.swing.JFrame {
         tglActInc = new javax.swing.JToggleButton();
         hiddenLbl = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        btnUsuarioDLT = new javax.swing.JButton();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         pnlBackup = new javax.swing.JPanel();
@@ -1356,14 +1368,14 @@ public class Menu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Identificador", "Nombre", "Ap Paterno", "Ap Materno", "Nvl de Acceso", "Creación"
+                "Identificador", "Nombre", "Ap Paterno", "Ap Materno", "Nvl de Acceso", "Creación", "DISPONIBLE"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1415,11 +1427,21 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        btnUsuarioDLT.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
+        btnUsuarioDLT.setForeground(new java.awt.Color(255, 102, 102));
+        btnUsuarioDLT.setText("Eliminar Usuario");
+        btnUsuarioDLT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioDLTActionPerformed(evt);
+            }
+        });
+
         jLayeredPane2.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(tglActInc, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(hiddenLbl, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(btnUsuarioDLT, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane2Layout = new javax.swing.GroupLayout(jLayeredPane2);
         jLayeredPane2.setLayout(jLayeredPane2Layout);
@@ -1430,6 +1452,8 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jLayeredPane2Layout.createSequentialGroup()
                         .addComponent(tglActInc)
+                        .addGap(189, 189, 189)
+                        .addComponent(btnUsuarioDLT, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(hiddenLbl)
                         .addGap(27, 27, 27)
@@ -1453,7 +1477,9 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(hiddenLbl))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane2Layout.createSequentialGroup()
-                        .addComponent(tglActInc, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnUsuarioDLT)
+                            .addComponent(tglActInc, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10))))
             .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane2Layout.createSequentialGroup()
@@ -2787,7 +2813,7 @@ public class Menu extends javax.swing.JFrame {
             //son las mismas?
             if (Arrays.equals(pass1, pass2)) {
                 //estan en blanco los demas campos
-                if (!nom.isEmpty() && !aPat.isEmpty() && !aMat.isEmpty()) {
+                if (!nom.isEmpty() && !aPat.isEmpty() && aPat.length() > 2 && !aMat.isEmpty()) {
                     try {
                         UsuarioReadDB leer = new UsuarioReadDB();
                         UsuarioCreateDB crear = new UsuarioCreateDB();
@@ -2943,7 +2969,7 @@ public class Menu extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "No se relizo ningun cambio revise la credencial del usuario que indico");
                 }
             }
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             System.out.println("Error al actualizar los datos: " + e);
         }
         updContenido(idOrig, idNew);
@@ -3086,6 +3112,8 @@ public class Menu extends javax.swing.JFrame {
             jTable2.setVisible(true);
             tglActInc.setVisible(true);
             jButton4.setVisible(true);
+            
+            btnUsuarioDLT.setVisible(true);
         }
 
         System.out.println("row " + fila + " seleccionada: " + Arrays.toString(datos));
@@ -3101,7 +3129,8 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         hiddenLbl.setText("");
-
+        btnUsuarioDLT.setVisible(false);
+        
         jScrollPane1.setVisible(true);
         jTable1.setVisible(true);
 
@@ -3391,6 +3420,33 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void btnUsuarioDLTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioDLTActionPerformed
+        int eleccion = JOptionPane.showConfirmDialog(this, "La eliminacion del usuario "+ hiddenLbl.getText() + " sera permanente!\nDesea continuar. . . ?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+        if(eleccion == JOptionPane.YES_OPTION){
+            try {
+                UsuarioCreateDB deleteUser = new UsuarioCreateDB();
+                if(new UsuarioReadDB().getCountUsuarios(true) > 1){
+                    deleteUser.deleteRelifeUsuario(hiddenLbl.getText().trim(), false);
+                    hiddenLbl.setText("");
+                    getTabla();
+                    btnUsuarioDLT.setVisible(false);
+
+                    jScrollPane1.setVisible(true);
+                    jTable1.setVisible(true);
+
+                    jScrollPane2.setVisible(false);
+                    jTable2.setVisible(false);
+                    tglActInc.setVisible(false);
+                    jButton4.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(this, "Es el unico usuario disponible no puede ser eliminado.");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnUsuarioDLTActionPerformed
+
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
         if (!(Character.isAlphabetic(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
@@ -3454,6 +3510,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel btnGenerar;
     private javax.swing.JButton btnGetUsuario;
     private javax.swing.JPanel btnProf;
+    private javax.swing.JButton btnUsuarioDLT;
     private javax.swing.JButton btnValidarUsr;
     private javax.swing.JPanel btnVid;
     private javax.swing.JCheckBox cb1;
