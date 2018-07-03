@@ -22,7 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import proyector.dataBase.crud.AccesorioDB;
+import proyector.dataBase.crud.ArticuloDB;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.DepartamentoDB;
 import proyector.dataBase.crud.UsuarioReadDB;
@@ -119,8 +119,8 @@ public class AlPrestamo extends javax.swing.JFrame {
     public void scrollPaneAccesorios() {
         jPanel1.removeAll();
         try {
-            AccesorioDB acc = new AccesorioDB();
-            String[][] datos = acc.getAccesorios(true);
+            ArticuloDB acc = new ArticuloDB();
+            String[][] datos = acc.getArticulos(true);
 
             int n = datos.length;
             for (int i = 0; i < n; i++) {
@@ -1385,18 +1385,18 @@ public class AlPrestamo extends javax.swing.JFrame {
                 boolean proyeExiste = proyector.getExisteProyector(proy);
                 if(profeExiste && proyeExiste){                                //comprobar los datos si son verdaderos
 //                    try{                                                                      //recupera el id de los checkbox seleccionados
-//                        AccesorioDB acc = new AccesorioDB();
+//                        ArticuloDB acc = new ArticuloDB();
 //                        Iterator<String> it = chkBText.iterator();      // iterar sobre arrayList con nombre de accesorios
 //                        while(it.hasNext()){
 //                            accesorio = it.next();
-//                            int id = acc.getAccesorioID(accesorio);       // recuperar ID del accesorio y agregar al arrayList temporal llamado chkBID
+//                            int id = acc.getArticuloID(accesorio);       // recuperar ID del accesorio y agregar al arrayList temporal llamado chkBID
 //                            System.out.println("-Id: " + id + " -Accesorio: " + accesorio);
 //                            chkBID.add(id);
 //                        }
                         // abrir dialog para validar prestamo con un usuario reconocido por el sistema
                         verUsuario.setLocationRelativeTo(pnlBackground);
                         verUsuario.setVisible(true);
-//                    }catch(SQLException ex){ System.out.println("Error al utilizar una instancia de AccesorioDB:" + ex); }
+//                    }catch(SQLException ex){ System.out.println("Error al utilizar una instancia de ArticuloDB:" + ex); }
                 }else{
                    JOptionPane.showMessageDialog(null, "El profesor indicado y/o video proyector no se encuentran registrados en la base de datos\n"
                        + "Compruebe los datos ingresados", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -1465,9 +1465,9 @@ public class AlPrestamo extends javax.swing.JFrame {
                             JCheckBox c = (JCheckBox) component;        //crea una instancia para identificar el componente
                             if(c.isSelected()){                                             //revisa si esta seleccionado
                                 try{
-                                    AccesorioDB acc = new AccesorioDB();
+                                    ArticuloDB acc = new ArticuloDB();
                                     String accesorio = c.getText();
-                                    int id = acc.getAccesorioID(accesorio);
+                                    int id = acc.getArticuloID(accesorio);
                                     chkBFinal.add(id);     //obtengo el texto del componente->obtengo el id del accesorio->lo asigno a un ArrayList temporal
                                     System.out.println("-Id: " + id + " -Accesorio: " + accesorio);
                                     

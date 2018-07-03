@@ -2333,7 +2333,7 @@ public final class Videoproyector extends javax.swing.JFrame {
                     pry.setReparacionPry(hiddenNSerie.getText(), imprevisto);
                     
                     pry.reportePry(Integer.parseInt(pry.getProyectorID(hiddenNSerie.getText())), datos);
-                    genR.getReporteFalloPry(reporteDtos);
+                    genR.getSolicitudMantenimientoPry(reporteDtos);
                     
                     dibujarProye();
                     fallosReporte.setVisible(false);

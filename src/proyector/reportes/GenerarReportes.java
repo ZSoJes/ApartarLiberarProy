@@ -158,23 +158,30 @@ public class GenerarReportes {
         try {
             Conexion conn = new Conexion();
             JasperReport report = null;
-            String ruta = "";
+            
+            String nomReporte = "";
             try {
+                String ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator;
                 switch (opc){
                     case 1:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reportePry" + File.separator + "PryPrestamos.jasper";
+                        ruta += "reportePry" + File.separator + "PryPrestamos.jasper";
+                        nomReporte = "Reporte de Videoproyectores";
                     break;
                     case 2:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteProf" + File.separator + "ProfPrestamos.jasper";
+                        ruta += "reporteProf" + File.separator + "ProfPrestamos.jasper";
+                        nomReporte = "Reporte por Profesor";
                     break;
                     case 3:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteDep" + File.separator + "DepPrestamos.jasper";
+                        ruta = "reporteDep" + File.separator + "DepPrestamos.jasper";
+                        nomReporte = "Reporte por Departamento";
                     break;
                     case 4:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reporteAccesorios.jasper";
+                        ruta = "reporteFallosAccYVid" + File.separator + "reporteAccesorios.jasper";
+                        nomReporte = "Reporte de fallos/daños Articulos";
                     break;
                     case 5:
-                        ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosAccYVid" + File.separator + "reportePry.jasper";
+                        ruta = "reporteFallosAccYVid" + File.separator + "reportePry.jasper";
+                        nomReporte = "Reporte de fallos/daños Proyectores";
                     break;
                 }
                 
@@ -193,7 +200,7 @@ public class GenerarReportes {
             JasperPrint j = JasperFillManager.fillReport(report, parameter, conn.getConexion());
 
             JasperViewer jv = new JasperViewer(j, false);
-            jv.setTitle("Reporte Videoproyectores");
+            jv.setTitle(nomReporte);
             jv.setVisible(true);
             jv.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
             jv.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
@@ -205,13 +212,13 @@ public class GenerarReportes {
     
     
     
-    public void getReporteFalloPry(String[] datos) {
+    public void getSolicitudMantenimientoPry(String[] datos) {
         try {
             Conexion conn = new Conexion();
             JasperReport report = null;
             String ruta = "";
             try {
-                ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "reporteFallosProyector.jasper";
+                ruta = new java.io.File(".").getCanonicalPath() + File.separator + "src" + File.separator + "proyector" + File.separator + "reportes" + File.separator+ "solicitudMantProyector.jasper";
                 
                 InputStream f = new FileInputStream(ruta);
                 System.out.println("Current dir:" + ruta);

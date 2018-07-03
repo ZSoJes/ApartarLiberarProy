@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
-import proyector.dataBase.crud.AccesorioDB;
+import proyector.dataBase.crud.ArticuloDB;
 
 /**
  *
@@ -66,13 +66,13 @@ public class Articulo extends javax.swing.JFrame {
     
     public void getTable() throws SQLException {
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-        AccesorioDB acc = new AccesorioDB();
+        ArticuloDB acc = new ArticuloDB();
 
         String[] cols = {jTable2.getColumnName(0),jTable2.getColumnName(1), jTable2.getColumnName(2), jTable2.getColumnName(3)};
-        int count = acc.getCantAccesorios(true);
+        int count = acc.getCantArticulos(true);
         System.out.println("\nAccesorios existentes: " + count);
 
-        String[][] datos = acc.getAccesorios(false);
+        String[][] datos = acc.getArticulos(false);
         String art[][] = new String[count][4];
         
         for(int i = 0; i < count ;i++){
@@ -86,10 +86,10 @@ public class Articulo extends javax.swing.JFrame {
     
     public void getPrestadosHOY() throws SQLException {
         DefaultTableModel model5 = (DefaultTableModel) jTable5.getModel();
-        AccesorioDB acc = new AccesorioDB();
+        ArticuloDB acc = new ArticuloDB();
         String[] cols = {jTable5.getColumnName(0),jTable5.getColumnName(1), jTable5.getColumnName(2), jTable5.getColumnName(3),jTable5.getColumnName(4)};
         
-        String[][] datos = acc.getRegAccesorios(true);
+        String[][] datos = acc.getRegArticulos(true);
         int count = datos.length;
         System.out.println("\nRegistros accesorios existentes: " + count);
         
@@ -104,10 +104,10 @@ public class Articulo extends javax.swing.JFrame {
     
     public void getPrestadosAcc() throws SQLException{
         DefaultTableModel modelReg = (DefaultTableModel) jTable3.getModel();
-        AccesorioDB acc = new AccesorioDB();
+        ArticuloDB acc = new ArticuloDB();
         String[] cols = {jTable3.getColumnName(0),jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3),jTable3.getColumnName(4)};
         
-        String[][] datos = acc.getRegAccesorios(false);
+        String[][] datos = acc.getRegArticulos(false);
         int count = datos.length;
         System.out.println("\nRegistros accesorios existentes: " + count);
         
@@ -1335,9 +1335,9 @@ public class Articulo extends javax.swing.JFrame {
 ////            jTabbedPane1.setEnabledAt(4, true);
 ////            jTabbedPane1.setSelectedIndex(4);
 ////            try {
-////                AccesorioDB acc = new AccesorioDB();
+////                ArticuloDB acc = new ArticuloDB();
 ////                String id = String.valueOf(jTable2.getValueAt(fila, 0));
-////                String[] datos = acc.getAccesorio(id);
+////                String[] datos = acc.getArticulo(id);
 ////                hiddenLabelArt.setText(datos[0]);
 ////                txtNom3.setText(datos[1]);
 ////                txtExist1.setText(datos[2]);
@@ -1446,10 +1446,10 @@ public class Articulo extends javax.swing.JFrame {
             System.out.println("Arreglo de datos: " + Arrays.toString(articulo));
             
             try {
-                AccesorioDB artic = new AccesorioDB();
-                if(!artic.accesorioExist(nom)){
+                ArticuloDB artic = new ArticuloDB();
+                if(!artic.articuloExist(nom)){
                     System.out.println("El accesorio no ha sido registrado, se creara el registro...");
-                    artic.setAccesorio(articulo);
+                    artic.setArticulo(articulo);
                     JOptionPane.showMessageDialog(null, "Se ha creado el nuevo registro");
                 }else{JOptionPane.showMessageDialog(this, "Este articulo ya existes!", "Advertencia", JOptionPane.WARNING_MESSAGE);}
             } catch (SQLException ex) {System.out.println("Error al realizar el guardado de Articulo: " + ex);}
@@ -1478,12 +1478,12 @@ public class Articulo extends javax.swing.JFrame {
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         String id = txtBorrar.getText().trim();
         try{
-            AccesorioDB acc = new AccesorioDB();
-            String[] datos = acc.getAccesorio(id);
+            ArticuloDB acc = new ArticuloDB();
+            String[] datos = acc.getArticulo(id);
             if(Integer.parseInt(datos[2])==Integer.parseInt(datos[3])){
                 int opc = JOptionPane.showConfirmDialog(this, "Si procede a esta accion borrara todos los registros relacionados", "Información", JOptionPane.YES_NO_OPTION);
                 if (opc == JOptionPane.YES_OPTION){
-                    acc.destroyAcc(Integer.parseInt(id));
+                    acc.destroyArt(Integer.parseInt(id));
                     getTable();
                     JOptionPane.showMessageDialog(this, "El articulo ha sido eliminado");
                 }
@@ -1501,8 +1501,8 @@ public class Articulo extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String id = txtIDArt.getText().trim();
         try{
-            AccesorioDB acc = new AccesorioDB();
-            String[] datos = acc.getAccesorio(id);
+            ArticuloDB acc = new ArticuloDB();
+            String[] datos = acc.getArticulo(id);
             if(datos[0]!=null){//existe
                 if(Integer.parseInt(datos[2])==Integer.parseInt(datos[3])){//si las existencias son menores a los diponibles hay un prestamo o una multa
                     //Colocar Info
@@ -1533,13 +1533,13 @@ public class Articulo extends javax.swing.JFrame {
         
         if(!nom.isEmpty() && !ext.isEmpty() && !desc.isEmpty()){
             try{
-                AccesorioDB artic = new AccesorioDB();
-                if(artic.accesorioExist(nom)){
+                ArticuloDB artic = new ArticuloDB();
+                if(artic.articuloExist(nom)){
                     System.out.println("Esta usando un nombre existente");
                     if(nom.equals(lblhiddenNom.getText().trim())){
                         System.out.println("el nombre es el mismo no hay problema");
                         String[] datos = {lblHiddenID.getText().trim(), nom, ext, desc };
-                        artic.updAccesorio(datos);
+                        artic.updArticulo(datos);
                         JOptionPane.showMessageDialog(this,"Se ha actualizado el registro de articulos");
                     }else{
                         JOptionPane.showMessageDialog(this, "El nombre que utiliza para el articulo ya esta registrado intente con un distinto");
@@ -1547,7 +1547,7 @@ public class Articulo extends javax.swing.JFrame {
                 }else{
                     System.out.println("el nombre no es el mismo y no existe en db no hay problema");
                     String[] datos = {lblHiddenID.getText().trim(), nom, ext, desc };
-                    artic.updAccesorio(datos);
+                    artic.updArticulo(datos);
                     JOptionPane.showMessageDialog(this,"Se ha actualizado el registro de articulos");
                 }
             }catch(SQLException e){System.out.println("Error al cargar registros desde AccesoriosDB:"+e);}

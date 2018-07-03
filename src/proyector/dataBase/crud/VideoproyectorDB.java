@@ -572,8 +572,9 @@ public class VideoproyectorDB {
     }
     
     public void reportePry(int proye, String[] datos){
+        PreparedStatement prep;
+        ResultSet rs;
         try{
-            PreparedStatement prep;
             prep = conn.prepareStatement("INSERT INTO E_REP_VIDEOPROYECTORES(ID_VIDEOPROYECTOR, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES) VALUES(?, ?, ?, ?, ?, ?, ?)");
             prep.setInt(1, proye);
             prep.setString(2, datos[0]);
@@ -585,7 +586,48 @@ public class VideoproyectorDB {
             prep.executeUpdate();
             prep.close();
         }catch(SQLException ex){
-            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB:" + ex + "\n\n");
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB part1:" + ex + "\n\n");
+        }
+        int idReporte = getIDReporte();
+        int idPrestamo = 0;
+        String idProf = null;
+        String sqlProf = "SELECT ID_PRESTAMO, ID_PROFESOR FROM E_PRESTAMOS WHERE ID_VIDEOPROYECTOR = ? ORDER BY CREADO DESC LIMIT 1;";
+        try {
+            prep = conn.prepareStatement(sqlProf);
+            prep.setInt(1, proye);
+            rs = prep.executeQuery();
+            while(rs.next()){
+                idPrestamo = rs.getInt(1);
+                idProf = rs.getString(2);
+            }
+            rs.close();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB part2:" + e + "\n\n");
+        }
+        
+        try {
+            prep = conn.prepareStatement("UPDATE E_REP_VIDEOPROYECTORES " +
+            "SET ID_PROFESOR = ?" +
+            "WHERE ID_REPORTE_VIDEOPROYECTOR = ?;");
+            prep.setString(1, idProf);
+            prep.setInt(2, idReporte);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB part3:" + e + "\n\n");
+        }
+        try {
+            prep = conn.prepareStatement("UPDATE E_PRESTAMOS " +
+            "SET ESTATUS_DEVOLUCION = TRUE, " +
+            "ID_REPORTE_VIDEOPROYECTOR = ? " +
+            "WHERE ID_PRESTAMO = ?;");
+            prep.setInt(1, idReporte);
+            prep.setInt(2, idPrestamo);
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println("\nError al REPORTAR MANTENIMIENTO SETREPARACIONPRY VIDEOPROYECTORDB part4:" + e + "\n\n");
         }
     }
     
@@ -594,7 +636,7 @@ public class VideoproyectorDB {
         ResultSet rs;
         int id = 0;
         try {
-            prep = conn.prepareStatement("SELECT * FROM E_REP_VIDEOPROYECTORES ORDER BY ID_REPORTE_VIDEOPROYECTOR DESC LIMIT 1");
+            prep = conn.prepareStatement("SELECT ID_REPORTE_VIDEOPROYECTOR FROM E_REP_VIDEOPROYECTORES ORDER BY CREADO DESC LIMIT 1");
             rs = prep.executeQuery();
             while(rs.next()){ id = rs.getInt(1); }
             rs.close();

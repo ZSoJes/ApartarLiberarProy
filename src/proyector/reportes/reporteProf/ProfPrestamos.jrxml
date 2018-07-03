@@ -150,7 +150,7 @@ ORDER BY E_PROFESORES.ID_PROFESOR]]>
 	<field name="A_MATERNO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ESTATUS_ESCOLAR" class="java.lang.Boolean">
+	<field name="SIN_ADEUDO" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ESTATUS" class="java.lang.Boolean">

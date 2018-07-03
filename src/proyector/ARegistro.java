@@ -73,12 +73,6 @@ public final class ARegistro extends javax.swing.JFrame {
         timer.start();
 
         tabbedContainer.setVisible(false);
-//        dlgLoading.setContentPane(new ShadowPane());
-//        dlgLoading.getRootPane().setOpaque(false);
-//        graficas();
-//        graficaPastelProy();
-//        graficaBarrasSolicitudes();
-//        graficaBarrasSolDepto();
         jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
     }
 
@@ -322,6 +316,7 @@ public final class ARegistro extends javax.swing.JFrame {
         btnRpImprimir = new javax.swing.JButton();
         hiddenIDRprt = new javax.swing.JLabel();
         lblProfe = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         groupSolictudAlDepto = new javax.swing.ButtonGroup();
         groupImprevisto = new javax.swing.ButtonGroup();
         dlgLoading = new javax.swing.JDialog();
@@ -620,11 +615,9 @@ public final class ARegistro extends javax.swing.JFrame {
                     .addComponent(dRb1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pnlDatosLayout.createSequentialGroup()
-                        .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dRb4)
-                            .addComponent(dRb6))
-                        .addGap(0, 0, 0))
+                    .addGroup(pnlDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dRb4)
+                        .addComponent(dRb6))
                     .addComponent(dRb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(23, 23, 23))
         );
@@ -825,9 +818,10 @@ public final class ARegistro extends javax.swing.JFrame {
         );
 
         dlgRprtArtPry.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        dlgRprtArtPry.setTitle("[Reimprimir/Modificar/Eliminar Reporte de VideoProyector]");
-        dlgRprtArtPry.setMinimumSize(new java.awt.Dimension(715, 550));
+        dlgRprtArtPry.setTitle("[Reimprimir/Modificar Solicitud de Mantenimiento VideoProyector]");
+        dlgRprtArtPry.setMinimumSize(new java.awt.Dimension(715, 580));
         dlgRprtArtPry.setModal(true);
+        dlgRprtArtPry.setPreferredSize(new java.awt.Dimension(715, 580));
         dlgRprtArtPry.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 dlgRprtArtPryWindowClosing(evt);
@@ -835,6 +829,8 @@ public final class ARegistro extends javax.swing.JFrame {
         });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setMinimumSize(new java.awt.Dimension(700, 570));
+        jPanel2.setPreferredSize(new java.awt.Dimension(700, 570));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -969,7 +965,7 @@ public final class ARegistro extends javax.swing.JFrame {
                 btnRpActualizarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRpActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 450, -1, -1));
+        jPanel2.add(btnRpActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, -1, -1));
 
         btnRpCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
         btnRpCancelar.setText("Cancelar");
@@ -979,7 +975,7 @@ public final class ARegistro extends javax.swing.JFrame {
                 btnRpCancelarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRpCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 450, -1, -1));
+        jPanel2.add(btnRpCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 460, -1, -1));
 
         btnRpImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Print_36px.png"))); // NOI18N
         btnRpImprimir.setText("Reimprimir");
@@ -994,25 +990,28 @@ public final class ARegistro extends javax.swing.JFrame {
         hiddenIDRprt.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         hiddenIDRprt.setText("SoyID");
         jPanel2.add(hiddenIDRprt, new org.netbeans.lib.awtextra.AbsoluteConstraints(618, 199, -1, -1));
+        jPanel2.add(lblProfe, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 417, -1, -1));
 
-        lblProfe.setText("jLabel5");
-        jPanel2.add(lblProfe, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 420, -1, -1));
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Info_36px.png"))); // NOI18N
+        jLabel14.setText("<html>Doble clic izq para modificar y/o imprimir reporte<br>Clic izq en cancelar para indicar un reporte diferente</html>");
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 500, -1, -1));
 
         javax.swing.GroupLayout dlgRprtArtPryLayout = new javax.swing.GroupLayout(dlgRprtArtPry.getContentPane());
         dlgRprtArtPry.getContentPane().setLayout(dlgRprtArtPryLayout);
         dlgRprtArtPryLayout.setHorizontalGroup(
             dlgRprtArtPryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(dlgRprtArtPryLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         dlgRprtArtPryLayout.setVerticalGroup(
             dlgRprtArtPryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
         );
 
         dlgLoading.setMinimumSize(new java.awt.Dimension(600, 300));
         dlgLoading.setModal(true);
         dlgLoading.setUndecorated(true);
-        dlgLoading.setPreferredSize(new java.awt.Dimension(600, 300));
         dlgLoading.setResizable(false);
         dlgLoading.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -1436,7 +1435,7 @@ public final class ARegistro extends javax.swing.JFrame {
         jLabel4.setMinimumSize(new java.awt.Dimension(70, 19));
         jLabel4.setPreferredSize(new java.awt.Dimension(70, 19));
 
-        btnReportePry.setText("<html>Modificar/Reimprimir<br>Reportes Proyector</html>");
+        btnReportePry.setText("<html>Modificar/Reimprimir<br>Solicitud de Mantenimiento</html>");
         btnReportePry.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         btnReportePry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1460,9 +1459,9 @@ public final class ARegistro extends javax.swing.JFrame {
                 .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnReportePry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(28, 28, 28)
                 .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1676,6 +1675,7 @@ public final class ARegistro extends javax.swing.JFrame {
                 gr.getRRTods(fch, 2, opc);
                 gr.getRRTods(fch, 3, opc);
                 gr.getRRTods(fch, 4, opc);
+                gr.getRRTods(fch, 5, opc);
             } else if (dRb3.isSelected()) { //videoproyector
                 gr.getRRTods(fch, 1, opc);
             } else if (dRb2.isSelected()) { //profesores
@@ -1777,10 +1777,17 @@ public final class ARegistro extends javax.swing.JFrame {
             try {
                 PrestamoDB press = new PrestamoDB();
                 String[] arr = press.getReporte(Integer.parseInt(id));
-                System.out.println("Arr On clic: " + Arrays.toString(arr));
+                System.out.println("\n> Usted ha seleccionado el siguiente reporte \n\t\t" + Arrays.toString(arr)+"\n<\n<<");
                 //profe
                 String[] profe = new ProfesorDB().getProfesor(arr[2]);
-                lblProfe.setText(profe[2] + " " + profe[3] + " " + profe[4]);
+                String miProfe;
+                if(profe[0]!=null){
+                    VideoproyectorDB a = new VideoproyectorDB();
+                    miProfe = "<html>Ultimo docente en usar Proyector <b>"+ a.getProyector(a.getProyectorNoSerie(arr[1]))[1] +"</b>:<br>" + profe[2] + " " + profe[3] + " " + profe[4] + "</html>";
+                }else{
+                    miProfe = "";
+                }
+                lblProfe.setText(miProfe);
                 //titulo
                 txtRprt3.setText(arr[3]);
                 //nombre_encargado
@@ -1888,7 +1895,7 @@ public final class ARegistro extends javax.swing.JFrame {
             PrestamoDB pres = new PrestamoDB();
             String[] arr = pres.getReporte(Integer.parseInt(hiddenIDRprt.getText()));
             String[] reporteDtos = {arr[5], arr[4], arr[8], arr[6], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
-            genR.getReporteFalloPry(reporteDtos);
+            genR.getSolicitudMantenimientoPry(reporteDtos);
             new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 5);
         } catch (SQLException e) {
             System.out.println("Error al generar Reporte: " + e);
@@ -1982,6 +1989,7 @@ public final class ARegistro extends javax.swing.JFrame {
         cbRprt6.setSelected(false);
         cbRprt7.setSelected(false);
         jTextArea1.setText("");
+        lblProfe.setText("");
     }
 
     public String[] rbFechasOpc(int opc) {
@@ -2140,6 +2148,7 @@ public final class ARegistro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel38;

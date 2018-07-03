@@ -13,6 +13,9 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{Imagen_SCRIPTLET}.reporte()+"/src/proyector/reportes/reporteFallosAccYVid/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="opc" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT COUNT(*) AS CONTADOR FROM E_PRESTAMOS WHERE CREADO BETWEEN $P{date1} AND $P{date2}]]>
 	</queryString>
@@ -40,7 +43,9 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Reportes de fallos técnicos/uso de Artículos"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Reportes" +
+($P{opc}==1?" por dia ":($P{opc}==2?" por semana ":($P{opc}==3?" por mes ":($P{opc}==4?" por semestre ":($P{opc}==5?" por año ":""))))) +
+"de fallos técnicos/uso de Artículos"]]></textFieldExpression>
 			</textField>
 			<elementGroup>
 				<image>

@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
-import proyector.dataBase.crud.AccesorioDB;
+import proyector.dataBase.crud.ArticuloDB;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.DepartamentoDB;
 import proyector.dataBase.crud.LogDB;
@@ -1485,14 +1485,14 @@ public class ADevolucion extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(this, "Reporte Realizado!\nSe descartaran del inventario los artículos que ha indicado","Información", JOptionPane.INFORMATION_MESSAGE);
             try{
-            AccesorioDB accDB = new AccesorioDB();
+            ArticuloDB accDB = new ArticuloDB();
             int[] accesorioID = new int[acc.length];
             int j = 0;
             for(String ac : acc){
-                accesorioID[j] = accDB.getAccesorioID(ac);
+                accesorioID[j] = accDB.getArticuloID(ac);
                 j++;
             }
-            accDB.reporteAcc(profe, titulo, detalles, accesorioID);
+            accDB.reporteArt(profe, titulo, detalles, accesorioID);
             
             }catch(SQLException ex){ System.out.println("Error de tabla accesorio como reporte: " + ex); }
                     
@@ -1615,7 +1615,7 @@ public class ADevolucion extends javax.swing.JFrame {
 
                     pres.updPrestamoConReporte(proyector, credencial, datos);//noSerie, idUsuario, datosR
                     
-                    genR.getReporteFalloPry(reporteDtos);
+                    genR.getSolicitudMantenimientoPry(reporteDtos);
                     new LogDB().log(credencial, "E_PRESTAMOS", 7);
                     
                     
@@ -1800,7 +1800,7 @@ public class ADevolucion extends javax.swing.JFrame {
         
         //datos
         String[] profe = new ProfesorDB().getProfesor(datos[4]);
-        String [] accesoriosAr = new AccesorioDB().getAccDeProf(datos[4]);
+        String [] accesoriosAr = new ArticuloDB().getArtDeProf(datos[4]);
         String pryNom = new VideoproyectorDB().getProyector(new VideoproyectorDB().getProyectorNoSerie(datos[3]))[1];
         
         vidNom.setText(pryNom);

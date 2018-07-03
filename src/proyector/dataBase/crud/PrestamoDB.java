@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Iterator;
 import proyector.dataBase.Conexion;
 
@@ -57,10 +56,10 @@ public class PrestamoDB {
                 } catch (SQLException ex) {
                     System.out.println("\nError al ingresar nueva informacion setPrestamo obtener id prestamo: " + ex);
                 }
-                AccesorioDB accesorioDB = new AccesorioDB();
+                ArticuloDB accesorioDB = new ArticuloDB();
                 for (int acc : accesorios) {
-                    accesorioDB.setPrestamoAccesorio(acc, prestamo);
-                    accesorioDB.updAccesorioAR(false, acc);
+                    accesorioDB.setPrestamoArticulo(acc, prestamo);
+                    accesorioDB.updArticuloAR(false, acc);
                 }
             }
             System.out.println("\n...: : : NUEVO PRESTAMO GENERADO EXITOSAMENTE : : :...\n");
@@ -96,9 +95,9 @@ public class PrestamoDB {
             ArrayList<Integer> articulosPrestados = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(datos[0])));
             if (articulosPrestados.size() > 0) {
                 try {
-                    AccesorioDB accesorioDB = new AccesorioDB();
+                    ArticuloDB accesorioDB = new ArticuloDB();
                     for (Iterator<Integer> it = articulosPrestados.iterator(); it.hasNext();) {
-                        accesorioDB.updAccesorioAR(true, it.next());
+                        accesorioDB.updArticuloAR(true, it.next());
                     }
                 } catch (SQLException ex) {
                     System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
@@ -109,29 +108,29 @@ public class PrestamoDB {
             System.out.println("\n\nError al momento de liberar el prestamo PrestamoDB:" + e);
         }
     }
-    
-    public void updPrestamoConReporte(String noSerie, String idUsuario, String[] datosR){
-        try{
-        String[] datosP = getPrestamo(noSerie); // datos = { idPrest, idProy, idProf, idAul }
-        PreparedStatement prep;
-        ResultSet rs;
-        int idReporte = 0;
+
+    public void updPrestamoConReporte(String noSerie, String idUsuario, String[] datosR) {
         try {
-            prep = conn.prepareStatement("CALL GEN_REP_PROY(?)");
-            prep.setObject(1, new String[]{datosP[1], datosP[2], datosR[0], datosR[1], datosR[2], datosR[3], datosR[4], datosR[5]  }); //idProy, idProf, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES
-            rs = prep.executeQuery();
-            while( rs.next()){
-                idReporte = rs.getInt(1);
+            String[] datosP = getPrestamo(noSerie); // datos = { idPrest, idProy, idProf, idAul }
+            PreparedStatement prep;
+            ResultSet rs;
+            int idReporte = 0;
+            try {
+                prep = conn.prepareStatement("CALL GEN_REP_PROY(?)");
+                prep.setObject(1, new String[]{datosP[1], datosP[2], datosR[0], datosR[1], datosR[2], datosR[3], datosR[4], datosR[5]}); //idProy, idProf, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES
+                rs = prep.executeQuery();
+                while (rs.next()) {
+                    idReporte = rs.getInt(1);
+                }
+                rs.close();
+                prep.close();
+                System.out.println("\n..:::El id del reporte es:" + idReporte);
+            } catch (SQLException e) {
+                System.out.println("Error al recuperar el ultimo reporte:" + e);
             }
-            rs.close();
-            prep.close();
-            System.out.println("\n..:::El id del reporte es:"+idReporte);
-        } catch (SQLException e) {
-            System.out.println("Error al recuperar el ultimo reporte:"+e);
-        }
-        
-        //devolucion de proyector con su reporte asignado
-        try {
+
+            //devolucion de proyector con su reporte asignado
+            try {
                 prep = conn.prepareStatement("CALL FREE_PRESTAMO_REPORT_PRY(?, ?, ?, ?, ?, ?)");
                 prep.setString(1, idUsuario);
                 prep.setInt(2, Integer.parseInt(datosP[1]));
@@ -144,20 +143,20 @@ public class PrestamoDB {
             } catch (SQLException e) {
                 System.out.println("Error al liberar con reporte prestamo updPrestamo:" + e);
             }
-        //devolucion de articulos
-        ArrayList<Integer> articulosPrestados = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(datosP[0])));
+            //devolucion de articulos
+            ArrayList<Integer> articulosPrestados = new ArrayList<>(getAccesoriosPrestamo(Integer.parseInt(datosP[0])));
             if (articulosPrestados.size() > 0) {
                 try {
-                    AccesorioDB accesorioDB = new AccesorioDB();
+                    ArticuloDB accesorioDB = new ArticuloDB();
                     for (Iterator<Integer> it = articulosPrestados.iterator(); it.hasNext();) {
-                        accesorioDB.updAccesorioAR(true, it.next());
+                        accesorioDB.updArticuloAR(true, it.next());
                     }
                 } catch (SQLException ex) {
                     System.out.println("Error al actualizar accesorios para liberarlos updPrestamo PrestamoDB: " + ex);
                 }
             }
-        }catch(NumberFormatException e){
-            System.out.println("Error al generar el reporte junto a la liberacion del prestamo updPrestamoConReporte:"+e);
+        } catch (NumberFormatException e) {
+            System.out.println("Error al generar el reporte junto a la liberacion del prestamo updPrestamoConReporte:" + e);
         }
     }
 
@@ -177,12 +176,18 @@ public class PrestamoDB {
         return accesorioID;
     }
 
-
-
     /**
-     *A NOMBRE DE UN AULA, PROFESOR, VIDEOPROYECTOR, DEPARTAMENTO con profesores que hayan solicitado prestamo, esperando EL ID CORRESPONDIENTE regresa si esta disponible para realizar un prestamo
-     * <p>se espera: <ul><li>{1, idAula int}</li><li>{2, idProfesor String}</li><li>{3, NoSerieProyector String}</li><li>{4, idDepto int}</li></ul><br>opcTabla se llena de acuerdo a la opciones anteriores 1 para indicar aula, 2 profesor y asi </p>
-     * REVISAR SI UN PROYECTOR SE ENCUENTRA DISPONIBLE DESDE E_PRESTAMOS INDICAR NumSerie y 5 para esta accion
+     * A NOMBRE DE UN AULA, PROFESOR, VIDEOPROYECTOR, DEPARTAMENTO con
+     * profesores que hayan solicitado prestamo, esperando EL ID CORRESPONDIENTE
+     * regresa si esta disponible para realizar un prestamo
+     * <p>
+     * se espera: <ul><li>{1, idAula int}</li><li>{2, idProfesor
+     * String}</li><li>{3, NoSerieProyector String}</li><li>{4, idDepto
+     * int}</li></ul><br>opcTabla se llena de acuerdo a la opciones anteriores 1
+     * para indicar aula, 2 profesor y asi </p>
+     * REVISAR SI UN PROYECTOR SE ENCUENTRA DISPONIBLE DESDE E_PRESTAMOS INDICAR
+     * NumSerie y 5 para esta accion
+     *
      * @param idElemento
      * @param opcTabla
      * @return
@@ -197,11 +202,13 @@ public class PrestamoDB {
             String prestProy = "SELECT DISPONIBILIDAD FROM  EV_ESTATUS WHERE ID_VIDEOPROYECTOR = (SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE  = ?)";  // PRESTAMO PROYECTOR DISPONIBLE
             String prestDep = "SELECT COUNT(*)>0 FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND E_PRESTAMOS.ID_PROFESOR IN (SELECT ID_PROFESOR FROM E_PROFESORES WHERE E_PROFESORES.ID_DEPARTAMENTO = ?);"; //PRESTAMOS ACTIVOS DE PROFESORES PERTENECIENTES A UN DEPTO
             String prestProyDisponible = "SELECT COUNT(*)>0 FROM E_PRESTAMOS WHERE ESTATUS = TRUE AND ID_VIDEOPROYECTOR = (SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE  = ?)"; //SE ENCUENTRA PRESTADO EL PROYECTOR?
-            String prestamo = (opcTabla==1?prestAul:(opcTabla==2?prestProf:(opcTabla==3?prestProy:(opcTabla==4?prestDep:prestProyDisponible))));
+            String prestamo = (opcTabla == 1 ? prestAul : (opcTabla == 2 ? prestProf : (opcTabla == 3 ? prestProy : (opcTabla == 4 ? prestDep : prestProyDisponible))));
             prep = conn.prepareStatement(prestamo);
             prep.setString(1, idElemento);
             rs = prep.executeQuery();
-            while (rs.next()) { disponible = rs.getBoolean(1);}
+            while (rs.next()) {
+                disponible = rs.getBoolean(1);
+            }
             prep.close();
             rs.close();
         } catch (SQLException ex) {
@@ -509,20 +516,18 @@ public class PrestamoDB {
     public String[][] getReportejTable() {
         int rowSize = 0;
         String[][] miArr = null;
+        ResultSet rs;
+        PreparedStatement prep;
         try {
-            PreparedStatement prep;
-            String sql = "SELECT "
-                    + "ID_REPORTE_VIDEOPROYECTOR, "
+            String sql = "SELECT ID_REPORTE_VIDEOPROYECTOR AS ID, "
                     + "(SELECT NOMBRE FROM E_VIDEOPROYECTORES WHERE E_REP_VIDEOPROYECTORES.ID_VIDEOPROYECTOR = E_VIDEOPROYECTORES.ID_VIDEOPROYECTOR ) AS VIDEOPROYECTOR, "
                     + "TITULO, "
                     + "IMPREVISTO, "
-                    + "TO_CHAR(CREADO, 'dd/MM/yyyy HH:MI AM') as CREADO "
+                    + "TO_CHAR(CREADO, 'dd/MM/yyyy HH:MI AM') as FECHA "
                     + "FROM E_REP_VIDEOPROYECTORES "
-                    + "ORDER BY CREADO DESC";
-            prep = conn.prepareStatement(sql,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = prep.executeQuery();
+                    + "ORDER BY CREADO DESC;";
+            prep = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = prep.executeQuery();
 
             try {
                 rs.last();

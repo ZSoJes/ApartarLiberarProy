@@ -73,15 +73,7 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="15" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="15" uuid="66d3df51-7bb6-464e-aec5-93512b5a2bd2"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Reportes de Artículos]]></text>
-			</staticText>
-		</band>
+		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
