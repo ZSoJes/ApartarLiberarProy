@@ -19,14 +19,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.ArticuloDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 
 /**
  *
  * @author JuanGS
  */
 public class Articulo extends javax.swing.JFrame {
-
+    private static Boolean valido = false;
     String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
     ImageIcon addW = new ImageIcon("./src/imagenes/Add New_36pxW.png");
@@ -175,6 +177,15 @@ public class Articulo extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtBorrar = new javax.swing.JTextField();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         bkArticulos = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -208,6 +219,10 @@ public class Articulo extends javax.swing.JFrame {
         ico6 = new javax.swing.JLabel();
         lbl3 = new javax.swing.JLabel();
         lblN3 = new javax.swing.JLabel();
+        pnlBtnReportar = new javax.swing.JPanel();
+        ico7 = new javax.swing.JLabel();
+        lbl4 = new javax.swing.JLabel();
+        lblN4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         tglReg = new javax.swing.JToggleButton();
@@ -221,7 +236,6 @@ public class Articulo extends javax.swing.JFrame {
         dlgNuevo.setMinimumSize(new java.awt.Dimension(630, 380));
         dlgNuevo.setModal(true);
         dlgNuevo.setUndecorated(true);
-        dlgNuevo.setPreferredSize(new java.awt.Dimension(630, 380));
         dlgNuevo.setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -684,7 +698,6 @@ public class Articulo extends javax.swing.JFrame {
         dlgBorrar.setMinimumSize(new java.awt.Dimension(550, 270));
         dlgBorrar.setModal(true);
         dlgBorrar.setUndecorated(true);
-        dlgBorrar.setPreferredSize(new java.awt.Dimension(550, 270));
         dlgBorrar.setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(255, 127, 80));
@@ -804,11 +817,114 @@ public class Articulo extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel8.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel40.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel41.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel41.setText("Usuario:");
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel43)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel41)
+                    .addComponent(jLabel42))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel41)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Artículos]");
         setIconImage(img.getImage());
         setMinimumSize(new java.awt.Dimension(1034, 630));
-        setPreferredSize(new java.awt.Dimension(1024, 600));
 
         bkArticulos.setBackground(new java.awt.Color(255, 255, 255));
         bkArticulos.setMaximumSize(new java.awt.Dimension(1024, 600));
@@ -1168,6 +1284,49 @@ public class Articulo extends javax.swing.JFrame {
 
         bkArticulos.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, -1, -1));
 
+        pnlBtnReportar.setBackground(new java.awt.Color(239, 239, 239));
+        pnlBtnReportar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
+        pnlBtnReportar.setMinimumSize(new java.awt.Dimension(80, 95));
+        pnlBtnReportar.setPreferredSize(new java.awt.Dimension(80, 95));
+        pnlBtnReportar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlBtnReportarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlBtnReportarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlBtnReportarMouseExited(evt);
+            }
+        });
+        pnlBtnReportar.setLayout(new java.awt.GridBagLayout());
+
+        ico7.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
+        ico7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/inform-36.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(10, 32, 0, 32);
+        pnlBtnReportar.add(ico7, gridBagConstraints);
+
+        lbl4.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
+        lbl4.setForeground(new java.awt.Color(231, 76, 60));
+        lbl4.setText("Reportar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 1, 0);
+        pnlBtnReportar.add(lbl4, gridBagConstraints);
+
+        lblN4.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
+        lblN4.setForeground(new java.awt.Color(231, 76, 60));
+        lblN4.setText("Articulo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
+        pnlBtnReportar.add(lblN4, gridBagConstraints);
+
+        bkArticulos.add(pnlBtnReportar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 465, -1, -1));
+
         jLabel6.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel6.setText("Artículos Prestados HOY");
         bkArticulos.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 370, -1, -1));
@@ -1372,8 +1531,14 @@ public class Articulo extends javax.swing.JFrame {
         pnlBtnBorrar.setBackground(new Color(240, 240, 240));
         ico2.setIcon(ers);
 
-        dlgBorrar.setLocationRelativeTo(bkArticulos);
-        dlgBorrar.setVisible(true);
+        dlgConfirm.setLocationRelativeTo(bkArticulos);
+        dlgConfirm.setVisible(true);
+
+        if(valido){
+            valido = false;
+            dlgBorrar.setLocationRelativeTo(bkArticulos);
+            dlgBorrar.setVisible(true);
+        }
     }//GEN-LAST:event_pnlBtnBorrarMouseClicked
 
     private void pnlBtnBorrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnBorrarMouseEntered
@@ -1628,6 +1793,68 @@ public class Articulo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel21MouseClicked
 
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
+
+    private void pnlBtnReportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseClicked
+        pnlBtnReportar.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_pnlBtnReportarMouseClicked
+
+    private void pnlBtnReportarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseEntered
+        pnlBtnReportar.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_pnlBtnReportarMouseEntered
+
+    private void pnlBtnReportarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseExited
+        pnlBtnReportar.setBackground(new Color(239,239,239));
+    }//GEN-LAST:event_pnlBtnReportarMouseExited
+
     public void clearActualizar(){
         txtNomA.setText("");
         txtExtA.setText("");
@@ -1682,11 +1909,13 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JDialog dlgActualizar;
     private javax.swing.JDialog dlgBorrar;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JLabel ico1;
     private javax.swing.JLabel ico2;
@@ -1694,6 +1923,7 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JLabel ico4;
     private javax.swing.JLabel ico5;
     private javax.swing.JLabel ico6;
+    private javax.swing.JLabel ico7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1711,6 +1941,10 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1721,6 +1955,7 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1732,16 +1967,19 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JLabel lbl1;
     private javax.swing.JLabel lbl2;
     private javax.swing.JLabel lbl3;
+    private javax.swing.JLabel lbl4;
     private javax.swing.JLabel lblHiddenID;
     private javax.swing.JLabel lblN1;
     private javax.swing.JLabel lblN2;
     private javax.swing.JLabel lblN3;
+    private javax.swing.JLabel lblN4;
     private javax.swing.JLabel lblhiddenNom;
     private javax.swing.JPanel panelOPC;
     private javax.swing.JPanel pnlActArt;
     private javax.swing.JPanel pnlBtnActualizar;
     private javax.swing.JPanel pnlBtnBorrar;
     private javax.swing.JPanel pnlBtnNuevo;
+    private javax.swing.JPanel pnlBtnReportar;
     private javax.swing.JPanel pnlBuscarArt;
     private javax.swing.JPanel pnlCabecera;
     private javax.swing.JPanel pnlColor1;
@@ -1762,5 +2000,7 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDArt;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNomA;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

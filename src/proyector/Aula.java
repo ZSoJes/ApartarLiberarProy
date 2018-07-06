@@ -22,8 +22,10 @@ import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.PrestamoDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 
 /**
  *
@@ -38,9 +40,11 @@ ImageIcon updW = new ImageIcon("./src/imagenes/Edit File_36pxW.png");
 ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
 ImageIcon ers = new ImageIcon("./src/imagenes/Erase_36px.png");
 ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
+private static Boolean valido = false;
 //AulaDB aula = new AulaDB();
     /**
      * Creates new form Aula
+     * @throws java.sql.SQLException
      */
     public Aula() throws SQLException {
         initComponents();
@@ -160,6 +164,15 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
         pnlFormulario = new javax.swing.JPanel();
         lblAulaNom1 = new javax.swing.JLabel();
         txtAulaNuevo = new javax.swing.JTextField();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         bkAulas = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         ico1 = new javax.swing.JLabel();
@@ -701,6 +714,110 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
 
         dlgActualizar.getAccessibleContext().setAccessibleParent(this);
 
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel11.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel40.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel41.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel41.setText("Usuario:");
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel43)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel41)
+                    .addComponent(jLabel42))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel41)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Aulas]");
         setIconImage(img.getImage());
@@ -1087,13 +1204,19 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
     private void pnlBtnBorrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnBorrarMouseClicked
         pnlBtnBorrar.setBackground(new Color(240,240,240));
         icoB.setIcon(ers);
-        try {
-            agregarAulaCombo();
-        } catch (SQLException ex) {
-            Logger.getLogger(Aula.class.getName()).log(Level.SEVERE, null, ex);
+         dlgConfirm.setLocationRelativeTo(bkAulas);
+        dlgConfirm.setVisible(true);
+
+        if(valido){
+            valido = false;
+            try {
+                agregarAulaCombo();
+            } catch (SQLException ex) {
+                Logger.getLogger(Aula.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dlgBorrar.setLocationRelativeTo(this);
+            dlgBorrar.setVisible(true);
         }
-        dlgBorrar.setLocationRelativeTo(this);
-        dlgBorrar.setVisible(true);
     }//GEN-LAST:event_pnlBtnBorrarMouseClicked
 
     private void pnlBtnBorrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnBorrarMouseEntered
@@ -1319,6 +1442,56 @@ ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
         this.dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -1367,12 +1540,14 @@ AulaDB aula = new AulaDB();
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnEliminarRegistro;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JDialog dlgActualizar;
     private javax.swing.JDialog dlgBorrar;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JLabel ico1;
     private javax.swing.JLabel ico2;
@@ -1393,12 +1568,17 @@ AulaDB aula = new AulaDB();
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLydPane1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -1429,5 +1609,7 @@ AulaDB aula = new AulaDB();
     private javax.swing.JPanel pnlFormularioCrear;
     private javax.swing.JTextField txtAula;
     private javax.swing.JTextField txtAulaNuevo;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -81,36 +81,12 @@ public class UsuarioReadDB {
      *
      * @return
      */
-    public boolean getUsuariosAdmin() {
+    public int getUsuariosAdmin() {
         int conteo = 0;
         PreparedStatement prep;
         ResultSet rs;
         try {
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE ADMINDR = TRUE");
-            rs = prep.executeQuery();
-            while (rs.next()) {
-                conteo = rs.getInt(1);
-            }
-            //cerrar conexiones
-            prep.close();
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println("Actualmente no se recupero usuarios administradores LeerInicio getUsuariosAdmin:" + ex);
-        }
-        return conteo > 0;
-    }
-
-    /**
-     * Revisar cuantos usuarios administradores existen
-     *
-     * @return
-     */
-    public int getUsuariosAdminNUM() {
-        int conteo = 0;
-        PreparedStatement prep;
-        ResultSet rs;
-        try {
-            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE ADMINDR = TRUE");
+            prep = conn.prepareStatement("SELECT COUNT(*) FROM E_USUARIOS WHERE ADMINDR = TRUE AND DISPONIBLE = TRUE");
             rs = prep.executeQuery();
             while (rs.next()) {
                 conteo = rs.getInt(1);
@@ -123,6 +99,7 @@ public class UsuarioReadDB {
         }
         return conteo;
     }
+
     /**
      * Revisar si el usuario indicado es administrador
      *
@@ -134,7 +111,7 @@ public class UsuarioReadDB {
         PreparedStatement prep;
         ResultSet rs;
         try {
-            prep = conn.prepareStatement("SELECT ADMINDR FROM E_USUARIOS WHERE ID_USUARIO = ?");
+            prep = conn.prepareStatement("SELECT ADMINDR FROM E_USUARIOS WHERE ID_USUARIO = ? AND DISPONIBLE = TRUE");
             prep.setString(1, user);
             rs = prep.executeQuery();
             while (rs.next()) {
@@ -211,7 +188,7 @@ public class UsuarioReadDB {
         PreparedStatement prep;
         ResultSet rs;
         try {
-            prep = conn.prepareStatement("SELECT ADMINDR FROM E_USUARIOS WHERE ID_USUARIO = ?");
+            prep = conn.prepareStatement("SELECT ADMINDR FROM E_USUARIOS WHERE ID_USUARIO = ? and DISPONIBLE = TRUE");
             prep.setString(1, id);
             rs = prep.executeQuery();
             while (rs.next()) {

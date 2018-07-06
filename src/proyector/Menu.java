@@ -19,9 +19,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
+import proyector.dataBase.Conexion;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.LogDB;
 import proyector.dataBase.crud.UsuarioCreateDB;
@@ -48,6 +48,7 @@ public class Menu extends javax.swing.JFrame {
     ImageIcon regW = new ImageIcon(("./src/imagenes/registr_32px_lavanda.png").replace('/', File.separatorChar));
 
     private static Boolean valido = false;
+
     /**
      * Creates new form Menu
      */
@@ -73,9 +74,9 @@ public class Menu extends javax.swing.JFrame {
         pnlUsuariosList.setVisible(false);
         txtIDNew.setEnabled(false);
         txtCredencialN.setEnabled(false);
-        
+
         pnlMenuBK.setVisible(false);
-        
+
         //no copiar ni pegar
         txtNomN.setTransferHandler(null);
         txtAPatN.setTransferHandler(null);
@@ -97,8 +98,8 @@ public class Menu extends javax.swing.JFrame {
         timer.setRepeats(true);
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
-        timer.start();        
-        
+        timer.start();
+
     }
 
     public void reloj() {
@@ -129,8 +130,8 @@ public class Menu extends javax.swing.JFrame {
                     if (j == 5) {
                         data[i][j] = data[i][j].substring(0, 16);
                     }
-                    if(j == 6){
-                        data[i][j] = Boolean.valueOf(data[i][j])?"SI":"NO";
+                    if (j == 6) {
+                        data[i][j] = Boolean.valueOf(data[i][j]) ? "SI" : "NO";
                     }
                 }
             }
@@ -156,7 +157,7 @@ public class Menu extends javax.swing.JFrame {
             int count = prestamos.getCantPrestamosUsuario(usuario, presActivInact);
             String[][] dataTabla = new String[count][8];
             String[][] dataDB = prestamos.getPrestamosUsuario(usuario, presActivInact);
-            
+
             for (int i = 0; i < count; i++) {
                 for (int j = 0; j < 8; j++) {
 //                    if (j == 0) {
@@ -1991,6 +1992,11 @@ public class Menu extends javax.swing.JFrame {
         setIconImage(img.getImage());
         setMinimumSize(new java.awt.Dimension(1024, 585));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         bkMenu.setBackground(new java.awt.Color(255, 255, 255));
         bkMenu.setPreferredSize(new java.awt.Dimension(1024, 585));
@@ -2477,7 +2483,7 @@ public class Menu extends javax.swing.JFrame {
         try {
             Profesor profe = new Profesor();
             profe.setVisible(true);
-            
+
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
@@ -2498,9 +2504,9 @@ public class Menu extends javax.swing.JFrame {
         try {
             Departamento depart = new Departamento();
             depart.setVisible(true);
-            
+
             this.setVisible(false);
-            this.dispose();            
+            this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2519,7 +2525,7 @@ public class Menu extends javax.swing.JFrame {
         try {
             Aula aula = new Aula();
             aula.setVisible(true);
-            
+
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
@@ -2560,10 +2566,10 @@ public class Menu extends javax.swing.JFrame {
         icoExtlbl1.setForeground(new Color(107, 107, 107));
         icoExt1.setIcon(pres);
 //        try {
-            AlPrestamo pres = new proyector.AlPrestamo();
-            pres.setVisible(true);
-            this.setVisible(false);
-            this.dispose();
+        AlPrestamo pres = new proyector.AlPrestamo();
+        pres.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
 //        } catch (SQLException ex) {
 //            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
 //        }
@@ -2601,7 +2607,7 @@ public class Menu extends javax.swing.JFrame {
 
         ADevolucion dev = new ADevolucion();
         dev.setVisible(true);
-        
+
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnExt2MouseClicked
@@ -2625,7 +2631,7 @@ public class Menu extends javax.swing.JFrame {
 
         ARegistro reg = new ARegistro();
         reg.setVisible(true);
-        
+
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnExt3MouseClicked
@@ -2739,7 +2745,7 @@ public class Menu extends javax.swing.JFrame {
 
                     String idUsuarioActual = lblUsuarioHidenID.getText().trim();
                     //comprobar que no sea el ultimo usuario admin
-                    if (leer.getUsuariosAdminNUM() >= 1) {
+                    if (leer.getUsuariosAdmin() >= 1) {
                         //comprobar que el usuario actual su nivel admin o usuario normal
                         if (!idUsuarioActual.equals(autorizar)) {
                             if (leer.getUsuarioNvl(idUsuarioActual)) {
@@ -2955,17 +2961,17 @@ public class Menu extends javax.swing.JFrame {
 
         char[] pass = passUpd.getPassword();
         char[] passC = passConfUpd.getPassword();
-        
+
         String usuario = JOptionPane.showInputDialog(null, "Introduzca la credencial de acceso de un usuario(que no sea su credencial)\npara validar esta acción", "Advertencia", JOptionPane.WARNING_MESSAGE);
         try {
-            if(!usuario.trim().isEmpty()){
+            if (!usuario.trim().isEmpty()) {
                 UsuarioReadDB leer = new UsuarioReadDB();
-                if(!idOrig.equals(usuario) && leer.getExisteUsuario(usuario.trim())){//si el usuario no es el mismo y existe 
-                    if(updNomCompleto(idOrig, nom, apat, amat)){
+                if (!idOrig.equals(usuario) && leer.getExisteUsuario(usuario.trim())) {//si el usuario no es el mismo y existe 
+                    if (updNomCompleto(idOrig, nom, apat, amat)) {
                         updPass(idOrig, pass, passC);
                         updId(idOrig, idNew);
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "No se relizo ningun cambio revise la credencial del usuario que indico");
                 }
             }
@@ -2973,7 +2979,7 @@ public class Menu extends javax.swing.JFrame {
             System.out.println("Error al actualizar los datos: " + e);
         }
         updContenido(idOrig, idNew);
-        
+
         txtNomUpd.setText("");
         txtAPatUpd.setText("");
         txtAMatUpd.setText("");
@@ -2985,62 +2991,71 @@ public class Menu extends javax.swing.JFrame {
         pnlUsuarioCont.setVisible(true);
     }//GEN-LAST:event_btnActUpdMouseClicked
 
-    public void updPass(String idOrig, char[] pass, char[] passC){
+    public void updPass(String idOrig, char[] pass, char[] passC) {
         //modificar contraseña
-        try{
+        try {
             UsuarioCreateDB usr = new UsuarioCreateDB();
-            if((pass.length > 0 && pass.length < 8) ){
-                JOptionPane.showMessageDialog(null,"-LOS CAMBIOS NO FUERON REALIZADOS-\nSi desea modificar la contraseña debe ser: \n-al menos de 8 caracteres\n-puede contener numeros y letras\n-puede contener mayusculas y minusculas");
-            }else if(pass.length >=8){
-                if(Arrays.equals(pass, passC)){//actualizar contraseña
-                        String hashed = BCrypt.hashpw(String.valueOf(pass).trim(), BCrypt.gensalt(12));  //cifrado
-                        usr.updUsuario(idOrig, hashed);
-                        System.out.println("Se actualizo la contraseña...");
-                }else{
-                        JOptionPane.showMessageDialog(null,"La contraseña y su confirmacion no son iguales\nes necesario las corriga");
+            if ((pass.length > 0 && pass.length < 8)) {
+                JOptionPane.showMessageDialog(null, "-LOS CAMBIOS NO FUERON REALIZADOS-\nSi desea modificar la contraseña debe ser: \n-al menos de 8 caracteres\n-puede contener numeros y letras\n-puede contener mayusculas y minusculas");
+            } else if (pass.length >= 8) {
+                if (Arrays.equals(pass, passC)) {//actualizar contraseña
+                    String hashed = BCrypt.hashpw(String.valueOf(pass).trim(), BCrypt.gensalt(12));  //cifrado
+                    usr.updUsuario(idOrig, hashed);
+                    System.out.println("Se actualizo la contraseña...");
+                } else {
+                    JOptionPane.showMessageDialog(null, "La contraseña y su confirmacion no son iguales\nes necesario las corriga");
                 }
             }
-        }catch(SQLException ex){ System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
-        }catch(Exception e){ System.out.println("Error al realizar accion de actualizar contraseña: " + e);}
+        } catch (SQLException ex) {
+            System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
+        } catch (Exception e) {
+            System.out.println("Error al realizar accion de actualizar contraseña: " + e);
+        }
     }
-    
-    public void updId(String idOrig, String idNew){
+
+    public void updId(String idOrig, String idNew) {
         //modificar credencial
-        try{
+        try {
             UsuarioCreateDB usr = new UsuarioCreateDB();
-            if(chkBNewID.isSelected()){
-                if(!idNew.isEmpty()){
-                        String[] id = {idNew, idOrig};
-                        usr.updUsuario(id);
-                        System.out.println("Se actualizo la credencial del usuario: " + idOrig + " ahora como: " + idNew);
-                }else{
-                        JOptionPane.showMessageDialog(null,"No se modificara la credencial si la seccion indicada esta en blanco");
+            if (chkBNewID.isSelected()) {
+                if (!idNew.isEmpty()) {
+                    String[] id = {idNew, idOrig};
+                    usr.updUsuario(id);
+                    System.out.println("Se actualizo la credencial del usuario: " + idOrig + " ahora como: " + idNew);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se modificara la credencial si la seccion indicada esta en blanco");
                 }
             }
-        }catch(SQLException ex){ System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
-        }catch(Exception e){ System.out.println("Error al realizar accion de actualizar contraseña: " + e);}
+        } catch (SQLException ex) {
+            System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
+        } catch (Exception e) {
+            System.out.println("Error al realizar accion de actualizar contraseña: " + e);
+        }
     }
-    
-    public boolean updNomCompleto(String idOrig, String nom, String apat, String amat){
+
+    public boolean updNomCompleto(String idOrig, String nom, String apat, String amat) {
         boolean estatus = true;
         //modificar nombre y apellidos
-        try{
+        try {
             UsuarioCreateDB usr = new UsuarioCreateDB();
-            if(!nom.isEmpty() && !apat.isEmpty() && !amat.isEmpty()){
-                    //JOptionPane.showMessageDialog(null,"Si desea hacer algún cambio debe por lo menos llenar los campos referentes al nombre");
-                    String data[] = {nom, apat, amat};
-                    usr.updUsuario(idOrig, data);
-                    System.out.println("Se actualizo su nombre y apellidos usuario : " + idOrig);
-            }else{
-                    JOptionPane.showMessageDialog(null,"No se realizo ningún cambio\nrecuerde indicar su nombre y apellidos si desea cambiarlos", "Importante", JOptionPane.WARNING_MESSAGE);
-                    estatus = false;
+            if (!nom.isEmpty() && !apat.isEmpty() && !amat.isEmpty()) {
+                //JOptionPane.showMessageDialog(null,"Si desea hacer algún cambio debe por lo menos llenar los campos referentes al nombre");
+                String data[] = {nom, apat, amat};
+                usr.updUsuario(idOrig, data);
+                System.out.println("Se actualizo su nombre y apellidos usuario : " + idOrig);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se realizo ningún cambio\nrecuerde indicar su nombre y apellidos si desea cambiarlos", "Importante", JOptionPane.WARNING_MESSAGE);
+                estatus = false;
             }
-        }catch(SQLException ex){ System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
-        }catch(Exception e){ System.out.println("Error al realizar accion de actualizar contraseña: " + e);}
+        } catch (SQLException ex) {
+            System.out.println("Error al realizar accion de actualizar contraseña updPass Menu: " + ex);
+        } catch (Exception e) {
+            System.out.println("Error al realizar accion de actualizar contraseña: " + e);
+        }
         return estatus;
     }
-    
-    public void updContenido(String idOrig, String idNew){
+
+    public void updContenido(String idOrig, String idNew) {
         //actualiza el pnlUsuarioCont contenido
         try {
             String[] datos = new String[6];
@@ -3048,7 +3063,7 @@ public class Menu extends javax.swing.JFrame {
             if (chkBNewID.isSelected()) {
                 if (!idNew.isEmpty()) {
                     datos = leer.getUsuario(idNew);
-                }else{
+                } else {
                     datos = leer.getUsuario(idOrig);
                 }
             } else {
@@ -3059,7 +3074,7 @@ public class Menu extends javax.swing.JFrame {
             System.out.println("Error al cargar los datos dentro de pnlUsuarioCont: " + ex);
         }
     }
-    
+
     private void btnActUpdMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnActUpdMouseEntered
         btnActUpd.setBackground(new Color(251, 189, 40));
     }//GEN-LAST:event_btnActUpdMouseEntered
@@ -3088,7 +3103,7 @@ public class Menu extends javax.swing.JFrame {
             pnlUsuarioMod.setVisible(false);
             pnlUsuarioCont.setVisible(false);
         }
-        if(index != 3){
+        if (index != 3) {
             pnlMenuBK.setVisible(false);
             pnlUsrVerif3.setVisible(true);
         }
@@ -3112,7 +3127,7 @@ public class Menu extends javax.swing.JFrame {
             jTable2.setVisible(true);
             tglActInc.setVisible(true);
             jButton4.setVisible(true);
-            
+
             btnUsuarioDLT.setVisible(true);
         }
 
@@ -3130,7 +3145,7 @@ public class Menu extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         hiddenLbl.setText("");
         btnUsuarioDLT.setVisible(false);
-        
+
         jScrollPane1.setVisible(true);
         jTable1.setVisible(true);
 
@@ -3192,7 +3207,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCheckUserKeyTyped
 
     private void lblLogo3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogo3MouseClicked
-        if(evt.getClickCount() == 3){
+        if (evt.getClickCount() == 3) {
             contacto.setLocationRelativeTo(bkMenu);
             contacto.setVisible(true);
         }
@@ -3211,26 +3226,44 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCredUsrKeyTyped
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
-        if(cb1.isSelected() || cb2.isSelected() || cb3.isSelected() || cb4.isSelected() || cb5.isSelected() || cb6.isSelected()){
+
+        if (cb1.isSelected() || cb2.isSelected() || cb3.isSelected() || cb4.isSelected() || cb5.isSelected() || cb6.isSelected()) {
             JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardados los archivos");
             JFileChooser f = new JFileChooser();
-            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int option = f.showSaveDialog(jTabbedPane1);
             //File path = f.getCurrentDirectory();
-            if (option == JFileChooser.APPROVE_OPTION){
+            if (option == JFileChooser.APPROVE_OPTION) {
                 String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
-                try{
+                try {
                     UsuarioReadDB leer = new UsuarioReadDB();
-                    if(cb1.isSelected()){ leer.bulkData(path, 1); }
-                    if(cb2.isSelected()){ leer.bulkData(path, 2); }
-                    if(cb3.isSelected()){ leer.bulkData(path, 3); }
-                    if(cb4.isSelected()){ leer.bulkData(path, 4); }
-                    if(cb5.isSelected()){ leer.bulkData(path, 5); }
-                    if(cb6.isSelected()){ leer.bulkData(path, 6); }
-                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
-            }else{ System.out.println("No se eligio una ruta"); }
-        }else{ JOptionPane.showMessageDialog(jTabbedPane1, "Seleccione al menos una opción"); }
+                    if (cb1.isSelected()) {
+                        leer.bulkData(path, 1);
+                    }
+                    if (cb2.isSelected()) {
+                        leer.bulkData(path, 2);
+                    }
+                    if (cb3.isSelected()) {
+                        leer.bulkData(path, 3);
+                    }
+                    if (cb4.isSelected()) {
+                        leer.bulkData(path, 4);
+                    }
+                    if (cb5.isSelected()) {
+                        leer.bulkData(path, 5);
+                    }
+                    if (cb6.isSelected()) {
+                        leer.bulkData(path, 6);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Error al generar csv: " + ex);
+                }
+            } else {
+                System.out.println("No se eligio una ruta");
+            }
+        } else {
+            JOptionPane.showMessageDialog(jTabbedPane1, "Seleccione al menos una opción");
+        }
         cb1.setSelected(false);
         cb2.setSelected(false);
         cb3.setSelected(false);
@@ -3262,20 +3295,24 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAutorizaNuevoKeyTyped
 
     private void lblLogo2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogo2MouseClicked
-        if(evt.getClickCount() == 2){
+        if (evt.getClickCount() == 2) {
             dlgConfirm.setLocationRelativeTo(bkMenu);
             dlgConfirm.setVisible(true);
 
-            if(valido){
+            if (valido) {
                 valido = false;
-                try{loadLog();}catch(Exception e){System.out.println("Error al cargar log:"+e);}
+                try {
+                    loadLog();
+                } catch (Exception e) {
+                    System.out.println("Error al cargar log:" + e);
+                }
                 dlgLog.setLocationRelativeTo(bkMenu);
                 dlgLog.setVisible(true);
             }
         }
     }//GEN-LAST:event_lblLogo2MouseClicked
 
-    public void loadLog() throws ParseException{
+    public void loadLog() throws ParseException {
         System.out.println("Llenando log");
         try {
             LogDB log = new LogDB();
@@ -3301,28 +3338,28 @@ public class Menu extends javax.swing.JFrame {
             if (leer.getExisteUsuario(crdncial)) {
                 String hashed = leer.getPass(crdncial);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
-                    if(leer.getEsAdminUsuario(crdncial)){
+                    if (leer.getEsAdminUsuario(crdncial)) {
                         valido = true;
                         txtUsuario.setText("");
                         txtPass.setText("");
                         dlgConfirm.setVisible(false);
                         dlgConfirm.dispose();
-                    }else{
+                    } else {
                         throw new Exception();
                     }
-                }else{
+                } else {
                     throw new Exception();
                 }
-            }else{
+            } else {
                 throw new Exception();
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error al comprobar usuario:" + ex);
-        }catch(Exception e){
+        } catch (Exception e) {
             txtUsuario.setText("");
             txtPass.setText("");
             valido = false;
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+            JOptionPane.showMessageDialog(null, "Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 
@@ -3346,18 +3383,22 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         JOptionPane.showMessageDialog(jTabbedPane1, "A continuacion indique en donde seran guardado el backup");
-            JFileChooser f = new JFileChooser();
-            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
-            int option = f.showSaveDialog(jTabbedPane1);
-            //File path = f.getCurrentDirectory();
-            if (option == JFileChooser.APPROVE_OPTION){
-                String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
-                try{
-                    UsuarioReadDB leer = new UsuarioReadDB();
-                    leer.bulkDataDB(path);
-                    JOptionPane.showMessageDialog(this, "Listo");
-                }catch(SQLException ex){ System.out.println("Error al generar csv: " + ex); }
-            }else{ System.out.println("No se eligio una ruta"); }
+        JFileChooser f = new JFileChooser();
+        f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int option = f.showSaveDialog(jTabbedPane1);
+        //File path = f.getCurrentDirectory();
+        if (option == JFileChooser.APPROVE_OPTION) {
+            String path = f.getSelectedFile().getAbsolutePath().replace('\\', '/');
+            try {
+                UsuarioReadDB leer = new UsuarioReadDB();
+                leer.bulkDataDB(path);
+                JOptionPane.showMessageDialog(this, "Listo");
+            } catch (SQLException ex) {
+                System.out.println("Error al generar csv: " + ex);
+            }
+        } else {
+            System.out.println("No se eligio una ruta");
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void btnAccMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAccMouseClicked
@@ -3378,12 +3419,12 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
-                                          + "\n-Los datos deben ser separados por coma(,)"
-                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
-                                          + "\n-La informacion debe tener el siguiente orden"
-                                          + "\nID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR"
-                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        if(respuesta == JOptionPane.OK_OPTION){
+                + "\n-Los datos deben ser separados por coma(,)"
+                + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                + "\n-La informacion debe tener el siguiente orden"
+                + "\nID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR",
+                 "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if (respuesta == JOptionPane.OK_OPTION) {
             int status = fcProfCSV.showOpenDialog(null);
             if (status == fcProfCSV.APPROVE_OPTION) {
                 File selectedFile = fcProfCSV.getSelectedFile();
@@ -3393,19 +3434,21 @@ public class Menu extends javax.swing.JFrame {
                     ProfesorDB prof = new ProfesorDB();
                     prof.bulkLoadUsuario(selectedFile.getPath());
                     JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
-                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
+                } catch (SQLException e) {
+                    System.out.println("Error al leer archivo que fue recibido");
+                }
             }
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         int respuesta = JOptionPane.showConfirmDialog(null, "A continuación aparecera una ventana se requiere eliga un archivo csv"
-                                          + "\n-Los datos deben ser separados por coma(,)"
-                                          + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
-                                          + "\n-La informacion debe tener el siguiente orden"
-                                          + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA"  
-                                     , "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        if(respuesta == JOptionPane.OK_OPTION){
+                + "\n-Los datos deben ser separados por coma(,)"
+                + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
+                + "\n-La informacion debe tener el siguiente orden"
+                + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA",
+                 "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        if (respuesta == JOptionPane.OK_OPTION) {
             int status = fcProfCSV.showOpenDialog(null);
             if (status == fcProfCSV.APPROVE_OPTION) {
                 File selectedFile = fcProfCSV.getSelectedFile();
@@ -3415,37 +3458,57 @@ public class Menu extends javax.swing.JFrame {
                     ProfesorDB prof = new ProfesorDB();
                     prof.bulkLoadProfe(selectedFile.getPath());
                     JOptionPane.showMessageDialog(null, "Los datos del archivo ubicado en: " + selectedFile.getPath() + "\nHAN SIDO GRABADOS EN LA BASE DE DATOS!!!");
-                } catch (SQLException e) {System.out.println("Error al leer archivo que fue recibido");}
+                } catch (SQLException e) {
+                    System.out.println("Error al leer archivo que fue recibido");
+                }
             }
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void btnUsuarioDLTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioDLTActionPerformed
-        int eleccion = JOptionPane.showConfirmDialog(this, "La eliminacion del usuario "+ hiddenLbl.getText() + " sera permanente!\nDesea continuar. . . ?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
-        if(eleccion == JOptionPane.YES_OPTION){
+        dlgConfirm.setLocationRelativeTo(pnlControlUsuarios);
+        dlgConfirm.setVisible(true);
+
+        if (valido) {
+            valido = false;
+
             try {
-                UsuarioCreateDB deleteUser = new UsuarioCreateDB();
-                if(new UsuarioReadDB().getCountUsuarios(true) > 1){
-                    deleteUser.deleteRelifeUsuario(hiddenLbl.getText().trim(), false);
-                    hiddenLbl.setText("");
-                    getTabla();
-                    btnUsuarioDLT.setVisible(false);
+                if (new UsuarioReadDB().getUsuariosAdmin() > 1) {
+                    int eleccion = JOptionPane.showConfirmDialog(this, "La eliminacion del usuario " + hiddenLbl.getText() + " sera permanente!\nDesea continuar. . . ?", "Advertencia", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+                    if (eleccion == JOptionPane.YES_OPTION) {
+                        UsuarioCreateDB deleteUser = new UsuarioCreateDB();
+                        deleteUser.deleteRelifeUsuario(hiddenLbl.getText().trim(), false);
+                        hiddenLbl.setText("");
+                        getTabla();
+                        btnUsuarioDLT.setVisible(false);
 
-                    jScrollPane1.setVisible(true);
-                    jTable1.setVisible(true);
+                        jScrollPane1.setVisible(true);
+                        jTable1.setVisible(true);
 
-                    jScrollPane2.setVisible(false);
-                    jTable2.setVisible(false);
-                    tglActInc.setVisible(false);
-                    jButton4.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(this, "Es el unico usuario disponible no puede ser eliminado.");
+                        jScrollPane2.setVisible(false);
+                        jTable2.setVisible(false);
+                        tglActInc.setVisible(false);
+                        jButton4.setVisible(false);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Es el unico usuario administrador disponible no puede ser eliminado.");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
     }//GEN-LAST:event_btnUsuarioDLTActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            Conexion conn = new Conexion();
+            conn.closeConexion();
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("\n\nFATAL ERROR NO FUE COMPACTADA LA DB");
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres

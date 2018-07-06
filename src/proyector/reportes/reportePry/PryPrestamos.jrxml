@@ -409,11 +409,10 @@ $P{date2}.substring(8,10)+"/"+$P{date2}.substring(5,7)+"/"+$P{date2}.substring(0
 						<jr:detailCell style="borderR" height="11" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="60" height="11" uuid="3eda1d03-534b-48ba-91cf-2ca802c5f969"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 									<font size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{ID_REPORTE_VIDEOPROYECTOR}==null?"ninguno":$F{ID_REPORTE_VIDEOPROYECTOR}.toString()
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{ID_REPORTE_VIDEOPROYECTOR}==null?"<span style=\"color:green\">ninguno</span>":"<span style=\"color:red\">"+$F{ID_REPORTE_VIDEOPROYECTOR}.toString()+"</span>"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

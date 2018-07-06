@@ -25,7 +25,7 @@ public class Conexion {
     private static final String FILESQL    = "./src/proyector/dataBase/database.sql";
     private static final String NEW_DB_URL = "jdbc:h2:file:./src/proyector/dataBase/db;INIT=CREATE SCHEMA IF NOT EXISTS db\\;"
                                            + "RUNSCRIPT FROM '" + FILESQL +"';CIPHER=AES";//;FILE_LOCK=SOCKET";
-    private static final String DB_URL = "jdbc:h2:file:./src/proyector/dataBase/db;IFEXISTS=TRUE;CIPHER=AES";//;FILE_LOCK=SOCKET";
+    private static final String DB_URL = "jdbc:h2:file:./src/proyector/dataBase/db;IFEXISTS=TRUE;CIPHER=AES;MAX_COMPACT_TIME=10000;";//;FILE_LOCK=SOCKET";
 
     private Connection conn;
     
@@ -73,7 +73,7 @@ public class Conexion {
             Class.forName(JDBC_NAME).newInstance();
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("CONEXION A LA BASE DE DATOS...");
-            crearProcedure(conn);
+            //crearProcedure(conn);
         } catch (SQLException ex) {
             conn = DriverManager.getConnection(NEW_DB_URL, USER, PASS);
             System.out.println("CREANDO Y CONECTANDO A LA BASE DE DATOS...");
@@ -85,6 +85,19 @@ public class Conexion {
         }
     }
     
+    public void closeConexion() throws ClassNotFoundException {
+        Statement stat; //generar periodicamente
+        try {
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stat = conn.createStatement(); 
+            stat.execute("SHUTDOWN COMPACT"); 
+            stat.close(); 
+            conn.close(); 
+            System.out.println("\n\n\n: : : : > > > Se ha compactado la base de datos");
+        } catch (SQLException e) {
+            System.out.println("Error al lanzar compactacion");
+        }
+    }
     /**
      * Metodo encargado de regresar la conexion a la base de datos 
      * para realizar operaciones sql

@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -68,7 +69,7 @@ public final class Inicio extends javax.swing.JFrame {
     public void lanzarRegistro() {
         try {
             UsuarioReadDB leer = new UsuarioReadDB();
-            if (leer.getUsuariosAdmin()) {
+            if (leer.getUsuariosAdmin()>0) {
                 lblRegistrarse.setVisible(false);
             } else {
                 lblRegistrarse.setVisible(true);
@@ -1363,7 +1364,7 @@ public final class Inicio extends javax.swing.JFrame {
                     desktop.browse(new URI("https://github.com/ZSoJes/ApartarLiberarProy"));
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jLabel7MouseClicked

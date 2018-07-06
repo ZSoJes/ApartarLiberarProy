@@ -29,8 +29,10 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.DepartamentoDB;
 import proyector.dataBase.crud.PrestamoDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 
 /**
  *
@@ -41,8 +43,10 @@ String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
 ImageIcon addW = new ImageIcon("./src/imagenes/Add New_36pxW.png");
 ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
+private static Boolean valido = false;
     /**
      * Creates new form Departamento
+     * @throws java.sql.SQLException
      */
     public Departamento() throws SQLException{
         initComponents();
@@ -136,6 +140,15 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         btnCerrar1 = new javax.swing.JButton();
         lblHide = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         bkDepartamentos = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -577,6 +590,110 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         );
 
         dlgEditar.getAccessibleContext().setAccessibleParent(this);
+
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel9.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel40.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel41.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel41.setText("Usuario:");
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel43)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel41)
+                    .addComponent(jLabel42))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel41)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Departamentos]");
@@ -1086,6 +1203,56 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
    
     /**
      * Metodo encargado de crear un jPanel con una estructura predefinida para recibir 
@@ -1095,7 +1262,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
      */
     public final void miPanel(String[][] datos, int i){
         //int y = Integer.parseInt(str);
-        ImageIcon img = new ImageIcon("./src/imagenes/User_36px.png");
+        ImageIcon imgU = new ImageIcon("./src/imagenes/User_36px.png");
         ImageIcon img1 = new ImageIcon("./src/imagenes/trash-24.png");
         ImageIcon img2 = new ImageIcon("./src/imagenes/pencil-24.png");
         JPanel anon = new JPanel();
@@ -1111,7 +1278,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
             c.insets = new Insets(5,0,10,0);
 
             JLabel lbico1 = new JLabel();
-            lbico1.setIcon(img);
+            lbico1.setIcon(imgU);
             c.gridy = 0;
             anon.add(lbico1, c);
 
@@ -1184,7 +1351,12 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                   int respuesta = JOptionPane.showConfirmDialog(null, "Desea eliminar el departamento???: " + datos[i][0] + "\n\nSI HACE ESTO SE BORRARAN TODOS LOS REGISTROS RELACIONADOS \n->ELIMINARA TODOS LOS PROFESORES \n-> TODOS LOS PRESTAMOS CON RELACION A LOS PROFESORES\n\nRECUERDE ESTA ACCION ES IRREVERSIBLE", "Eliminar registro", JOptionPane.YES_NO_OPTION);
+                dlgConfirm.setLocationRelativeTo(bkDepartamentos);
+                dlgConfirm.setVisible(true);
+
+                if(valido){
+                    valido = false;
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Desea eliminar el departamento???: " + datos[i][0] + "\n\nSI HACE ESTO SE BORRARAN TODOS LOS REGISTROS RELACIONADOS \n->ELIMINARA TODOS LOS PROFESORES \n-> TODOS LOS PRESTAMOS CON RELACION A LOS PROFESORES\n\nRECUERDE ESTA ACCION ES IRREVERSIBLE", "Eliminar registro", JOptionPane.YES_NO_OPTION);
                     if (respuesta == JOptionPane.YES_OPTION){
                        try {
                            DepartamentoDB depart = new DepartamentoDB();
@@ -1208,6 +1380,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
                     }else{
                         JOptionPane.showMessageDialog(null, "No se ha borrado el registro\n\nRecuerde que esta accion es irreversible y si es ejecutada\nse borraran todos los registros relacionados a este departamento", "Información", JOptionPane.INFORMATION_MESSAGE);
                     }
+                }
                 }
             });
         
@@ -1297,8 +1470,10 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JLabel departamentos;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgEditar;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JLabel ico1;
@@ -1310,6 +1485,10 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1320,6 +1499,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
@@ -1346,5 +1526,7 @@ ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     private javax.swing.JTextField txtEnc1;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNom1;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

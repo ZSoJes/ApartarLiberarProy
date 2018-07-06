@@ -5,6 +5,7 @@
  */
 package proyector.dataBase.crud;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,16 +97,18 @@ public class VideoproyectorDB {
     /**
      * Asignar valores a un videoproyector nuevo
      * @param data 
+     * @param accesorios 
      */
-    public void setVideoProyector(String[] data) {
+    public void setVideoProyector(String[] data, String[] accesorios) {
         
         PreparedStatement prep;
         try {
-            prep = conn.prepareStatement("INSERT INTO E_VIDEOPROYECTORES(NOMBRE, MARCA, MODELO, NO_SERIE) VALUES (?,?,?,?)");
+            prep = conn.prepareStatement("INSERT INTO E_VIDEOPROYECTORES(NOMBRE, MARCA, MODELO, NO_SERIE, ACCESORIOS) VALUES (?,?,?,?,?)");
             prep.setString(1, data[0]);
             prep.setString(2, data[1]);
             prep.setString(3, data[2]);
             prep.setString(4, data[3]);
+            prep.setObject(5, accesorios);
             prep.execute();
             prep.close();
         } catch (SQLException ex) {
@@ -273,10 +276,10 @@ public class VideoproyectorDB {
      * @return
      */
     public String[] getProyector(String noSerie) {
-        String[] datos = new String[6];
+        String[] datos = new String[7];
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO FROM E_VIDEOPROYECTORES WHERE NO_SERIE = ?");
+            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO, ACCESORIOS FROM E_VIDEOPROYECTORES WHERE NO_SERIE = ?");
             prep.setString(1, noSerie);
 
             ResultSet rs = prep.executeQuery();
@@ -288,6 +291,7 @@ public class VideoproyectorDB {
                 datos[3] = rs.getString("MODELO");
                 datos[4] = rs.getString("NO_SERIE");
                 datos[5] = rs.getString("CREADO");
+                datos[6] = rs.getString("ACCESORIOS");
             }
             rs.close();
             prep.close();
@@ -647,6 +651,30 @@ public class VideoproyectorDB {
         return id;
     }
     
+        public String[] unicogetProyectorUnico() {
+        String[] datos = new String[7];
+        try {
+            PreparedStatement prep;
+            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO, ACCESORIOS FROM E_VIDEOPROYECTORES ORDER BY CREADO DESC LIMIT 1");
+
+            ResultSet rs = prep.executeQuery();
+
+            while (rs.next()) {
+                datos[0] = rs.getString("ID_VIDEOPROYECTOR");
+                datos[1] = rs.getString("NOMBRE");
+                datos[2] = rs.getString("MARCA");
+                datos[3] = rs.getString("MODELO");
+                datos[4] = rs.getString("NO_SERIE");
+                datos[5] = rs.getString("CREADO");
+                datos[6] = rs.getString("ACCESORIOS");
+            }
+            rs.close();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al recuperar datos de un proyector getProyector VideoproyectorDB: " + ex);
+        }
+        return datos;
+    }
 //    public void setReporteAPrestamo(String noSerie, String credencialUsuario, boolean estatusDevolucion) throws SQLException{
 //        String[] otros = new PrestamoDB().getPrestamo(noSerie);
 //        PreparedStatement prep;

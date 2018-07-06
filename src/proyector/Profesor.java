@@ -26,9 +26,11 @@ import javax.swing.RowFilter;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import org.mindrot.jbcrypt.BCrypt;
 import proyector.dataBase.crud.DepartamentoDB;
 import proyector.dataBase.crud.PrestamoDB;
 import proyector.dataBase.crud.ProfesorDB;
+import proyector.dataBase.crud.UsuarioReadDB;
 
 /**
  *
@@ -44,7 +46,7 @@ public class Profesor extends javax.swing.JFrame {
     ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     ImageIcon ers = new ImageIcon("./src/imagenes/Erase_36px.png");
     ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
-
+    private static Boolean valido = false;
     /**
      * Creates new form Profesor
      *
@@ -192,7 +194,16 @@ public class Profesor extends javax.swing.JFrame {
         lblAMat2 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         lblHide = new javax.swing.JLabel();
-        pnlBkProfesor = new javax.swing.JPanel();
+        dlgConfirm = new javax.swing.JDialog();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        btnComprobar = new javax.swing.JButton();
+        jLabel43 = new javax.swing.JLabel();
+        txtUsuario = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
+        bkProfesor = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         lblInstrucciones = new javax.swing.JLabel();
         cabecera = new javax.swing.JPanel();
@@ -913,17 +924,121 @@ public class Profesor extends javax.swing.JFrame {
 
         dlgActualizar.getAccessibleContext().setAccessibleParent(this);
 
+        dlgConfirm.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dlgConfirm.setTitle("[Confirmar Acción]");
+        dlgConfirm.setMinimumSize(new java.awt.Dimension(400, 300));
+        dlgConfirm.setModal(true);
+
+        jPanel8.setBackground(new java.awt.Color(255, 183, 77));
+
+        jLabel40.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel40.setText("<html>Esta acción necesita su<br><b>Usuario</b> y <b>Contraseña</b></html>");
+
+        jLabel41.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel41.setText("Usuario:");
+
+        jLabel42.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel42.setText("Contraseña:");
+
+        btnComprobar.setText("Validar Acción");
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/niceGuy-60.png"))); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtUsuario.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtUsuario.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtUsuario.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPass.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1));
+        txtPass.setMinimumSize(new java.awt.Dimension(111, 30));
+        txtPass.setPreferredSize(new java.awt.Dimension(111, 30));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel43)
+                .addGap(18, 18, 18))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel41)
+                    .addComponent(jLabel42))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(btnComprobar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel43))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel41)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprobar)
+                .addGap(19, 19, 19))
+        );
+
+        javax.swing.GroupLayout dlgConfirmLayout = new javax.swing.GroupLayout(dlgConfirm.getContentPane());
+        dlgConfirm.getContentPane().setLayout(dlgConfirmLayout);
+        dlgConfirmLayout.setHorizontalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgConfirmLayout.setVerticalGroup(
+            dlgConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Profesores]");
         setIconImage(img.getImage());
         setMinimumSize(new java.awt.Dimension(1024, 600));
         setResizable(false);
 
-        pnlBkProfesor.setBackground(new java.awt.Color(255, 255, 255));
-        pnlBkProfesor.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
-        pnlBkProfesor.setMinimumSize(new java.awt.Dimension(1024, 600));
-        pnlBkProfesor.setPreferredSize(new java.awt.Dimension(1024, 600));
-        pnlBkProfesor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        bkProfesor.setBackground(new java.awt.Color(255, 255, 255));
+        bkProfesor.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
+        bkProfesor.setMinimumSize(new java.awt.Dimension(1024, 600));
+        bkProfesor.setPreferredSize(new java.awt.Dimension(1024, 600));
+        bkProfesor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblTitulo.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         lblTitulo.setText("Profesores");
@@ -932,11 +1047,11 @@ public class Profesor extends javax.swing.JFrame {
                 lblTituloMouseClicked(evt);
             }
         });
-        pnlBkProfesor.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 109, -1, -1));
+        bkProfesor.add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 109, -1, -1));
 
         lblInstrucciones.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblInstrucciones.setText("Filtrar información:");
-        pnlBkProfesor.add(lblInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
+        bkProfesor.add(lblInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, -1, -1));
 
         cabecera.setBackground(new java.awt.Color(1, 200, 1));
         cabecera.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
@@ -1003,7 +1118,7 @@ public class Profesor extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlBkProfesor.add(cabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        bkProfesor.add(cabecera, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pnlBusqueda.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(190, 190, 190), 2, true));
         pnlBusqueda.setPreferredSize(new java.awt.Dimension(204, 37));
@@ -1034,7 +1149,7 @@ public class Profesor extends javax.swing.JFrame {
                 .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlBkProfesor.add(pnlBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
+        bkProfesor.add(pnlBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 168, -1, -1));
 
         panelOPC.setBackground(new java.awt.Color(250, 250, 250));
         panelOPC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 173, 179), 1, true));
@@ -1131,7 +1246,7 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 15, 0);
         panelOPC.add(jLabel11, gridBagConstraints);
 
-        pnlBkProfesor.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
+        bkProfesor.add(panelOPC, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
         pnlBtnNuevo.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnNuevo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
@@ -1174,7 +1289,7 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnNuevo.add(lblN1, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 190, -1, -1));
+        bkProfesor.add(pnlBtnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 190, -1, -1));
 
         pnlBtnBorrar.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnBorrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
@@ -1217,7 +1332,7 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnBorrar.add(lblN2, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 320, -1, -1));
+        bkProfesor.add(pnlBtnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 320, -1, -1));
 
         pnlBtnActualizar.setBackground(new java.awt.Color(239, 239, 239));
         pnlBtnActualizar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)));
@@ -1260,12 +1375,12 @@ public class Profesor extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 12, 0);
         pnlBtnActualizar.add(lblN3, gridBagConstraints);
 
-        pnlBkProfesor.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 440, -1, -1));
+        bkProfesor.add(pnlBtnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 440, -1, -1));
 
         comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_PROFESOR", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "DEPARTAMENTO" }));
         comboFiltro.setMinimumSize(new java.awt.Dimension(125, 30));
         comboFiltro.setPreferredSize(new java.awt.Dimension(125, 30));
-        pnlBkProfesor.add(comboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 160, -1));
+        bkProfesor.add(comboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 160, -1));
 
         btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Back To_35px.png"))); // NOI18N
         btnRegresar.setMaximumSize(new java.awt.Dimension(40, 37));
@@ -1276,7 +1391,7 @@ public class Profesor extends javax.swing.JFrame {
                 btnRegresarMouseClicked(evt);
             }
         });
-        pnlBkProfesor.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+        bkProfesor.add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
 
         btnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Checklist_24px.png"))); // NOI18N
         btnMenu.setMaximumSize(new java.awt.Dimension(40, 37));
@@ -1287,7 +1402,7 @@ public class Profesor extends javax.swing.JFrame {
                 btnMenuItemStateChanged(evt);
             }
         });
-        pnlBkProfesor.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
+        bkProfesor.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
 
         btnBusqueda.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_25px.png"))); // NOI18N
@@ -1297,7 +1412,7 @@ public class Profesor extends javax.swing.JFrame {
                 btnBusquedaActionPerformed(evt);
             }
         });
-        pnlBkProfesor.add(btnBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, -1, -1));
+        bkProfesor.add(btnBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, -1, -1));
 
         btnBusquedaClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/borrar-búsqueda-24.png"))); // NOI18N
         btnBusquedaClear.setPreferredSize(new java.awt.Dimension(45, 35));
@@ -1306,7 +1421,7 @@ public class Profesor extends javax.swing.JFrame {
                 btnBusquedaClearActionPerformed(evt);
             }
         });
-        pnlBkProfesor.add(btnBusquedaClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, -1, -1));
+        bkProfesor.add(btnBusquedaClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, -1, -1));
 
         jTable1.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -1349,17 +1464,17 @@ public class Profesor extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        pnlBkProfesor.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 824, 353));
+        bkProfesor.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 824, 353));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBkProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(bkProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlBkProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(bkProfesor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -1399,7 +1514,7 @@ public class Profesor extends javax.swing.JFrame {
         pnlBtnNuevo.setBackground(new Color(240, 240, 240));
         ico1.setIcon(add);
 
-        dlgNuevo.setLocationRelativeTo(pnlBkProfesor);
+        dlgNuevo.setLocationRelativeTo(bkProfesor);
         dlgNuevo.setVisible(true);
     }//GEN-LAST:event_pnlBtnNuevoMouseClicked
 
@@ -1416,9 +1531,14 @@ public class Profesor extends javax.swing.JFrame {
     private void pnlBtnBorrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnBorrarMouseClicked
         pnlBtnBorrar.setBackground(new Color(240, 240, 240));
         ico2.setIcon(ers);
+         dlgConfirm.setLocationRelativeTo(bkProfesor);
+            dlgConfirm.setVisible(true);
 
-        dlgBorrar.setLocationRelativeTo(pnlBkProfesor);
-        dlgBorrar.setVisible(true);
+        if(valido){
+            valido = false;
+            dlgBorrar.setLocationRelativeTo(bkProfesor);
+            dlgBorrar.setVisible(true);
+        }
     }//GEN-LAST:event_pnlBtnBorrarMouseClicked
 
     private void pnlBtnBorrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnBorrarMouseEntered
@@ -1435,7 +1555,7 @@ public class Profesor extends javax.swing.JFrame {
         pnlBtnActualizar.setBackground(new Color(240, 240, 240));
         ico6.setIcon(upd);
         lblHide.setVisible(false);
-        dlgActualizar.setLocationRelativeTo(pnlBkProfesor);
+        dlgActualizar.setLocationRelativeTo(bkProfesor);
         dlgActualizar.setVisible(true);
     }//GEN-LAST:event_pnlBtnActualizarMouseClicked
 
@@ -1845,6 +1965,56 @@ public class Profesor extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String crdncial = txtUsuario.getText().trim();
+        try {
+            UsuarioReadDB leer = new UsuarioReadDB();
+            if (leer.getExisteUsuario(crdncial)) {
+                String hashed = leer.getPass(crdncial);
+                if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
+                    if(leer.getEsAdminUsuario(crdncial)){
+                        valido = true;
+                        txtUsuario.setText("");
+                        txtPass.setText("");
+                        dlgConfirm.setVisible(false);
+                        dlgConfirm.dispose();
+                    }else{
+                        throw new Exception();
+                    }
+                }else{
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
+            }
+        }catch(SQLException ex){
+            System.out.println("Error al comprobar usuario:" + ex);
+        }catch(Exception e){
+            txtUsuario.setText("");
+            txtPass.setText("");
+            valido = false;
+            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+        }
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
+        if (txtUsuario.getText().length() >= 15) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        if (txtPass.getPassword().length >= 12) {
+            evt.consume();
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            btnComprobar.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
+
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
         if (!(Character.isAlphabetic(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
@@ -1895,6 +2065,7 @@ public class Profesor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel bkProfesor;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBusqueda;
@@ -1902,6 +2073,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
+    private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnDlgBuscarAct;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JToggleButton btnMenu;
@@ -1910,6 +2082,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboFiltro;
     private javax.swing.JDialog dlgActualizar;
     private javax.swing.JDialog dlgBorrar;
+    private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgNuevo;
     private javax.swing.JPanel dlgPnlFormulario;
     private javax.swing.JLabel ico1;
@@ -1926,6 +2099,10 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1933,6 +2110,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel labelFecha;
@@ -1966,7 +2144,6 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBkActualizar;
     private javax.swing.JPanel pnlBkBorrar;
     private javax.swing.JPanel pnlBkNuevo;
-    private javax.swing.JPanel pnlBkProfesor;
     private javax.swing.JPanel pnlBtnActualizar;
     private javax.swing.JPanel pnlBtnBorrar;
     private javax.swing.JPanel pnlBtnNuevo;
@@ -1991,5 +2168,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JTextField txtId1;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNom1;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

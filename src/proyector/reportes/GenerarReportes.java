@@ -172,15 +172,15 @@ public class GenerarReportes {
                         nomReporte = "Reporte por Profesor";
                     break;
                     case 3:
-                        ruta = "reporteDep" + File.separator + "DepPrestamos.jasper";
+                        ruta += "reporteDep" + File.separator + "DepPrestamos.jasper";
                         nomReporte = "Reporte por Departamento";
                     break;
                     case 4:
-                        ruta = "reporteFallosAccYVid" + File.separator + "reporteAccesorios.jasper";
+                        ruta += "reporteFallosAccYVid" + File.separator + "reporteAccesorios.jasper";
                         nomReporte = "Reporte de fallos/daños Articulos";
                     break;
                     case 5:
-                        ruta = "reporteFallosAccYVid" + File.separator + "reportePry.jasper";
+                        ruta += "reporteFallosAccYVid" + File.separator + "reportePry.jasper";
                         nomReporte = "Reporte de fallos/daños Proyectores";
                     break;
                 }
