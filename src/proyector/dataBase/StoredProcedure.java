@@ -102,8 +102,7 @@ public class StoredProcedure{
     public static ResultSet genReportProy(Connection conn, String[] datos){
         PreparedStatement prep;
 
-        String reporte = "INSERT INTO E_REP_VIDEOPROYECTORES "+
-        "(ID_VIDEOPROYECTOR, ID_PROFESOR, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES) "+
+        String reporte = "INSERT INTO E_REP_VIDEOPROYECTORES (ID_VIDEOPROYECTOR, ID_PROFESOR, TITULO, NOMBRE_ENCARGADO, AREA, DEPTO_REPARADOR, IMPREVISTO, DETALLES) "+
         "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         String idReporte = "SELECT ID_REPORTE_VIDEOPROYECTOR FROM E_REP_VIDEOPROYECTORES ORDER BY ID_REPORTE_VIDEOPROYECTOR DESC LIMIT 1";
         try{
@@ -124,7 +123,18 @@ public class StoredProcedure{
         }
         return null;
     }
-    
+    /**
+     * SE REPORTA QUE EL PROYECTOR TIENE UN PROBLEMA POR LO TANTO EL AULA QUEDA LIBRE PARA SER INDICADA NUEVAMENTE
+     * EL ESTATUS DEL PROYECTOR ASI COMO EL DEL PRESTAMO CAMBIAN 
+     * SE INDICA PROFESOR CON ADEUDO Y ESTATUS TRUE
+     * @param conn
+     * @param idUsuario
+     * @param idProy
+     * @param idProf
+     * @param idAul
+     * @param idPrest
+     * @param idReporte 
+     */
     public static void liberarPrestamoReport(Connection conn, String idUsuario, int idProy, String idProf, int idAul, int idPrest, int idReporte){
         PreparedStatement prestStatm;
         PreparedStatement proyStatm;
@@ -133,7 +143,7 @@ public class StoredProcedure{
         
         String prestamo = "UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE, ESTATUS_DEVOLUCION = FALSE, ID_REPORTE_VIDEOPROYECTOR = ? WHERE ID_PRESTAMO = ?";
         String proyector = "UPDATE EV_ESTATUS SET NOMBRE = ?, DISPONIBILIDAD = FALSE WHERE ID_VIDEOPROYECTOR = ?";
-        String profesor = "UPDATE E_PROFESORES SET ESTATUS = FALSE, SIN_ADEUDO = FALSE WHERE ID_PROFESOR = ?";
+        String profesor = "UPDATE E_PROFESORES SET ESTATUS = TRUE, ADEUDO = TRUE WHERE ID_PROFESOR = ?";
         String aula = "UPDATE E_AULAS SET ESTATUS = TRUE WHERE ID_AULA = ?";
         
         try{
@@ -166,6 +176,56 @@ public class StoredProcedure{
             aulStatm.close();
         }catch(SQLException e){
             System.out.println("Error al liberar de forma normal prestamo en Procedure:"+e);
+        }
+    }
+    
+    public static void setProyector(Connection conn, String[] data, String[] accesorios){
+        String sqlProyector = "INSERT INTO E_VIDEOPROYECTORES(NOMBRE, MARCA, MODELO, NO_SERIE, ACCESORIOS) VALUES (?,?,?,?,?);";
+        String sqlEstatus = "INSERT INTO EV_ESTATUS(ID_VIDEOPROYECTOR, NOMBRE) VALUES(?, ?);";
+        String sqlServicio = "INSERT INTO EV_HORASSERVICIO(ID_VIDEOPROYECTOR) VALUES(?);";
+        String sqlID = "SELECT ID_VIDEOPROYECTOR FROM E_VIDEOPROYECTORES WHERE NO_SERIE = ?;";
+        PreparedStatement prep;
+        PreparedStatement prepS;
+        
+        try {
+            prep = conn.prepareStatement(sqlProyector);
+            for (int i = 0; i < data.length; i++) {
+                prep.setString(i+1, data[i]);
+            }
+            prep.setObject(5, accesorios);
+            prep.execute();
+            prep.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al ingresar videoproyector, revise los datos ingresados setVideoProyector VideoproyectorDB: " + ex);
+        }
+        ResultSet rs;
+        int id = 0;
+        try {
+            prep = conn.prepareStatement(sqlID);
+            prep.setString(1, data[3]);
+            rs = prep.executeQuery();
+            while(rs.next()){
+                id = rs.getInt(1);
+            }
+            prep.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar id del nuevo Proyector:" + e);
+        }
+        try {
+            prep = conn.prepareStatement(sqlEstatus);
+            prepS= conn.prepareStatement(sqlServicio);
+            
+            prep.setInt(1, id);
+            prep.setString(2, "DISPONIBLE");
+            prepS.setInt(1, id);
+            
+            prep.execute();
+            prepS.execute();
+            prep.close();
+            prepS.close();
+        } catch (SQLException e) {
+            System.out.println("error al ingresar en EV_ESTATUS y  EV_HORASSERVICIO procedure: " + e);
         }
     }
 }

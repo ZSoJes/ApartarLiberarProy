@@ -44,6 +44,7 @@ public final class ARegistro extends javax.swing.JFrame {
 
     public ARegistro() {
         initComponents();
+        hiddenIDRprt.setVisible(false);
         lblLoadingIcon.setIcon(loadingIMG);
         try {
             new VideoproyectorDB().setProyectorServicio();
@@ -991,6 +992,11 @@ public final class ARegistro extends javax.swing.JFrame {
         hiddenIDRprt.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         hiddenIDRprt.setText("SoyID");
         jPanel2.add(hiddenIDRprt, new org.netbeans.lib.awtextra.AbsoluteConstraints(618, 199, -1, -1));
+
+        lblProfe.setBackground(new java.awt.Color(255, 51, 51));
+        lblProfe.setForeground(new java.awt.Color(255, 255, 255));
+        lblProfe.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 4, 2, 4));
+        lblProfe.setOpaque(true);
         jPanel2.add(lblProfe, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 417, -1, -1));
 
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Info_36px.png"))); // NOI18N
@@ -1903,7 +1909,7 @@ public final class ARegistro extends javax.swing.JFrame {
             PrestamoDB pres = new PrestamoDB();
             String[] arr = pres.getReporte(Integer.parseInt(hiddenIDRprt.getText()));
             String[] reporteDtos = {arr[5], arr[4], arr[8], arr[6], new VideoproyectorDB().getProyectorNoSerie(arr[1])};
-            genR.getSolicitudMantenimientoPry(reporteDtos);
+            genR.getSolicitudMant(reporteDtos);
             new LogDB().log(usuario, "E_REP_VIDEOPROYECTORES", 5);
         } catch (SQLException e) {
             System.out.println("Error al generar Reporte: " + e);

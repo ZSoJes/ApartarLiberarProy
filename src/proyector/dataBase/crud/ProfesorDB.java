@@ -54,15 +54,15 @@ public class ProfesorDB {
         int i = 0;
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO FROM E_PROFESORES ORDER BY ID_PROFESOR");
+            prep = conn.prepareStatement("SELECT ID_PROFESOR, (SELECT NOMBRE FROM E_DEPARTAMENTOS WHERE E_DEPARTAMENTOS.ID_DEPARTAMENTO = E_PROFESORES.ID_DEPARTAMENTO) AS DEPT, NOMBRE, A_PATERNO, A_MATERNO, ADEUDO FROM E_PROFESORES ORDER BY ID_PROFESOR");
             ResultSet rs = prep.executeQuery();
             while (rs.next()) {
                 array[i][0] = rs.getString("ID_PROFESOR");
                 array[i][1] = rs.getString("NOMBRE");
                 array[i][2] = rs.getString("A_PATERNO");
                 array[i][3] = rs.getString("A_MATERNO");
-                array[i][4] = rs.getString("ID_DEPARTAMENTO");
-                array[i][5] = rs.getString("SIN_ADEUDO");
+                array[i][4] = rs.getString("DEPT");
+                array[i][5] = rs.getString("ADEUDO");
                 i++;
             }
             rs.close();
@@ -83,7 +83,7 @@ public class ProfesorDB {
         String profe[] = new String[6];
         try{
             PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO FROM E_PROFESORES WHERE ID_PROFESOR = ?");
+            prep = conn.prepareStatement("SELECT ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ADEUDO FROM E_PROFESORES WHERE ID_PROFESOR = ?");
             prep.setString(1, id);
             ResultSet rs = prep.executeQuery();
             while (rs.next()){
@@ -92,7 +92,7 @@ public class ProfesorDB {
                 profe[2] = rs.getString("NOMBRE");
                 profe[3] = rs.getString("A_PATERNO");
                 profe[4] = rs.getString("A_MATERNO");
-                profe[5] = rs.getString("SIN_ADEUDO");
+                profe[5] = rs.getString("ADEUDO");
             }
             rs.close();
             prep.close();
@@ -115,6 +115,7 @@ public class ProfesorDB {
             prep.setString(1, id);
             ResultSet rs = prep.executeQuery();
             while (rs.next()) existe =  rs.getInt(1) > 0;
+            prep.close();
         }catch(SQLException ex){
             System.out.println("Error al recuperar la cantidad de datos profesores: " + ex);
         }
@@ -262,7 +263,7 @@ public class ProfesorDB {
         try {
             PreparedStatement prep;
             System.out.println("ruta: " + ruta.replace('\\', '/'));
-            String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, SIN_ADEUDO) "
+            String sql = "INSERT INTO E_PROFESORES(ID_PROFESOR, ID_DEPARTAMENTO, NOMBRE, A_PATERNO, A_MATERNO, ADEUDO) "
                        + "SELECT * FROM CSVREAD('" + ruta.replace('\\', '/') + "', null, ";
             //sql = sql.concat(OS.contains("win")?"STRINGDECODE('charset=windows-1252'))":"STRINGDECODE('charset=UTF-8'))"); //si es windows decode char con windows 1252 sino usa UTF-8 -se debe usar windows1252 en linux error charsetUTF8
             sql = sql.concat("STRINGDECODE('charset=windows-1252'))");

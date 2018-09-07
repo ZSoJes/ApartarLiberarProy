@@ -968,7 +968,7 @@ public final class Inicio extends javax.swing.JFrame {
 
         lblRegistrarse.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
         lblRegistrarse.setForeground(new java.awt.Color(255, 255, 255));
-        lblRegistrarse.setText("Registrarse");
+        lblRegistrarse.setText("<html><u>Registrarse</u></html>");
         lblRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblRegistrarseMouseClicked(evt);
@@ -1404,7 +1404,7 @@ public final class Inicio extends javax.swing.JFrame {
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Intenta de nuevo\nEsta ingresando icorrectamente \nusuario y/o contraseña!!!\n\no su usuario no puede dar inicio al programa", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                System.out.println("Error usuario carga:" + ex);
+                System.out.println("Error USUARIO NO ENCONTRADO:" + ex);
                 txtUsuario.setText("");
                 jPassAcceso.setText("");
             }

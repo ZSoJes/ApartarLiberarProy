@@ -30,7 +30,6 @@ public class VideoproyectorDB {
 
     /**
      * Regresa true/false si existe el videoproyector indicado por su no_serie
-     *
      * @param noSerie
      * @return
      */
@@ -74,7 +73,6 @@ public class VideoproyectorDB {
 
     /**
      * Regresa la cantidad de videoproyectores existentes
-     *
      * @return
      */
     public int getCantProy() {
@@ -99,39 +97,16 @@ public class VideoproyectorDB {
      * @param data 
      * @param accesorios 
      */
-    public void setVideoProyector(String[] data, String[] accesorios) {
-        
+    public void setProyector(String[] data, String[] accesorios) {
         PreparedStatement prep;
         try {
-            prep = conn.prepareStatement("INSERT INTO E_VIDEOPROYECTORES(NOMBRE, MARCA, MODELO, NO_SERIE, ACCESORIOS) VALUES (?,?,?,?,?)");
-            prep.setString(1, data[0]);
-            prep.setString(2, data[1]);
-            prep.setString(3, data[2]);
-            prep.setString(4, data[3]);
-            prep.setObject(5, accesorios);
-            prep.execute();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al ingresar videoproyector, revise los datos ingresados setVideoProyector VideoproyectorDB: " + ex);
-        }
-        try {
-            String id = getProyectorID(data[3]);
-            prep = conn.prepareStatement("INSERT INTO EV_ESTATUS(ID_VIDEOPROYECTOR, NOMBRE) VALUES(?, ?)");
-            prep.setString(1, id);
-            prep.setString(2, "DISPONIBLE");
+            prep = conn.prepareStatement("CALL SET_PRY(?,?)");
+            prep.setObject(1, data);
+            prep.setObject(2, accesorios);
             prep.execute();
             prep.close();
         } catch (SQLException e) {
-            System.out.println("error al ingresar en EV_ESTATUS setVideoProyector VideoproyectorDB: " + e);
-        }
-        try {
-            String id = getProyectorID(data[3]);
-            prep = conn.prepareStatement("INSERT INTO EV_HORASSERVICIO(ID_VIDEOPROYECTOR) VALUES(?)");
-            prep.setString(1, id);
-            prep.execute();
-            prep.close();
-        } catch (SQLException e) {
-            System.out.println("error al ingresar en EV_HORASSERVICIO setVideoProyector VideoproyectorDB: " + e);
+            System.out.println(": : : : Error al procesar el nuevo videoproyector setVideoProyector " + e);
         }
     }
 
@@ -322,17 +297,19 @@ public class VideoproyectorDB {
      * Nombre * Marca * Modelo * No_serie
      * @param id
      * @param datos 
+     * @param accesorios 
      */
-    public void updVideoproyector(int id, String[] datos) {
+    public void updVideoproyector(int id, String[] datos, String[] accesorios) {
         try {
             PreparedStatement prep;
-            prep = conn.prepareStatement("UPDATE E_VIDEOPROYECTORES SET NOMBRE = ? , MARCA = ?, MODELO = ?, NO_SERIE = ?"
+            prep = conn.prepareStatement("UPDATE E_VIDEOPROYECTORES SET NOMBRE = ? , MARCA = ?, MODELO = ?, NO_SERIE = ?, ACCESORIOS = ?"
                     + " WHERE ID_VIDEOPROYECTOR = ?");
             prep.setString(1, datos[0]);
             prep.setString(2, datos[1]);
             prep.setString(3, datos[2]);
             prep.setString(4, datos[3]);
-            prep.setInt(5, id);
+            prep.setObject(5, accesorios);
+            prep.setInt(6, id);
             prep.executeUpdate();
             prep.close();
         } catch (SQLException ex) {
@@ -341,19 +318,18 @@ public class VideoproyectorDB {
     }
 
     /**
-     * Retorna los videoproyectores que existen de acuerdo a su estatus
-     * disponible = true / no disponible = false
-     *
+     * Retorna los videoproyectores que existen de acuerdo a su estatus<br>disponible = true / no disponible = false
      * @param disponible
      * @return
      */
     public int evStatusDisponible(boolean disponible) {
         int cant = 0;
+        ResultSet rs;
+        PreparedStatement prep;
         try {
-            PreparedStatement prep;
             prep = conn.prepareStatement("SELECT COUNT(*) FROM EV_ESTATUS WHERE DISPONIBILIDAD = ?");
             prep.setBoolean(1, disponible);
-            ResultSet rs = prep.executeQuery();
+            rs = prep.executeQuery();
             while (rs.next()) {
                 cant = rs.getInt(1);
             }
@@ -366,20 +342,18 @@ public class VideoproyectorDB {
     }
 
     /**
-     * Regresa el estatus de un proyector especifico a partir de su id si no se
-     * encuentran los datos regresa un array string empty
-     *
+     * Regresa el estatus de un proyector especifico a partir de su id si no <br>encuentra los datos regresa un array string empty
      * @param id
      * @return
      */
     public String[] showMeEvStatus(String id) {
-        String[] datos = {"", "", "", ""};
+        String[] datos = new String[4];
+        PreparedStatement prep;
+        ResultSet rs;
         try {
-            PreparedStatement prep;
             prep = conn.prepareStatement("SELECT * FROM EV_ESTATUS WHERE ID_VIDEOPROYECTOR = ?");
             prep.setString(1, id);
-            ResultSet rs = prep.executeQuery();
-
+            rs = prep.executeQuery();
             while (rs.next()) {
                 datos[0] = rs.getString("ID_ESTATUS");
                 datos[1] = rs.getString("ID_VIDEOPROYECTOR");
@@ -400,7 +374,6 @@ public class VideoproyectorDB {
         ResultSet rs;
         try {
             prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, NO_SERIE FROM E_VIDEOPROYECTORES ORDER BY ID_VIDEOPROYECTOR");
-
             rs = prep.executeQuery();
             comboItemProy cmi;
             while (rs.next()) {
@@ -423,7 +396,6 @@ public class VideoproyectorDB {
         ResultSet rs;
         try {
             prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR FROM E_PRESTAMOS WHERE ESTATUS = TRUE ORDER BY ID_PRESTAMO");
-
             rs = prep.executeQuery();
             comboItemProy cmi;
             while (rs.next()) {
@@ -469,7 +441,7 @@ public class VideoproyectorDB {
         return datos;
     } 
     
-        /**
+   /**
      * Recupera el tiempo de un videoproyector en servicio los datos presentados
      * con el formato hrs min o min de acuedo a la cantidad de tiempo que fue solicitado
      * <p>El array presenta los datos de la siguiente forma { NombreProyector, Total, Semestre, Mes }</p>
@@ -649,47 +621,5 @@ public class VideoproyectorDB {
             System.out.println("Error al recuperar el id del ultimo reporte generado");
         }
         return id;
-    }
-    
-        public String[] unicogetProyectorUnico() {
-        String[] datos = new String[7];
-        try {
-            PreparedStatement prep;
-            prep = conn.prepareStatement("SELECT ID_VIDEOPROYECTOR, NOMBRE, MARCA, MODELO, NO_SERIE, CREADO, ACCESORIOS FROM E_VIDEOPROYECTORES ORDER BY CREADO DESC LIMIT 1");
-
-            ResultSet rs = prep.executeQuery();
-
-            while (rs.next()) {
-                datos[0] = rs.getString("ID_VIDEOPROYECTOR");
-                datos[1] = rs.getString("NOMBRE");
-                datos[2] = rs.getString("MARCA");
-                datos[3] = rs.getString("MODELO");
-                datos[4] = rs.getString("NO_SERIE");
-                datos[5] = rs.getString("CREADO");
-                datos[6] = rs.getString("ACCESORIOS");
-            }
-            rs.close();
-            prep.close();
-        } catch (SQLException ex) {
-            System.out.println("Error al recuperar datos de un proyector getProyector VideoproyectorDB: " + ex);
-        }
-        return datos;
-    }
-//    public void setReporteAPrestamo(String noSerie, String credencialUsuario, boolean estatusDevolucion) throws SQLException{
-//        String[] otros = new PrestamoDB().getPrestamo(noSerie);
-//        PreparedStatement prep;
-//        ResultSet rs;
-//        int idReporte = getIDReporte();
-//        try {
-//            String miSQL = "UPDATE E_PRESTAMOS SET ID_ENTRADA = ?, ESTATUS = FALSE, ESTATUS_DEVOLUCION = ?, ID_REPORTE_VIDEOPROYECTOR = "+ idReporte +" WHERE ID_PRESTAMO = ?";
-//            prep = conn.prepareStatement(miSQL);
-//            prep.setString(1, credencialUsuario);
-//            prep.setBoolean(2, estatusDevolucion);
-//            prep.setInt(3, Integer.parseInt(otros[0]));
-//            prep.executeUpdate();
-//            prep.close();
-//        } catch (SQLException ex) {
-//            System.out.println("\nError al actualizar PRESTAMO a updPrestamo E_PRESTAMOS:" + ex + "\n\n");
-//        }
-//    }
+    }    
 }

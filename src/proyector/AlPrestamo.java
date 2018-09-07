@@ -42,8 +42,6 @@ public class AlPrestamo extends javax.swing.JFrame {
 
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
     String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-//    static ArrayList<String> chkBText = new ArrayList<String>();
-//    static ArrayList<Integer> chkBID = new ArrayList<Integer>();
     
     /**
      * Creates new form AlPrestamo
@@ -1196,12 +1194,14 @@ public class AlPrestamo extends javax.swing.JFrame {
         String profe = txtProf.getText().trim();
         System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::");
         System.out.println("foco profesor");
+        System.out.println("\n\n\n El profe se encuentra vacio : "+ profe.isEmpty()+"\n"+profe.equals("")+"\n\n");
         if (!profe.isEmpty()) {
             try {
                 ProfesorDB prof = new ProfesorDB();
                 if (prof.getExisteProfesor(profe)) {
                     PrestamoDB prestamo = new PrestamoDB();
                     if (prestamo.getPrestamoActivo(profe, 2)) { //si true (si diponible) utilizar profesor
+                        if(Boolean.valueOf(prof.getProfesor(profe)[5])){ JOptionPane.showMessageDialog(null,"El profesor cuenta con adeudos pendientes\n\nAun asi es posible prestarle material escolar si lo desea", "Importante",JOptionPane.INFORMATION_MESSAGE);}
                         DepartamentoDB depar = new DepartamentoDB();
                         String[] datos = prof.getProfesor(profe);
                         String[] depart = depar.getDepartamento(Integer.parseInt(datos[1]));

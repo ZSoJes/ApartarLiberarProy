@@ -37,12 +37,12 @@ public class Conexion {
      */
     public static void lanzarTriggers(Connection conn) throws SQLException {
         String triggerNomTabla[][] = {{"E_DEPARTAMENTOS", "ACTUALIZAR_EN_DEPARTAMENTOS"}, 
-            {"E_PROFESORES", "ACUTALIZAR_EN_PROFESORES"},
-            {"E_AULAS","ACUTALIZADO_EN_AULAS"}, 
-            {"E_USUARIOS", "ACUTALIZADO_EN_USUARIOS"}, 
-            {"E_VIDEOPROYECTORES", "ACUTALIZADO_EN_VIDEOPROYECTORES"},
-            {"E_PRESTAMOS","ACUTALIZADO_EN_PRESTAMOS"},
-            {"E_REP_VIDEOPROYECTORES","ACUTALIZADO_EN_ACCESORIOS"}};
+            {"E_PROFESORES", "ACTUALIZAR_EN_PROFESORES"},
+            {"E_AULAS","ACTUALIZADO_EN_AULAS"}, 
+            {"E_USUARIOS", "ACTUALIZADO_EN_USUARIOS"}, 
+            {"E_VIDEOPROYECTORES", "ACTUALIZADO_EN_VIDEOPROYECTORES"},
+            {"E_PRESTAMOS","ACTUALIZADO_EN_PRESTAMOS"},
+            {"E_REP_VIDEOPROYECTORES","ACTUALIZADO_EN_ACCESORIOS"}};
 
         /*insertando triggers*/
         Statement stat = conn.createStatement();
@@ -61,6 +61,7 @@ public class Conexion {
         stat.execute("CREATE ALIAS IF NOT EXISTS FREE_PRESTAMO_N FOR \"proyector.dataBase.StoredProcedure.liberarPrestamoN\" ");
         stat.execute("CREATE ALIAS IF NOT EXISTS GEN_REP_PROY FOR \"proyector.dataBase.StoredProcedure.genReportProy\" ");
         stat.execute("CREATE ALIAS IF NOT EXISTS FREE_PRESTAMO_REPORT_PRY FOR \"proyector.dataBase.StoredProcedure.liberarPrestamoReport\" ");
+        stat.execute("CREATE ALIAS IF NOT EXISTS SET_PRY FOR \"proyector.dataBase.StoredProcedure.setProyector\" ");
     }
     
     /**
@@ -73,7 +74,7 @@ public class Conexion {
             Class.forName(JDBC_NAME).newInstance();
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("CONEXION A LA BASE DE DATOS...");
-            //crearProcedure(conn);
+            crearProcedure(conn);
         } catch (SQLException ex) {
             conn = DriverManager.getConnection(NEW_DB_URL, USER, PASS);
             System.out.println("CREANDO Y CONECTANDO A LA BASE DE DATOS...");
@@ -95,7 +96,7 @@ public class Conexion {
             conn.close(); 
             System.out.println("\n\n\n: : : : > > > Se ha compactado la base de datos");
         } catch (SQLException e) {
-            System.out.println("Error al lanzar compactacion");
+            System.out.println("Error al lanzar compactacion: " + e);
         }
     }
     /**

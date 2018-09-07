@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c88588ac-d92e-475f-ae53-b0eb906e862f">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="15"/>
+	<property name="ireport.y" value="0"/>
+	<style name="roundedCorner" mode="Opaque" forecolor="#FFFFFF" backcolor="#1A2E52" fill="Solid" radius="20">
+		<pen lineWidth="1.25" lineColor="#41719C"/>
+	</style>
+	<style name="barcodeS" hAlign="Center"/>
+	<style name="Text" mode="Transparent" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<box leftPadding="2"/>
+	</style>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="356" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement style="roundedCorner" x="70" y="5" width="213" height="321" forecolor="#FFFFFF" uuid="6841f62f-509f-493a-b76a-15de8c620118"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement style="roundedCorner" x="286" y="5" width="213" height="321" uuid="29f56e47-21bc-4c89-8d64-afffde1ba577"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="70" y="276" width="213" height="17" forecolor="#FFFFFF" uuid="d9b0b083-2580-4e33-965c-d193d87a74e6"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRESTAMO DE]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="71" y="105" width="211" height="170" uuid="ab933025-f881-4fc1-b538-8da82be9d25b"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="70" y="100" width="213" height="5" backcolor="#A6A6A6" uuid="26a5f272-70df-4e56-9056-db472e030b82"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="70" y="295" width="213" height="24" forecolor="#FFFFFF" uuid="e9d9fea5-b107-4e2c-9f60-f4e418a3fbdf"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VIDEOPROYECTORES]]></text>
+			</staticText>
+			<image>
+				<reportElement x="95" y="20" width="170" height="72" uuid="3539af9b-e7d5-4bad-a753-0c1bdca1f0a5"/>
+				<imageExpression><![CDATA["C:\\Users\\JuanGS\\NetBeansProjects\\Proyector\\src\\imagenes\\TecNM.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="83" y="120" width="77" height="94" uuid="3f27d227-a392-428a-8108-60059cf56392"/>
+				<graphicElement>
+					<pen lineWidth="1.5" lineColor="#4472C4"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="286" y="100" width="213" height="176" backcolor="#D8D8D8" uuid="2b729bb7-e2b8-4065-b51e-16fb4bc22aba"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<image>
+				<reportElement x="368" y="15" width="48" height="71" uuid="6270813b-788d-417b-946e-ebc5c9321b58"/>
+				<imageExpression><![CDATA["C:\\Users\\JuanGS\\NetBeansProjects\\Proyector\\src\\imagenes\\itt.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="286" y="276" width="213" height="50" forecolor="#FFFFFF" uuid="9687f9ec-21f6-41fe-8121-7bf4d1b17198"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Av. Estanislao Ramírez # 301, Col. Ampliación Selene
+Delegación Tláhuac, C.P. 13430, CDMX.
+Tels. 58410560 | 73125616 | 58660927 | 25944096
+www.ittlahuac.edu.mx
+]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement style="barcodeS" stretchType="RelativeToBandHeight" mode="Transparent" x="286" y="120" width="213" height="65" uuid="68b2bb77-a306-4628-b9f3-96436dca9751"/>
+				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" moduleWidth="0.9" textPosition="none" displayChecksum="true" displayStartStop="true" extendedCharSetEnabled="true">
+					<jr:codeExpression><![CDATA["12106433"]]></jr:codeExpression>
+				</jr:Code39>
+			</componentElement>
+			<image>
+				<reportElement x="324" y="214" width="140" height="26" uuid="39416446-bed3-40b4-b156-025913be2dca"/>
+				<imageExpression><![CDATA["C:\\Users\\JuanGS\\NetBeansProjects\\Proyector\\src\\imagenes\\text.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="Text" x="179" y="135" width="100" height="20" uuid="7c19b2e7-a3a0-4a87-9e07-0b5eccca8bba"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RAQUEL"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Text" x="179" y="155" width="100" height="20" uuid="87a0de3d-4784-4652-9a83-5a6ab37a9b6a"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PACHECO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Text" x="179" y="175" width="100" height="20" uuid="eee8c865-8507-4402-87d8-13b001ae10fe"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["HERNÁNDEZ"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="240" width="208" height="35" uuid="2fda545e-14f1-4a53-a7d9-911c3297b09c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DOCENTE"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="286" y="88" width="213" height="10" forecolor="#FFFFFF" uuid="002ad804-501f-4e82-8157-725742e8e253"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUTO TECNOLÓGICO DE TLÁHUAC]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="286" y="185" width="213" height="20" uuid="7d402e75-8d6a-4022-b7e1-44d8d580cb5a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["0188"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

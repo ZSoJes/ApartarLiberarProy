@@ -1,6 +1,18 @@
 package proyector;
-
+//System.out.println(
+//
+//(char)27 + "[32m" + " ($) Error  in green"
+//
+//);
+//
+//
+//System.out.println(
+//
+//(char)27 + "[31m" + "ERROR MESSAGE IN RED"
+//
+//);
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -8,20 +20,25 @@ import java.io.File;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableModel;
 import org.mindrot.jbcrypt.BCrypt;
-import proyector.dataBase.Conexion;
+import proyector.dataBase.crud.ArticuloDB;
 import proyector.dataBase.crud.AulaDB;
 import proyector.dataBase.crud.LogDB;
 import proyector.dataBase.crud.UsuarioCreateDB;
@@ -47,6 +64,7 @@ public class Menu extends javax.swing.JFrame {
     ImageIcon reg = new ImageIcon(("./src/imagenes/registr_32px.png").replace('/', File.separatorChar));
     ImageIcon regW = new ImageIcon(("./src/imagenes/registr_32px_lavanda.png").replace('/', File.separatorChar));
 
+    ImageIcon notifyIMG = new ImageIcon(("./src/imagenes/notify-32.png").replace('/', File.separatorChar));
     private static Boolean valido = false;
 
     /**
@@ -91,7 +109,13 @@ public class Menu extends javax.swing.JFrame {
         passUpd.setTransferHandler(null);
         passConfUpd.setTransferHandler(null);
         txtIDNew.setTransferHandler(null);
-
+        dlgReport.setVisible(false);
+        notify.setVisible(false);
+        visibleRepos();
+//        container.revalidate();
+//        container.repaint();
+        getReports();
+        scrollContainer.getVerticalScrollBar().setUnitIncrement(16);
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();
         });
@@ -104,6 +128,195 @@ public class Menu extends javax.swing.JFrame {
 
     public void reloj() {
         labelHora.setText(new SimpleDateFormat("hh:mm:ss a").format(new Date()));
+    }
+
+    public void visibleRepos() {
+        try {
+            ArticuloDB arti = new ArticuloDB();
+            ArrayList<String[]> arrList = arti.getListaR();
+
+            if (arrList.size() > 0) {
+                notify.setVisible(true);
+                counterN.setText(" " + String.valueOf(arrList.size()) + " ");
+            }
+            arrList.clear();
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar la cantidad de registros Reportes: " + e);
+        }
+    }
+
+    public void getReports() {
+        try {
+            ArticuloDB arti = new ArticuloDB();
+            ArrayList<String[]> arrList = arti.getListaR();
+            Iterator<String[]> it = arrList.iterator();
+            
+            while (it.hasNext()) {
+                pnlReportesArtDinamico(it.next());
+            }
+            
+            int filas = (container.getComponentCount());
+            System.out.println("\n" + (char)27 + "[32m" + "    Cantidad de componentes \"Reportes de Articulos\" en container: " + filas);
+            int altura = (100 * filas);
+            container.setPreferredSize(new Dimension(230, altura));
+            if (filas > 6) {
+                dlgReport.setMinimumSize(new Dimension(270, 600));
+            } else {
+                dlgReport.setMinimumSize(new Dimension(270, altura));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error recuperando la lista de reportes de articuloDB " + e);
+        }
+    }
+
+    public void pnlReportesArtDinamico(String[] datos) { //articulo, docente, resumen, fecha
+        container.revalidate();
+        container.repaint();
+        
+        JPanel rContenido = new javax.swing.JPanel();
+        JLabel rLblArt = new javax.swing.JLabel();
+        JLabel rlblNomArt = new javax.swing.JLabel();
+        JLabel rlblDocent = new javax.swing.JLabel();
+        JLabel rlblResumn = new javax.swing.JLabel();
+        JLabel rlblCreado = new javax.swing.JLabel();
+        JSeparator rSeparador = new javax.swing.JSeparator();
+
+        rContenido.setBackground(new java.awt.Color(255, 255, 255));
+        rContenido.setPreferredSize(new java.awt.Dimension(225, 100));
+
+        rLblArt.setForeground(new java.awt.Color(51, 51, 51));
+        rLblArt.setText("Reporte de: ");
+
+        rlblNomArt.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rlblNomArt.setForeground(new java.awt.Color(51, 51, 51));
+        rlblNomArt.setText(datos[1]);//"VGA");
+        rlblDocent.setFont(new java.awt.Font("Trebuchet MS", 1, 10)); // NOI18N
+        rlblDocent.setForeground(new java.awt.Color(51, 51, 51));
+
+        rlblResumn.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        rlblResumn.setForeground(new java.awt.Color(102, 102, 102));
+
+        rlblCreado.setFont(new java.awt.Font("Trebuchet MS", 3, 11)); // NOI18N
+
+        javax.swing.GroupLayout rContenidoLayout = new javax.swing.GroupLayout(rContenido);
+        rContenido.setLayout(rContenidoLayout);
+        rContenidoLayout.setHorizontalGroup(
+                rContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(rContenidoLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(rContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(rContenidoLayout.createSequentialGroup()
+                                                .addComponent(rLblArt)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(rlblNomArt))
+                                        .addComponent(rlblDocent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(rlblResumn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(rlblCreado))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(rContenidoLayout.createSequentialGroup()
+                                .addComponent(rSeparador)
+                                .addContainerGap())
+        );
+        rContenidoLayout.setVerticalGroup(
+                rContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(rContenidoLayout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addGroup(rContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(rLblArt)
+                                        .addComponent(rlblNomArt))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rlblDocent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rlblResumn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rlblCreado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rSeparador, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+        );
+
+        rContenido.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rContenido.setBackground(Color.white);
+                
+                JOptionPane.showMessageDialog(bkMenu, "El articulo " + datos[1] + " sera liberado una vez ingrese: \n\n-Solución al reporte del articulo\n-Valide liberación con un usuario administrador");
+                Object opciones[] = {"Continuar", "Cancelar"};
+                
+                javax.swing.JTextArea textArea = new javax.swing.JTextArea(6, 25);
+                textArea.setText("");
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setEditable(true);
+                textArea.setTransferHandler(null); //no copiar pegar
+                
+                javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
+
+                int opc = JOptionPane.showOptionDialog(bkMenu, scrollPane, 
+                        "Solucion al reporte del articulo",
+                        JOptionPane.OK_CANCEL_OPTION, 
+                        JOptionPane.QUESTION_MESSAGE, 
+                        null, opciones, opciones[0]);
+                String text = textArea.getText();
+                if(opc == JOptionPane.OK_OPTION && !text.isEmpty()){
+                    System.out.println("\n\n: : : : Solucion del reporte articulo " + datos[1] + ":\n" + text + "\n\n");
+                    dlgConfirm.setLocationRelativeTo(bkMenu);
+                    dlgConfirm.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(null, "NO SE PROCEDE A LIBERAR REPORTE!");
+                }
+                if (valido) {
+                    valido = false;
+                    try {
+                        ArticuloDB artic = new ArticuloDB();
+                        artic.liberarReporte(text, Integer.parseInt(datos[0])); 
+                        JOptionPane.showMessageDialog(bkMenu, "Se ha liberado al profesor: " + datos[2] + "\n\nAhora el profesor ya no cuenta con este adeudo sobre el Articulo:\n\n" + datos[1]);
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(bkMenu, "ERROR AL LIBERAR Articulo:\n\n" + datos[1]+ "\n\n"+ e, "Error", JOptionPane.ERROR_MESSAGE); 
+                    }
+                    
+                    
+                    //datos[0] id del articulo    
+                    
+                }
+                container.removeAll();
+                container.revalidate();
+                container.repaint();
+                
+                visibleRepos();
+                getReports();
+                notify.revalidate();
+                notify.repaint();
+                counterN.revalidate();
+                counterN.repaint();
+                dlgReport.setVisible(false);
+            }
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                rContenido.setBackground(new Color(240, 240, 240));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                rContenido.setBackground(Color.white);
+            }
+        });
+
+        
+        rlblDocent.setText("<html>Docente: <i>" + datos[2] + "</i></html>");//Juan Jesús Gómez Sotelo</i></html>");
+        rlblResumn.setText("<html><body style='width:160px '>Resumen: " + datos[3] + "</body></html>");//"lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem</body></html>");
+        rlblCreado.setText("Reportado el " + datos[4]);//19-07-2018  04:31 PM");
+
+//        rContenido.add(rlblNomArt);
+        rContenido.revalidate();
+        rContenido.repaint();
+
+        container.add(rContenido);
+        container.revalidate();
+        container.repaint();
+
     }
 
     public void getTabla() {
@@ -354,6 +567,9 @@ public class Menu extends javax.swing.JFrame {
         txtUsuario = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
         fcProfCSV = new javax.swing.JFileChooser();
+        dlgReport = new javax.swing.JDialog();
+        scrollContainer = new javax.swing.JScrollPane();
+        container = new javax.swing.JPanel();
         bkMenu = new javax.swing.JPanel();
         menuBar = new javax.swing.JPanel();
         lblHora = new javax.swing.JLabel();
@@ -392,6 +608,9 @@ public class Menu extends javax.swing.JFrame {
         btnExt3 = new javax.swing.JPanel();
         icoExt2 = new javax.swing.JLabel();
         icoExtlbl2 = new javax.swing.JLabel();
+        notify = new javax.swing.JPanel();
+        counterN = new javax.swing.JLabel();
+        bellAlert = new javax.swing.JLabel();
 
         dlgUsuario.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         dlgUsuario.setTitle("[ADMIN USUARIOS]");
@@ -1987,6 +2206,31 @@ public class Menu extends javax.swing.JFrame {
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        dlgReport.setTitle("[Notificaciones]");
+        dlgReport.setIconImage(notifyIMG.getImage());
+        dlgReport.setMinimumSize(new java.awt.Dimension(240, 140));
+        dlgReport.setModal(true);
+        dlgReport.setPreferredSize(new java.awt.Dimension(240, 140));
+
+        scrollContainer.setMinimumSize(new java.awt.Dimension(220, 100));
+        scrollContainer.setPreferredSize(new java.awt.Dimension(222, 102));
+
+        container.setBackground(new java.awt.Color(255, 255, 255));
+        container.setMinimumSize(new java.awt.Dimension(220, 100));
+        container.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        scrollContainer.setViewportView(container);
+
+        javax.swing.GroupLayout dlgReportLayout = new javax.swing.GroupLayout(dlgReport.getContentPane());
+        dlgReport.getContentPane().setLayout(dlgReportLayout);
+        dlgReportLayout.setHorizontalGroup(
+            dlgReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+        );
+        dlgReportLayout.setVerticalGroup(
+            dlgReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema Administrador de Video Proyectores");
         setIconImage(img.getImage());
@@ -2248,8 +2492,10 @@ public class Menu extends javax.swing.JFrame {
 
         menuBarIzq.setBackground(new java.awt.Color(255, 255, 255));
         menuBarIzq.setMinimumSize(new java.awt.Dimension(629, 585));
+        menuBarIzq.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblLogo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sep.png"))); // NOI18N
+        menuBarIzq.add(lblLogo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, -1, -1));
 
         lblLogo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tecnm2.png"))); // NOI18N
         lblLogo2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2257,6 +2503,7 @@ public class Menu extends javax.swing.JFrame {
                 lblLogo2MouseClicked(evt);
             }
         });
+        menuBarIzq.add(lblLogo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
 
         lblLogo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/itt.png"))); // NOI18N
         lblLogo3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2264,12 +2511,15 @@ public class Menu extends javax.swing.JFrame {
                 lblLogo3MouseClicked(evt);
             }
         });
+        menuBarIzq.add(lblLogo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(347, 266, -1, -1));
 
         lblDep.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
         lblDep.setText("Departamento de Desarrollo Académico");
+        menuBarIzq.add(lblDep, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
         lblBienv.setFont(new java.awt.Font("Trebuchet MS", 1, 36)); // NOI18N
         lblBienv.setText("Bienvenid@");
+        menuBarIzq.add(lblBienv, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 202, -1, -1));
 
         lblAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/opciones_28px.png"))); // NOI18N
         lblAjustes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2283,6 +2533,7 @@ public class Menu extends javax.swing.JFrame {
                 lblAjustesMouseExited(evt);
             }
         });
+        menuBarIzq.add(lblAjustes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 558, -1, -1));
 
         principalBar.setBackground(new java.awt.Color(39, 147, 230));
 
@@ -2401,65 +2652,30 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(15, 15, 15))
         );
 
-        javax.swing.GroupLayout menuBarIzqLayout = new javax.swing.GroupLayout(menuBarIzq);
-        menuBarIzq.setLayout(menuBarIzqLayout);
-        menuBarIzqLayout.setHorizontalGroup(
-            menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuBarIzqLayout.createSequentialGroup()
-                .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(menuBarIzqLayout.createSequentialGroup()
-                        .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(menuBarIzqLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblAjustes))
-                            .addGroup(menuBarIzqLayout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(principalBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(lblLogo3))
-                    .addGroup(menuBarIzqLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(menuBarIzqLayout.createSequentialGroup()
-                                .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(menuBarIzqLayout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblBienv))
-                                    .addComponent(lblDep))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuBarIzqLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(lblLogo1)))))
-                .addContainerGap())
-            .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(menuBarIzqLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lblLogo2)
-                    .addContainerGap(419, Short.MAX_VALUE)))
-        );
-        menuBarIzqLayout.setVerticalGroup(
-            menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuBarIzqLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblLogo1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(lblDep)
-                .addGap(21, 21, 21)
-                .addComponent(lblBienv)
-                .addGap(18, 18, 18)
-                .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblLogo3)
-                    .addGroup(menuBarIzqLayout.createSequentialGroup()
-                        .addComponent(principalBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblAjustes)))
-                .addContainerGap())
-            .addGroup(menuBarIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(menuBarIzqLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lblLogo2)
-                    .addContainerGap(491, Short.MAX_VALUE)))
-        );
+        menuBarIzq.add(principalBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(41, 297, -1, -1));
+
+        notify.setOpaque(false);
+        notify.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        counterN.setBackground(new java.awt.Color(255, 90, 90));
+        counterN.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
+        counterN.setForeground(new java.awt.Color(255, 255, 255));
+        counterN.setText(" 0 ");
+        counterN.setOpaque(true);
+        notify.add(counterN, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 22, -1, -1));
+
+        bellAlert.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
+        bellAlert.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        bellAlert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/notify-32.png"))); // NOI18N
+        bellAlert.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bellAlert.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bellAlertMouseClicked(evt);
+            }
+        });
+        notify.add(bellAlert, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+
+        menuBarIzq.add(notify, new org.netbeans.lib.awtextra.AbsoluteConstraints(299, 250, 38, -1));
 
         bkMenu.add(menuBarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -2875,7 +3091,7 @@ public class Menu extends javax.swing.JFrame {
                         System.out.println("error al generar nuevo usurio crearUsuarioBTN: " + e);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe llenar completamente el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No se ha creado el usuario!!!\nEl siguiente error puede ser causado por:\n\n -No llenar adecuadamente nombre y apellidos\n -La contraseña no es de minimo de 8 digitos\n -La credencial que el usuario desea registrar para su uso ya se encuentra en el sistema\n -El usuario que autoriza el registro no existe o no tiene privilegios suficientes", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Ambas contraseñas deben coincidir", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -3207,7 +3423,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCheckUserKeyTyped
 
     private void lblLogo3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLogo3MouseClicked
-        if (evt.getClickCount() == 3) {
+        if (evt.getClickCount() == 1) {
             contacto.setLocationRelativeTo(bkMenu);
             contacto.setVisible(true);
         }
@@ -3423,7 +3639,7 @@ public class Menu extends javax.swing.JFrame {
                 + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
                 + "\n-La informacion debe tener el siguiente orden"
                 + "\nID_USUARIO, NOMBRE, A_PATERNO, A_MATERNO, PASSWORD, ADMINDR",
-                 "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         if (respuesta == JOptionPane.OK_OPTION) {
             int status = fcProfCSV.showOpenDialog(null);
             if (status == fcProfCSV.APPROVE_OPTION) {
@@ -3447,7 +3663,7 @@ public class Menu extends javax.swing.JFrame {
                 + "\n-Cada dato debe estar encerrado en comillas dobles (\"Juan Jesús\")"
                 + "\n-La informacion debe tener el siguiente orden"
                 + "\nID_PROFESOR => 0001(MINIMO 12 CARACTERES)\nID_DEPARTAMENTO\n\tNOMBRE\n\tA_PATERNO\n\tA_MATERNO\n\tESTATUS_ESCOLAR => TRUE PARA HONORARIOS, FALSE PARA PLAZA",
-                 "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                "Importante", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         if (respuesta == JOptionPane.OK_OPTION) {
             int status = fcProfCSV.showOpenDialog(null);
             if (status == fcProfCSV.APPROVE_OPTION) {
@@ -3501,14 +3717,23 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUsuarioDLTActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            Conexion conn = new Conexion();
-            conn.closeConexion();
-        } catch (SQLException | ClassNotFoundException ex) {
-            System.out.println("\n\nFATAL ERROR NO FUE COMPACTADA LA DB");
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            Conexion conn = new Conexion();
+//            conn.closeConexion();
+//        } catch (SQLException | ClassNotFoundException ex) {
+//            System.out.println("\n\nFATAL ERROR NO FUE COMPACTADA LA DB");
+//            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_formWindowClosing
+
+    private void bellAlertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bellAlertMouseClicked
+//        getReports();
+////        container.removeAll();
+////        container.repaint(); 
+//        getReports();
+        dlgReport.setLocationRelativeTo(bkMenu);
+        dlgReport.setVisible(true);
+    }//GEN-LAST:event_bellAlertMouseClicked
 
     public void limiteYcaracteres(JTextField nombre, int limite, java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar(); //probar introducir solo caracteres
@@ -3556,6 +3781,7 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bellAlert;
     private javax.swing.JPanel bkMenu;
     private javax.swing.JPanel btnAcc;
     private javax.swing.JPanel btnActUpd;
@@ -3584,8 +3810,11 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JCheckBox cb6;
     private javax.swing.JCheckBox chkBNewID;
     private javax.swing.JDialog contacto;
+    private javax.swing.JPanel container;
+    private javax.swing.JLabel counterN;
     private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgLog;
+    private javax.swing.JDialog dlgReport;
     private javax.swing.JDialog dlgUsuario;
     private javax.swing.JFileChooser fcProfCSV;
     private javax.swing.JLabel hdnIDCopy;
@@ -3705,6 +3934,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuarioHidenID;
     private javax.swing.JPanel menuBar;
     private javax.swing.JPanel menuBarIzq;
+    private javax.swing.JPanel notify;
     private javax.swing.JPasswordField passConfN;
     private javax.swing.JPasswordField passConfUpd;
     private javax.swing.JPasswordField passN;
@@ -3725,6 +3955,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel pnlUsuarioMod;
     private javax.swing.JPanel pnlUsuariosList;
     private javax.swing.JPanel principalBar;
+    private javax.swing.JScrollPane scrollContainer;
     private javax.swing.JToggleButton tglActInc;
     private javax.swing.JTextField txtAMatN;
     private javax.swing.JTextField txtAMatUpd;

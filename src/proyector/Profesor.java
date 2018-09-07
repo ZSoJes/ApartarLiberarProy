@@ -86,10 +86,10 @@ public class Profesor extends javax.swing.JFrame {
      * @throws SQLException
      */
     public void getTable() throws SQLException {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tablaProf.getModel();
         ProfesorDB profe = new ProfesorDB();
 
-        String[] cols = {jTable1.getColumnName(0), jTable1.getColumnName(1), jTable1.getColumnName(2), jTable1.getColumnName(3), jTable1.getColumnName(4), jTable1.getColumnName(5)};
+        String[] cols = {tablaProf.getColumnName(0), tablaProf.getColumnName(1), tablaProf.getColumnName(2), tablaProf.getColumnName(3), tablaProf.getColumnName(4), tablaProf.getColumnName(5)};
         int count = profe.getRegistros();
         System.out.println("\nRegistros existentes: " + count);
 
@@ -97,13 +97,8 @@ public class Profesor extends javax.swing.JFrame {
         data = profe.getProfesores();
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < 6; j++) {
-                //data[i][j] = profe.getProfesores()[i][j];
-                //probar a futuo almacenar en un hash y asignar el valor de acuerdo al k,v del id depart
-//                if (j == 5) {
-//                    data[i][j] = new DepartamentoDB().getDepartamento(Integer.parseInt(profe.getProfesores()[i][j]))[0];
-//                }
-                if (j == 4) {
-                    data[i][j] = new DepartamentoDB().getDepartamento(Integer.parseInt(profe.getProfesores()[i][j]))[0];
+                if (j == 5) {
+                    data[i][j] = data[i][j].equals("FALSE") ? "NO" : "SI";
                 }
             }
         }
@@ -163,11 +158,12 @@ public class Profesor extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        txtBorrar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnBorrar = new javax.swing.JButton();
+        pnlBorrar = new javax.swing.JPanel();
+        txtBorrar = new javax.swing.JTextField();
         dlgActualizar = new javax.swing.JDialog();
         pnlBkActualizar = new javax.swing.JPanel();
         btnCerrar2 = new javax.swing.JButton();
@@ -241,7 +237,7 @@ public class Profesor extends javax.swing.JFrame {
         btnBusqueda = new javax.swing.JButton();
         btnBusquedaClear = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaProf = new javax.swing.JTable();
 
         dlgNuevo.setMinimumSize(new java.awt.Dimension(700, 370));
         dlgNuevo.setModal(true);
@@ -550,17 +546,6 @@ public class Profesor extends javax.swing.JFrame {
 
         pnlBkBorrar.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, 300));
 
-        txtBorrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        txtBorrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 103, 96)));
-        txtBorrar.setMinimumSize(new java.awt.Dimension(200, 30));
-        txtBorrar.setPreferredSize(new java.awt.Dimension(200, 30));
-        txtBorrar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtBorrarKeyTyped(evt);
-            }
-        });
-        pnlBkBorrar.add(txtBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 113, -1, -1));
-
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Número Identificador");
@@ -583,6 +568,43 @@ public class Profesor extends javax.swing.JFrame {
             }
         });
         pnlBkBorrar.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(193, 220, -1, -1));
+
+        pnlBorrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 103, 96)));
+        pnlBorrar.setMinimumSize(new java.awt.Dimension(202, 32));
+        pnlBorrar.setPreferredSize(new java.awt.Dimension(202, 32));
+
+        txtBorrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        txtBorrar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 2, 1));
+        txtBorrar.setMinimumSize(new java.awt.Dimension(200, 30));
+        txtBorrar.setPreferredSize(new java.awt.Dimension(200, 30));
+        txtBorrar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBorrarKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlBorrarLayout = new javax.swing.GroupLayout(pnlBorrar);
+        pnlBorrar.setLayout(pnlBorrarLayout);
+        pnlBorrarLayout.setHorizontalGroup(
+            pnlBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+            .addGroup(pnlBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlBorrarLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        pnlBorrarLayout.setVerticalGroup(
+            pnlBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+            .addGroup(pnlBorrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlBorrarLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        pnlBkBorrar.add(pnlBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 113, -1, -1));
 
         javax.swing.GroupLayout dlgBorrarLayout = new javax.swing.GroupLayout(dlgBorrar.getContentPane());
         dlgBorrar.getContentPane().setLayout(dlgBorrarLayout);
@@ -1423,13 +1445,13 @@ public class Profesor extends javax.swing.JFrame {
         });
         bkProfesor.add(btnBusquedaClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 170, -1, -1));
 
-        jTable1.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProf.setFont(new java.awt.Font("Verdana", 0, 11)); // NOI18N
+        tablaProf.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID_PROFESOR", "NOMBRE", "A_PATERNO", "A_MATERNO", "DEPARTAMENTO", "SIN ADEUDO"
+                "ID_PROFESOR", "NOMBRE", "A_PATERNO", "A_MATERNO", "DEPARTAMENTO", "CON ADEUDO"
             }
         ) {
             Class[] types = new Class [] {
@@ -1447,21 +1469,21 @@ public class Profesor extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaProf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                tablaProfMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(20);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
+        jScrollPane2.setViewportView(tablaProf);
+        if (tablaProf.getColumnModel().getColumnCount() > 0) {
+            tablaProf.getColumnModel().getColumn(0).setResizable(false);
+            tablaProf.getColumnModel().getColumn(0).setPreferredWidth(15);
+            tablaProf.getColumnModel().getColumn(1).setResizable(false);
+            tablaProf.getColumnModel().getColumn(2).setResizable(false);
+            tablaProf.getColumnModel().getColumn(3).setResizable(false);
+            tablaProf.getColumnModel().getColumn(4).setResizable(false);
+            tablaProf.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tablaProf.getColumnModel().getColumn(5).setResizable(false);
         }
 
         bkProfesor.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 824, 353));
@@ -1623,11 +1645,11 @@ public class Profesor extends javax.swing.JFrame {
                         int seleccion = map.get(jComboBox1.getSelectedItem().toString());
 
                         String datos[] = {id, String.valueOf(seleccion), nom, apat, amat};
-                        System.out.println("array de datos: " + Arrays.toString(datos));
+                        System.out.println("\n: : : Preparando datos del Profesor: " + Arrays.toString(datos) + "\n");
                         if (rdBtnOpc1.isSelected()) {
-                            System.out.println("ya seleccionaste la opcion 1 ahora veamos si existe el id:" + profe.getExisteProfesor(id));
+                            System.out.println("\n: : : ID REGISTRADO EN EL SISTEMA?: " + profe.getExisteProfesor(id));
                             if (profe.getExisteProfesor(id)) {
-                                JOptionPane.showMessageDialog(null, "El numero identificador ya existe en la base de datos\nPrueba a ingresar uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "El Numero Identificador ya se encuentra registrado!\nPrueba con uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
                             } else {
                                 profe.setProfesor(datos);
                                 cerrarDlgNuevoProfesor();
@@ -1666,7 +1688,7 @@ public class Profesor extends javax.swing.JFrame {
         //cerrar dialog
         dlgNuevo.setVisible(false);
         dlgNuevo.dispose();
-        System.out.println("dibujo tabla nuevamente");
+        System.out.println(" : : : Redibujo tabla Profesores : : :");
         getTable();
         txtBusqueda.requestFocusInWindow();
     }
@@ -1921,8 +1943,8 @@ public class Profesor extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_ico5MouseClicked
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-    }//GEN-LAST:event_jTable1MouseClicked
+    private void tablaProfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProfMouseClicked
+    }//GEN-LAST:event_tablaProfMouseClicked
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
         char c = evt.getKeyChar();
@@ -1933,7 +1955,7 @@ public class Profesor extends javax.swing.JFrame {
 
     private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
         System.out.println("Seleccionaste: "+comboFiltro.getSelectedIndex());
-        TableRowSorter trsFiltro = new TableRowSorter(jTable1.getModel());
+        TableRowSorter trsFiltro = new TableRowSorter(tablaProf.getModel());
 //        trsFiltro.setRowFilter(RowFilter.regexFilter(txtBusqueda.getText().toLowerCase(), comboFiltro.getSelectedIndex()));
         trsFiltro.setStringConverter(new javax.swing.table.TableStringConverter(){
             public String toString(javax.swing.table.TableModel model,int row, int column){
@@ -1943,15 +1965,15 @@ public class Profesor extends javax.swing.JFrame {
         
         //jTable1.setRowSorter(trsFiltro);
         trsFiltro.setRowFilter(RowFilter.regexFilter(txtBusqueda.getText().toLowerCase()));
-        jTable1.setRowSorter(trsFiltro);
+        tablaProf.setRowSorter(trsFiltro);
     }//GEN-LAST:event_btnBusquedaActionPerformed
 
     private void btnBusquedaClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaClearActionPerformed
         txtBusqueda.setText("");
-        TableRowSorter trsFiltro = new TableRowSorter(jTable1.getModel());
+        TableRowSorter trsFiltro = new TableRowSorter(tablaProf.getModel());
         trsFiltro.setRowFilter(RowFilter.regexFilter(txtBusqueda.getText(), 0));
         comboFiltro.setSelectedIndex(0);
-        jTable1.setRowSorter(trsFiltro);
+        tablaProf.setRowSorter(trsFiltro);
     }//GEN-LAST:event_btnBusquedaClearActionPerformed
 
     private void lblTituloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTituloMouseClicked
@@ -2112,7 +2134,6 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel labelFecha;
     private javax.swing.JLabel labelHora;
     private javax.swing.JLabel lbl1;
@@ -2144,6 +2165,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JPanel pnlBkActualizar;
     private javax.swing.JPanel pnlBkBorrar;
     private javax.swing.JPanel pnlBkNuevo;
+    private javax.swing.JPanel pnlBorrar;
     private javax.swing.JPanel pnlBtnActualizar;
     private javax.swing.JPanel pnlBtnBorrar;
     private javax.swing.JPanel pnlBtnNuevo;
@@ -2157,6 +2179,7 @@ public class Profesor extends javax.swing.JFrame {
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JRadioButton rdBtnOpc1;
     private javax.swing.JRadioButton rdBtnOpc2;
+    private javax.swing.JTable tablaProf;
     private javax.swing.JTextField txtAMat;
     private javax.swing.JTextField txtAMat1;
     private javax.swing.JTextField txtAPat;

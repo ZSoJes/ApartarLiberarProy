@@ -26,11 +26,11 @@
 		</parameter>
 		<queryString>
 			<![CDATA[SELECT
-     (SELECT NOMBRE FROM E_ACCESORIOS WHERE E_ACCESORIOS.ID_ACCESORIO = EREPA_ACCESORIOS.ID_ACCESORIO) AS ACCESORIO
+     (SELECT NOMBRE FROM E_ARTICULOS WHERE E_ARTICULOS.ID_ARTICULO = EREPA_ARTICULOS.ID_ARTICULO) AS ACCESORIO
 FROM
-     EREPA_ACCESORIOS
+     EREPA_ARTICULOS
 WHERE
-    ID_REPORTE_ACCESORIO = $P{ID_REPORTE}]]>
+    ID_REPORTE_ARTICULO = $P{ID_REPORTE}]]>
 		</queryString>
 		<field name="ACCESORIO" class="java.lang.String"/>
 	</subDataset>
@@ -42,15 +42,16 @@ WHERE
 	</parameter>
 	<queryString>
 		<![CDATA[select 
-    ID_REPORTE_ACCESORIO,
-    (SELECT CONCAT(NOMBRE, ' ', A_PATERNO, ' ', A_MATERNO) FROM E_PROFESORES WHERE E_REP_ACCESORIOS.ID_PROFESOR = E_PROFESORES.ID_PROFESOR) AS PROFESOR,
+    ID_REPORTE_ARTICULO,
+    (SELECT CONCAT(NOMBRE, ' ', A_PATERNO, ' ', A_MATERNO) FROM E_PROFESORES WHERE E_REP_ARTICULOS.ID_PROFESOR = E_PROFESORES.ID_PROFESOR) AS PROFESOR,
     ID_PROFESOR,
     TITULO,
     DETALLES,
+    RESOLUCION,
     CREADO
-from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
+from E_REP_ARTICULOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 	</queryString>
-	<field name="ID_REPORTE_ACCESORIO" class="java.lang.Integer">
+	<field name="ID_REPORTE_ARTICULO" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="PROFESOR" class="java.lang.String"/>
@@ -61,6 +62,9 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="DETALLES" class="java.sql.Clob">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RESOLUCION" class="java.sql.Clob">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="CREADO" class="java.sql.Timestamp">
@@ -82,7 +86,7 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="161" splitType="Prevent">
+		<band height="208" splitType="Prevent">
 			<line>
 				<reportElement x="10" y="12" width="525" height="1" forecolor="#646464" uuid="e111f7fd-4124-4b09-bed7-348042cf40ea"/>
 				<graphicElement>
@@ -94,7 +98,7 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Reporte #"+$F{ID_REPORTE_ACCESORIO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Reporte #"+$F{ID_REPORTE_ARTICULO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a">
 				<reportElement x="284" y="16" width="242" height="20" uuid="40dcde77-ec28-45cd-a106-cc92ffc59d54"/>
@@ -129,7 +133,7 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="articulosReportados" uuid="cc6617c7-676f-4608-88d5-745fceee6c70">
 						<datasetParameter name="ID_REPORTE">
-							<datasetParameterExpression><![CDATA[$F{ID_REPORTE_ACCESORIO}]]></datasetParameterExpression>
+							<datasetParameterExpression><![CDATA[$F{ID_REPORTE_ARTICULO}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
@@ -165,6 +169,26 @@ from E_REP_ACCESORIOS where CREADO BETWEEN $P{date1} AND $P{date2}]]>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""+$F{DETALLES}.getSubString( 1l, ( new Long( $F{DETALLES}.length() ) ).intValue() )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="159" width="508" height="20" backcolor="#FFFFFF" uuid="c4e5b4ad-f3fb-4e0d-b2d8-8c6d93a01aa3"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[CIERRE DEL REPORTE:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="18" y="179" width="508" height="28" uuid="7b90c210-534c-4d2e-83b2-19119bd51eca"/>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{RESOLUCION}.getSubString( 1l, ( new Long( $F{RESOLUCION}.length() ) ).intValue() )]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

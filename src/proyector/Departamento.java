@@ -450,7 +450,7 @@ private static Boolean valido = false;
         lblEncarg.setText("Encargado");
 
         txtNom1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtNom1.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 1, 1, 1));
+        txtNom1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 2, 1));
         txtNom1.setMinimumSize(new java.awt.Dimension(200, 30));
         txtNom1.setPreferredSize(new java.awt.Dimension(200, 30));
         txtNom1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -460,7 +460,7 @@ private static Boolean valido = false;
         });
 
         txtAbrv1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtAbrv1.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 1, 1, 1));
+        txtAbrv1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 2, 1));
         txtAbrv1.setMinimumSize(new java.awt.Dimension(200, 30));
         txtAbrv1.setPreferredSize(new java.awt.Dimension(200, 30));
         txtAbrv1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -470,7 +470,7 @@ private static Boolean valido = false;
         });
 
         txtEnc1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtEnc1.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 1, 1, 1));
+        txtEnc1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 2, 1));
         txtEnc1.setMinimumSize(new java.awt.Dimension(200, 30));
         txtEnc1.setPreferredSize(new java.awt.Dimension(200, 30));
         txtEnc1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -536,15 +536,15 @@ private static Boolean valido = false;
                             .addGroup(pnlBkEditarLayout.createSequentialGroup()
                                 .addGap(40, 40, 40)
                                 .addGroup(pnlBkEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtEnc1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtNom1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                                     .addComponent(txtAbrv1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtNom1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(txtEnc1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(pnlBkEditarLayout.createSequentialGroup()
                                 .addGap(109, 109, 109)
                                 .addComponent(btnCerrar1)
                                 .addGap(56, 56, 56)
                                 .addComponent(lblHide)))))
-                .addGap(568, 568, 568))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
         pnlBkEditarLayout.setVerticalGroup(
             pnlBkEditarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1361,7 +1361,7 @@ private static Boolean valido = false;
                        try {
                            DepartamentoDB depart = new DepartamentoDB();
                            PrestamoDB prestamo = new PrestamoDB();
-                           if(prestamo.getPrestamoActivo(datos[i][3], 4)){
+                           if(!prestamo.getPrestamoActivo(datos[i][3], 4)){
                             depart.destroyDepartamento(Integer.parseInt(datos[i][3]));
                             JOptionPane.showMessageDialog(null, "Se ha eliminado el departamento");
                             pnlContenedor.removeAll();

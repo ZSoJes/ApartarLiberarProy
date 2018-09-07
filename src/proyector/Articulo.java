@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import proyector.dataBase.crud.UsuarioReadDB;
  * @author JuanGS
  */
 public class Articulo extends javax.swing.JFrame {
+
     private static Boolean valido = false;
     String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     ImageIcon img = new ImageIcon("./src/imagenes/logo-adm.png");
@@ -37,13 +39,15 @@ public class Articulo extends javax.swing.JFrame {
     ImageIcon add = new ImageIcon("./src/imagenes/Add New_36px.png");
     ImageIcon ers = new ImageIcon("./src/imagenes/Erase_36px.png");
     ImageIcon upd = new ImageIcon("./src/imagenes/Edit File_36px.png");
+
     /**
      * Creates new form Articulo
      */
     public Articulo() {
         initComponents();
-        
-        labelFecha.setText(date);     
+
+        hiddenIDPrestArt.setVisible(false);
+        labelFecha.setText(date);
         Timer timer = new Timer(500, (ActionEvent e) -> {
             reloj();                                //coloca la hora
         });
@@ -51,50 +55,63 @@ public class Articulo extends javax.swing.JFrame {
         timer.setCoalesce(true);
         timer.setInitialDelay(0);
         timer.start();
-        
+
         pnlActArt.setVisible(false);
         lblHiddenID.setVisible(false);
         lblhiddenNom.setVisible(false);
         pnlTodos.setVisible(false);
         panelOPC.setVisible(false);
         //cargar los articulos existentes
-        try{getTable();}catch(SQLException e){System.out.println("Error al cargar los articulos existentes:"+e);}
-        try{getPrestadosHOY();}catch(SQLException e){System.out.println("Error al cargar los articulos prestados hoy:"+e);}
+        try {
+            getTable();
+        } catch (SQLException e) {
+            System.out.println("Error al cargar los articulos existentes:" + e);
+        }
+        try {
+            getPrestadosHOY();
+        } catch (SQLException e) {
+            System.out.println("Error al cargar los articulos prestados hoy:" + e);
+        }
     }
 
     public void reloj() {
         labelHora.setText(new SimpleDateFormat("hh:mm:ss a").format(new Date()));
     }
-    
+
     public void getTable() throws SQLException {
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableArticulos.getModel();
         ArticuloDB acc = new ArticuloDB();
 
-        String[] cols = {jTable2.getColumnName(0),jTable2.getColumnName(1), jTable2.getColumnName(2), jTable2.getColumnName(3)};
+        String[] cols = {tableArticulos.getColumnName(0), tableArticulos.getColumnName(1), tableArticulos.getColumnName(2)};
         int count = acc.getCantArticulos(true);
-        System.out.println("\nAccesorios existentes: " + count);
+        System.out.println("\nArticulos existentes: " + count);
 
         String[][] datos = acc.getArticulos(false);
-        String art[][] = new String[count][4];
-        
-        for(int i = 0; i < count ;i++){
-            for (int j = 0; j < 4; j++) {
+        String art[][] = new String[count][3];
+
+        for (int i = 0; i < count; i++) {
+            for (int j = 0; j < 3; j++) {
                 art[i][j] = datos[i][j];
-                if(j == 3) { art[i][j] = String.valueOf(Integer.parseInt(datos[i][2]) - Integer.parseInt(datos[i][3])); }
             }
         }
         model.setDataVector(art, cols);
     }
-    
+
     public void getPrestadosHOY() throws SQLException {
         DefaultTableModel model5 = (DefaultTableModel) jTable5.getModel();
         ArticuloDB acc = new ArticuloDB();
-        String[] cols = {jTable5.getColumnName(0),jTable5.getColumnName(1), jTable5.getColumnName(2), jTable5.getColumnName(3),jTable5.getColumnName(4)};
-        
-        String[][] datos = acc.getRegArticulos(true);
+        String[] cols = {jTable5.getColumnName(0), jTable5.getColumnName(1), jTable5.getColumnName(2), jTable5.getColumnName(3), jTable5.getColumnName(4)};
+
+        Calendar c = Calendar.getInstance();
+        String fechaUno = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+        c.add(Calendar.DATE, 1);
+        String fechaDos = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+        System.out.println("Tabla con Fecha de Hoy: " + fechaUno + " : : " + fechaDos);
+
+        String[][] datos = acc.getRegArticulos(true, fechaUno.concat(" 00:00:00"), fechaDos.concat(" 00:00:00"));
         int count = datos.length;
-        System.out.println("\nRegistros accesorios existentes: " + count);
-        
+        System.out.println("\nRegistros articulos existentes: " + count);
+
         jTable5.getColumnModel().getColumn(0).setPreferredWidth(30);
         jTable5.getColumnModel().getColumn(1).setPreferredWidth(295);
         jTable5.getColumnModel().getColumn(2).setPreferredWidth(295);
@@ -103,16 +120,16 @@ public class Articulo extends javax.swing.JFrame {
         jTable5.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         model5.setDataVector(datos, cols);
     }
-    
-    public void getPrestadosAcc() throws SQLException{
+
+    public void getPrestadosAcc() throws SQLException {
         DefaultTableModel modelReg = (DefaultTableModel) jTable3.getModel();
         ArticuloDB acc = new ArticuloDB();
-        String[] cols = {jTable3.getColumnName(0),jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3),jTable3.getColumnName(4)};
-        
-        String[][] datos = acc.getRegArticulos(false);
+        String[] cols = {jTable3.getColumnName(0), jTable3.getColumnName(1), jTable3.getColumnName(2), jTable3.getColumnName(3), jTable3.getColumnName(4)};
+
+        String[][] datos = acc.getRegArticulos(false, "", "");
         int count = datos.length;
-        System.out.println("\nRegistros accesorios existentes: " + count);
-        
+        System.out.println("\nRegistros articulos existentes: " + count);
+
         jTable3.getColumnModel().getColumn(0).setPreferredWidth(30);
         jTable3.getColumnModel().getColumn(1).setPreferredWidth(295);
         jTable3.getColumnModel().getColumn(2).setPreferredWidth(295);
@@ -121,6 +138,7 @@ public class Articulo extends javax.swing.JFrame {
         jTable3.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         modelReg.setDataVector(datos, cols);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -186,6 +204,37 @@ public class Articulo extends javax.swing.JFrame {
         jLabel43 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
+        dlgReporte = new javax.swing.JDialog();
+        bkRArt = new javax.swing.JPanel();
+        lblTituloR = new javax.swing.JLabel();
+        btnCerrarR = new javax.swing.JLabel();
+        lblInfoR = new javax.swing.JLabel();
+        lyrCrearReporte = new javax.swing.JLayeredPane();
+        fechaArtPrestamo = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        fechaPrestamo = new com.toedter.calendar.JDateChooser();
+        btnC = new javax.swing.JButton();
+        listaPrestamos = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        articulosPrestados = new javax.swing.JScrollPane();
+        listaArt = new javax.swing.JTable();
+        btnC1 = new javax.swing.JButton();
+        pnlFormularioR = new javax.swing.JPanel();
+        btnGenR = new javax.swing.JButton();
+        btnClearR = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        txtResum = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        txtProfNom = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtDetalles = new javax.swing.JTextArea();
+        jLabel24 = new javax.swing.JLabel();
+        lblArticuloR = new javax.swing.JLabel();
+        hiddenIDPrestArt = new javax.swing.JLabel();
+        rdComp = new javax.swing.JRadioButton();
+        rdComp1 = new javax.swing.JRadioButton();
+        rdComp2 = new javax.swing.JRadioButton();
         bkArticulos = new javax.swing.JPanel();
         pnlCabecera = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -206,7 +255,7 @@ public class Articulo extends javax.swing.JFrame {
         btnMenu = new javax.swing.JToggleButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableArticulos = new javax.swing.JTable();
         pnlBtnNuevo = new javax.swing.JPanel();
         ico1 = new javax.swing.JLabel();
         lbl1 = new javax.swing.JLabel();
@@ -921,10 +970,275 @@ public class Articulo extends javax.swing.JFrame {
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        dlgReporte.setMinimumSize(new java.awt.Dimension(830, 470));
+        dlgReporte.setModal(true);
+        dlgReporte.setUndecorated(true);
+        dlgReporte.setResizable(false);
+
+        bkRArt.setBackground(new java.awt.Color(255, 102, 102));
+        bkRArt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153), 5));
+        bkRArt.setMinimumSize(new java.awt.Dimension(830, 470));
+        bkRArt.setPreferredSize(new java.awt.Dimension(830, 470));
+        bkRArt.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblTituloR.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        lblTituloR.setForeground(new java.awt.Color(255, 255, 255));
+        lblTituloR.setText("Reporte de Artículo");
+        bkRArt.add(lblTituloR, new org.netbeans.lib.awtextra.AbsoluteConstraints(307, 19, -1, -1));
+
+        btnCerrarR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Close_22px.png"))); // NOI18N
+        btnCerrarR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        btnCerrarR.setOpaque(true);
+        btnCerrarR.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCerrarRMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCerrarRMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCerrarRMouseExited(evt);
+            }
+        });
+        bkRArt.add(btnCerrarR, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+
+        lblInfoR.setForeground(new java.awt.Color(255, 255, 255));
+        lblInfoR.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblInfoR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/More Info_22px.png"))); // NOI18N
+        lblInfoR.setText("Para comenzar el reporte debe indicar la fecha en que fue prestado el Artículo");
+        lblInfoR.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        bkRArt.add(lblInfoR, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 435, 830, 20));
+
+        lyrCrearReporte.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        fechaArtPrestamo.setBackground(new java.awt.Color(255, 255, 255));
+        fechaArtPrestamo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 3));
+        fechaArtPrestamo.setMinimumSize(new java.awt.Dimension(500, 100));
+        fechaArtPrestamo.setPreferredSize(new java.awt.Dimension(500, 100));
+        fechaArtPrestamo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel23.setText("Fecha del prestamo");
+        fechaArtPrestamo.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        fechaPrestamo.setDateFormatString("yyyy-MM-dd");
+        fechaArtPrestamo.add(fechaPrestamo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 150, -1));
+
+        btnC.setText("Continuar");
+        btnC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCActionPerformed(evt);
+            }
+        });
+        fechaArtPrestamo.add(btnC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, -1, -1));
+
+        lyrCrearReporte.add(fechaArtPrestamo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 120, 500, 100));
+
+        listaPrestamos.setBackground(new java.awt.Color(255, 255, 255));
+        listaPrestamos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 3));
+        listaPrestamos.setMinimumSize(new java.awt.Dimension(750, 230));
+        listaPrestamos.setPreferredSize(new java.awt.Dimension(750, 230));
+        listaPrestamos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel22.setText("Seleccione un registro de la lista");
+        listaPrestamos.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 14, -1, -1));
+
+        articulosPrestados.setPreferredSize(new java.awt.Dimension(700, 152));
+
+        listaArt.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Profesor", "Artículo", "Hora", "Fecha"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        listaArt.getTableHeader().setReorderingAllowed(false);
+        articulosPrestados.setViewportView(listaArt);
+
+        listaPrestamos.add(articulosPrestados, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 35, 700, 152));
+
+        btnC1.setText("Continuar");
+        btnC1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnC1ActionPerformed(evt);
+            }
+        });
+        listaPrestamos.add(btnC1, new org.netbeans.lib.awtextra.AbsoluteConstraints(335, 193, -1, -1));
+
+        lyrCrearReporte.add(listaPrestamos, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 55, 750, 230));
+
+        pnlFormularioR.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFormularioR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204), 3));
+        pnlFormularioR.setPreferredSize(new java.awt.Dimension(710, 334));
+
+        btnGenR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/reportar-22px.png"))); // NOI18N
+        btnGenR.setText("Generar Reporte");
+        btnGenR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenRActionPerformed(evt);
+            }
+        });
+
+        btnClearR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Broom_24px.png"))); // NOI18N
+        btnClearR.setText("Limpiar Formulario");
+        btnClearR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearRActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        jLabel30.setText("Descripción detallado de lo sucedido a el(los) accesorio(s) indicado(s):");
+
+        txtResum.setMinimumSize(new java.awt.Dimension(390, 30));
+        txtResum.setPreferredSize(new java.awt.Dimension(390, 30));
+        txtResum.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtResumKeyTyped(evt);
+            }
+        });
+
+        jLabel28.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        jLabel28.setText("Descripcion corta sobre el problema:");
+
+        txtProfNom.setEditable(false);
+        txtProfNom.setBackground(new java.awt.Color(204, 204, 204));
+        txtProfNom.setMinimumSize(new java.awt.Dimension(390, 30));
+        txtProfNom.setPreferredSize(new java.awt.Dimension(390, 30));
+
+        jLabel27.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        jLabel27.setText("Profesor:");
+
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(390, 110));
+
+        txtDetalles.setColumns(20);
+        txtDetalles.setLineWrap(true);
+        txtDetalles.setRows(5);
+        txtDetalles.setWrapStyleWord(true);
+        txtDetalles.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDetallesKeyTyped(evt);
+            }
+        });
+        jScrollPane5.setViewportView(txtDetalles);
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel24.setText("Artículo Reportado");
+
+        lblArticuloR.setFont(new java.awt.Font("Trebuchet MS", 3, 18)); // NOI18N
+        lblArticuloR.setForeground(new java.awt.Color(102, 102, 102));
+        lblArticuloR.setText(">");
+
+        hiddenIDPrestArt.setText("ID Prestamo");
+
+        javax.swing.GroupLayout pnlFormularioRLayout = new javax.swing.GroupLayout(pnlFormularioR);
+        pnlFormularioR.setLayout(pnlFormularioRLayout);
+        pnlFormularioRLayout.setHorizontalGroup(
+            pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormularioRLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel30)
+                    .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(btnGenR)
+                        .addGap(69, 69, 69)
+                        .addComponent(btnClearR))
+                    .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                        .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28)
+                            .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtProfNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtResum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(43, 43, 43)
+                        .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(hiddenIDPrestArt)
+                            .addComponent(lblArticuloR)
+                            .addComponent(jLabel24)))
+                    .addComponent(jLabel27))
+                .addGap(48, 48, 48))
+        );
+        pnlFormularioRLayout.setVerticalGroup(
+            pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel24))
+                .addGap(6, 6, 6)
+                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtProfNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblArticuloR))
+                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel28)
+                        .addGap(6, 6, 6)
+                        .addComponent(txtResum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormularioRLayout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(hiddenIDPrestArt)))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlFormularioRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGenR, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClearR))
+                .addContainerGap())
+        );
+
+        lyrCrearReporte.add(pnlFormularioR, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 0, 710, 334));
+
+        bkRArt.add(lyrCrearReporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 800, 340));
+
+        rdComp.setEnabled(false);
+        rdComp.setOpaque(false);
+        bkRArt.add(rdComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 410, -1, -1));
+
+        rdComp1.setEnabled(false);
+        rdComp1.setOpaque(false);
+        bkRArt.add(rdComp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 410, -1, -1));
+
+        rdComp2.setEnabled(false);
+        rdComp2.setOpaque(false);
+        bkRArt.add(rdComp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 410, -1, -1));
+
+        javax.swing.GroupLayout dlgReporteLayout = new javax.swing.GroupLayout(dlgReporte.getContentPane());
+        dlgReporte.getContentPane().setLayout(dlgReporteLayout);
+        dlgReporteLayout.setHorizontalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bkRArt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        dlgReporteLayout.setVerticalGroup(
+            dlgReporteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bkRArt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("[Artículos]");
         setIconImage(img.getImage());
         setMinimumSize(new java.awt.Dimension(1034, 630));
+        setResizable(false);
 
         bkArticulos.setBackground(new java.awt.Color(255, 255, 255));
         bkArticulos.setMaximumSize(new java.awt.Dimension(1024, 600));
@@ -1119,22 +1433,22 @@ public class Articulo extends javax.swing.JFrame {
         jLabel4.setText("Artículos");
         bkArticulos.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID", "Articulo", "Existencias", "En prestamo"
+                "ID", "Articulo", "Disponibles"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1145,13 +1459,13 @@ public class Articulo extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableArticulos.getTableHeader().setReorderingAllowed(false);
+        tableArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
+                tableArticulosMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(tableArticulos);
 
         bkArticulos.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 750, 200));
 
@@ -1445,7 +1759,7 @@ public class Articulo extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Profesor\n"+ex);
+            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Profesor\n" + ex);
         }
     }//GEN-LAST:event_jLabel7MouseClicked
 
@@ -1456,7 +1770,7 @@ public class Articulo extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Departamento\n"+ex);
+            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Departamento\n" + ex);
         }
     }//GEN-LAST:event_jLabel8MouseClicked
 
@@ -1467,7 +1781,7 @@ public class Articulo extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Aula\n"+ex);
+            JOptionPane.showMessageDialog(null, "Error al cargar la interfaz de Aula\n" + ex);
         }
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -1486,9 +1800,9 @@ public class Articulo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnMenuItemStateChanged
 
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        int fila = jTable2.getSelectedRow();
-        if(evt.getClickCount() == 2){
+    private void tableArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableArticulosMouseClicked
+        int fila = tableArticulos.getSelectedRow();
+        if (evt.getClickCount() == 2) {
             System.out.println("fila seleccionada: " + fila);
         }
 ////            jTabbedPane1.setEnabledAt(4, true);
@@ -1507,7 +1821,7 @@ public class Articulo extends javax.swing.JFrame {
 ////        }
         //        int fila = (int) jTable2.getModel().getValueAt(jTable2.getSelectedRow(),3);
         //        System.out.println("Seleccionaste la fila de articulos id: " +jTable2.getModel().getValueAt(jTable2.convertRowIndexToModel(fila), 3));
-    }//GEN-LAST:event_jTable2MouseClicked
+    }//GEN-LAST:event_tableArticulosMouseClicked
 
     private void pnlBtnNuevoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnNuevoMouseClicked
         pnlBtnNuevo.setBackground(new Color(240, 240, 240));
@@ -1534,7 +1848,7 @@ public class Articulo extends javax.swing.JFrame {
         dlgConfirm.setLocationRelativeTo(bkArticulos);
         dlgConfirm.setVisible(true);
 
-        if(valido){
+        if (valido) {
             valido = false;
             dlgBorrar.setLocationRelativeTo(bkArticulos);
             dlgBorrar.setVisible(true);
@@ -1555,7 +1869,7 @@ public class Articulo extends javax.swing.JFrame {
         pnlBtnActualizar.setBackground(new Color(240, 240, 240));
         ico6.setIcon(upd);
         clearActualizar();
-                
+
         dlgActualizar.setLocationRelativeTo(bkArticulos);
         dlgActualizar.setVisible(true);
     }//GEN-LAST:event_pnlBtnActualizarMouseClicked
@@ -1603,26 +1917,37 @@ public class Articulo extends javax.swing.JFrame {
     }//GEN-LAST:event_txtExistKeyTyped
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        String nom = txtNom.getText().trim();
-        String exist = txtExist.getText().trim();
-        String desc = txtDesc.getText().trim();
-        if (!nom.isEmpty() && !exist.isEmpty() && !desc.isEmpty()){
-            String[] articulo = {nom, exist, desc};
-            System.out.println("Arreglo de datos: " + Arrays.toString(articulo));
-            
+        String nombre = txtNom.getText().trim();
+        String existencias = txtExist.getText().trim();
+        String descripcion = txtDesc.getText().trim();
+        
+        if (!nombre.isEmpty() && !existencias.isEmpty() && !descripcion.isEmpty()) {
+            String[] articulo = {nombre, existencias, descripcion};
+            System.out.println("\n: : : Preparando datos del Nuevo articulo: " + Arrays.toString(articulo) + "\n");
+
             try {
                 ArticuloDB artic = new ArticuloDB();
-                if(!artic.articuloExist(nom)){
-                    System.out.println("El accesorio no ha sido registrado, se creara el registro...");
+                if (!artic.articuloExist(nombre)) {
+                    System.out.println("\n: : : El nombre del articulo se encuentra disponible, se creara el registro...");
                     artic.setArticulo(articulo);
                     JOptionPane.showMessageDialog(null, "Se ha creado el nuevo registro");
-                }else{JOptionPane.showMessageDialog(this, "Este articulo ya existes!", "Advertencia", JOptionPane.WARNING_MESSAGE);}
-            } catch (SQLException ex) {System.out.println("Error al realizar el guardado de Articulo: " + ex);}
-        }else{JOptionPane.showMessageDialog(null, "No puede dejar ningun campo vacio\nFavor de completar el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);}
+                } else {
+                    JOptionPane.showMessageDialog(this, "El nombre del articulo ya se encuentra registrado!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al realizar el guardado de Articulo: " + ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No puede dejar ningun campo vacio\nFavor de completar el formulario", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
         txtNom.setText("");
         txtDesc.setText("");
         txtExist.setText("");
-        try{getTable();}catch(SQLException e){System.out.println("Error al dibjuar los articulos despues de crear un registro:"+e);}
+        try {
+            getTable();
+        } catch (SQLException e) {
+            System.out.println("Error al dibjuar los articulos despues de crear un registro:" + e);
+        }
         dlgNuevo.setVisible(false);
         dlgNuevo.dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -1642,21 +1967,22 @@ public class Articulo extends javax.swing.JFrame {
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         String id = txtBorrar.getText().trim();
-        try{
-            ArticuloDB acc = new ArticuloDB();
-            String[] datos = acc.getArticulo(id);
-            if(Integer.parseInt(datos[2])==Integer.parseInt(datos[3])){
+        try {//JHBHJBHJB COMPROBAR QUE NO HAY ARTICULOS EN PRESTAMO O CON REPORTE PENDIENTES A LIBERAR
+            ArticuloDB art = new ArticuloDB();
+            String[] datos = art.getArticulo(id);
+            JOptionPane.showMessageDialog(this, "El articulo en cuestion tiene " + art.comprobarArtEnPrestYRep(Integer.parseInt(id)) + " reportes y prestamos en el sistema");
+            if (art.comprobarArtEnPrestYRep(Integer.parseInt(id)) == 0){//Integer.parseInt(datos[2]) == Integer.parseInt(datos[3])) {
                 int opc = JOptionPane.showConfirmDialog(this, "Si procede a esta accion borrara todos los registros relacionados", "Información", JOptionPane.YES_NO_OPTION);
-                if (opc == JOptionPane.YES_OPTION){
-                    acc.destroyArt(Integer.parseInt(id));
+                if (opc == JOptionPane.YES_OPTION) {
+                    art.destroyArt(Integer.parseInt(id));
                     getTable();
                     JOptionPane.showMessageDialog(this, "El articulo ha sido eliminado");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "El articulo se encuentra prestado o con un reporte\nCambie el estado del reporte sobre el articulo para su eliminación");
             }
-        }catch(SQLException e){
-            System.out.println("Error al cargar los registros de AccesorioDB o al cargar la tabla de accesorios:"+e);
+        } catch (SQLException e) {
+            System.out.println("Error al cargar los registros de AccesorioDB o al cargar la tabla de accesorios:" + e);
         }
         txtBorrar.setText("");
         dlgBorrar.setVisible(false);
@@ -1665,29 +1991,32 @@ public class Articulo extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String id = txtIDArt.getText().trim();
-        try{
-            ArticuloDB acc = new ArticuloDB();
-            String[] datos = acc.getArticulo(id);
-            if(datos[0]!=null){//existe
-                if(Integer.parseInt(datos[2])==Integer.parseInt(datos[3])){//si las existencias son menores a los diponibles hay un prestamo o una multa
+        try {//asdad investigar cuantos articulos tengo en total y si el sujeto ingresa menos de los que estan en prestamo o menos de 1 indicar que no es posible esta operacion
+            ArticuloDB art = new ArticuloDB();
+            String[] datos = art.getArticulo(id);
+            if (datos[0] != null) {//existe
+                int existencias = art.comprobarExistenciasArt(Integer.parseInt(id));
+                int prestYrep = art.comprobarArtEnPrestYRep(Integer.parseInt(id));
+                int total = existencias + prestYrep;
+                if (prestYrep == 0){//Integer.parseInt(datos[2]) == Integer.parseInt(datos[3])) {//si las existencias son menores a los diponibles hay un prestamo o una multa
                     //Colocar Info
                     txtNomA.setText(datos[1]);
                     txtExtA.setText(datos[2]);
-                    txtDescA.setText(datos[4]);
+                    txtDescA.setText(datos[3]);
 
                     lblHiddenID.setText(id);
                     lblhiddenNom.setText(datos[1]);
                     btnActualizar.setEnabled(true);
                     pnlBuscarArt.setVisible(false);
                     pnlActArt.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(this, "El artículo indicado se encuentra en prestamo o con un reporte\nSi tiene un reporte debe dar de baja el reporte para actualizarlo\nSi es un prestamo por favor espere a la devolución");
+                } else {
+                    JOptionPane.showMessageDialog(this, "El artículo indicado se encuentra en un prestamo\nNo será posible actualizar hasta indicar la devolución de todos los articulos de este ID prestados");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "No se encontro el artículo indicado");
             }
-        }catch(SQLException e){
-            System.out.println("Error al recuperar articulo: "+ e);
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar articulo: " + e);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -1695,31 +2024,45 @@ public class Articulo extends javax.swing.JFrame {
         String nom = txtNomA.getText().trim();
         String ext = txtExtA.getText().trim();
         String desc = txtDescA.getText().trim();
-        
-        if(!nom.isEmpty() && !ext.isEmpty() && !desc.isEmpty()){
-            try{
+        String id = lblHiddenID.getText().trim();
+        if (!nom.isEmpty() && !ext.isEmpty() && !desc.isEmpty()) {
+            try {
                 ArticuloDB artic = new ArticuloDB();
-                if(artic.articuloExist(nom)){
+                //int existencias = artic.comprobarExistenciasArt(Integer.parseInt(id));
+                int prestYrep = artic.comprobarArtEnPrestYRep(Integer.parseInt(id));
+                //int total = existencias + prestYrep;
+                if(Integer.parseInt(ext) >= prestYrep){
+                if (artic.articuloExist(nom)) {
                     System.out.println("Esta usando un nombre existente");
-                    if(nom.equals(lblhiddenNom.getText().trim())){
+                    if (nom.equals(lblhiddenNom.getText().trim())) {
                         System.out.println("el nombre es el mismo no hay problema");
-                        String[] datos = {lblHiddenID.getText().trim(), nom, ext, desc };
+                        String[] datos = {id, nom, ext, desc};
                         artic.updArticulo(datos);
-                        JOptionPane.showMessageDialog(this,"Se ha actualizado el registro de articulos");
-                    }else{
+                        JOptionPane.showMessageDialog(this, "Se ha actualizado el registro de articulos");
+                    } else {
                         JOptionPane.showMessageDialog(this, "El nombre que utiliza para el articulo ya esta registrado intente con un distinto");
                     }
-                }else{
+                } else {
                     System.out.println("el nombre no es el mismo y no existe en db no hay problema");
-                    String[] datos = {lblHiddenID.getText().trim(), nom, ext, desc };
+                    String[] datos = {lblHiddenID.getText().trim(), nom, ext, desc};
                     artic.updArticulo(datos);
-                    JOptionPane.showMessageDialog(this,"Se ha actualizado el registro de articulos");
+                    JOptionPane.showMessageDialog(this, "Se ha actualizado el registro de articulos");
                 }
-            }catch(SQLException e){System.out.println("Error al cargar registros desde AccesoriosDB:"+e);}
-        }else{
-            JOptionPane.showMessageDialog(this,"No puede dejar ningun campo en blanco");
+            }else{
+                    JOptionPane.showMessageDialog(this, "No se puede actualizar este articulo con la cantidad de existencias ingresadas\nEsto sucede porque el dato ingresado es menor a la cantidad de  existencias en prestamo y reporte\n\nSolucion:\nLibere los reportes de este articulo y los prestamos realizados");
+            }
+                    
+            } catch (SQLException e) {
+                System.out.println("Error al cargar registros desde AccesoriosDB:" + e);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No puede dejar ningun campo en blanco");
         }
-        try{getTable();}catch(SQLException e){System.out.println("Error:"+e);}
+        try {
+            getTable();
+        } catch (SQLException e) {
+            System.out.println("Error:" + e);
+        }
         clearActualizar();
         dlgActualizar.setVisible(false);
         dlgActualizar.dispose();
@@ -1768,13 +2111,21 @@ public class Articulo extends javax.swing.JFrame {
 
     private void tglRegItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tglRegItemStateChanged
         if (tglReg.isSelected()) {
-            try{getPrestadosAcc();}catch(SQLException e){System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);}
+            try {
+                getPrestadosAcc();
+            } catch (SQLException e) {
+                System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);
+            }
             pnlTodos.setVisible(true);
             pnlHoy.setVisible(false);
             jLabel6.setText("Artículos Prestados TODOS");
             tglReg.setText("Los registros de artículos de HOY");
         } else {
-            try{getPrestadosHOY();}catch(SQLException e){System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);}
+            try {
+                getPrestadosHOY();
+            } catch (SQLException e) {
+                System.out.println("Error al recuperar todos los registros existentes de articulos: " + e);
+            }
             pnlHoy.setVisible(true);
             pnlTodos.setVisible(false);
             tglReg.setText("Todos los Registros de artículos");
@@ -1800,28 +2151,28 @@ public class Articulo extends javax.swing.JFrame {
             if (leer.getExisteUsuario(crdncial)) {
                 String hashed = leer.getPass(crdncial);
                 if (BCrypt.checkpw(String.valueOf(txtPass.getPassword()), hashed)) {
-                    if(leer.getEsAdminUsuario(crdncial)){
+                    if (leer.getEsAdminUsuario(crdncial)) {
                         valido = true;
                         txtUsuario.setText("");
                         txtPass.setText("");
                         dlgConfirm.setVisible(false);
                         dlgConfirm.dispose();
-                    }else{
+                    } else {
                         throw new Exception();
                     }
-                }else{
+                } else {
                     throw new Exception();
                 }
-            }else{
+            } else {
                 throw new Exception();
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error al comprobar usuario:" + ex);
-        }catch(Exception e){
+        } catch (Exception e) {
             txtUsuario.setText("");
             txtPass.setText("");
             valido = false;
-            JOptionPane.showMessageDialog(null,"Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
+            JOptionPane.showMessageDialog(null, "Compruebe los datos ingresados, es posible que:\n-Su usuario no sea administrador\n-No ingreso sus datos correctamente");
         }
     }//GEN-LAST:event_btnComprobarActionPerformed
 
@@ -1844,28 +2195,181 @@ public class Articulo extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPassKeyTyped
 
     private void pnlBtnReportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseClicked
-        pnlBtnReportar.setBackground(new Color(204,204,204));
+        pnlBtnReportar.setBackground(new Color(204, 204, 204));
+        fechaArtPrestamo.setVisible(true);
+        listaPrestamos.setVisible(false);
+        pnlFormularioR.setVisible(false);
+        rdComp.setSelected(true);
+        lblInfoR.setText("Para comenzar el reporte debe indicar la fecha en que fue prestado el Artículo");
+        dlgReporte.setLocationRelativeTo(bkArticulos);
+        dlgReporte.setVisible(true);
     }//GEN-LAST:event_pnlBtnReportarMouseClicked
 
     private void pnlBtnReportarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseEntered
-        pnlBtnReportar.setBackground(new Color(204,204,204));
+        pnlBtnReportar.setBackground(new Color(204, 204, 204));
     }//GEN-LAST:event_pnlBtnReportarMouseEntered
 
     private void pnlBtnReportarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBtnReportarMouseExited
-        pnlBtnReportar.setBackground(new Color(239,239,239));
+        pnlBtnReportar.setBackground(new Color(239, 239, 239));
     }//GEN-LAST:event_pnlBtnReportarMouseExited
 
-    public void clearActualizar(){
+    private void btnCerrarRMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarRMouseClicked
+        btnCerrarR.setBackground(null);
+        fechaArtPrestamo.setVisible(true);
+        listaPrestamos.setVisible(false);
+        pnlFormularioR.setVisible(false);
+        fechaPrestamo.setCalendar(null);
+        rdComp.setSelected(false);
+        rdComp1.setSelected(false);
+        rdComp2.setSelected(false);
+        dlgReporte.setVisible(false);
+        dlgReporte.dispose();
+    }//GEN-LAST:event_btnCerrarRMouseClicked
+
+    private void btnCerrarRMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarRMouseEntered
+        btnCerrarR.setBackground(Color.WHITE);
+    }//GEN-LAST:event_btnCerrarRMouseEntered
+
+    private void btnCerrarRMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarRMouseExited
+        btnCerrarR.setBackground(null);
+    }//GEN-LAST:event_btnCerrarRMouseExited
+
+    private void btnCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCActionPerformed
+        if (fechaPrestamo.getDate() != null) {
+            String fch1 = new SimpleDateFormat("yyyy-MM-dd").format(fechaPrestamo.getDate());
+            System.out.println("mi fecha: " + fch1.concat(" 00:00:00"));
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(fechaPrestamo.getDate());
+            c.add(Calendar.DATE, 1);  // number of days to add
+            String miNuevaFecha = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
+
+            System.out.println("con fecha extra:" + miNuevaFecha.concat(" 00:00:00"));
+            System.out.println(": : : resumen fechas: " + fch1.concat(" 00:00:00") + " : " + miNuevaFecha.concat(" 00:00:00"));
+
+            String[] cols = {listaArt.getColumnName(0), listaArt.getColumnName(1), listaArt.getColumnName(2), listaArt.getColumnName(3), listaArt.getColumnName(4)};
+            int count = 0;
+            String[][] datos = null;
+
+            try {
+                ArticuloDB acc = new ArticuloDB();
+                datos = acc.getRegArticulos(fch1.concat(" 00:00:00"), miNuevaFecha.concat(" 00:00:00"));
+                count = datos.length;
+                System.out.println("\nRegistros articulos existentes: " + count);
+            } catch (SQLException ex) {
+                System.out.println("Error al recuperar los datos: " + ex);
+            }
+            if (count != 0) {
+                javax.swing.table.TableModel miModelListaArt = new DefaultTableModel(cols, count) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+                for (int i = 0; i < datos.length; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        miModelListaArt.setValueAt(datos[i][j], i, j);
+                        listaArt.isCellEditable(i, j);
+                    }
+                }
+                listaArt.setModel(miModelListaArt);
+                fechaArtPrestamo.setVisible(false);
+                listaPrestamos.setVisible(true);
+                pnlFormularioR.setVisible(false);
+                lblInfoR.setText("Seleccione el Artículo de la lista de préstamos realizados, recuerde observar la fecha, hora y profesor");
+                rdComp1.setSelected(true);
+            } else {
+                JOptionPane.showMessageDialog(bkRArt, "La fecha indicada no cuenta con articulos disponibles para reportar!!!\nPuede intentar nuevamente con una fecha diferente.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(bkRArt, "Debe indicar la fecha en que fue prestado el artículo para generar\nla lista de los prestamos realizados ese día");
+        }
+        fechaPrestamo.setCalendar(null);
+    }//GEN-LAST:event_btnCActionPerformed
+
+    private void btnC1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnC1ActionPerformed
+        int row = listaArt.getSelectedRow();
+        if (row != -1) {
+            int idRow = Integer.parseInt((String) listaArt.getValueAt(row, 0));
+            System.out.println("El id seleccionado es:" + idRow);
+            txtProfNom.setText((String) listaArt.getValueAt(row, 1));
+            lblArticuloR.setText((String) listaArt.getValueAt(row, 2));
+            hiddenIDPrestArt.setText((String) listaArt.getValueAt(row, 0));
+            fechaArtPrestamo.setVisible(false);
+            listaPrestamos.setVisible(false);
+            pnlFormularioR.setVisible(true);
+            lblInfoR.setText("Complete el formulario");
+            rdComp2.setSelected(true);
+        } else {
+            JOptionPane.showMessageDialog(bkRArt, "Seleccione el registro del articulo a reportar!!!\nAsegúrese que la fecha, hora y profesor sea el que busca.");
+        }
+
+    }//GEN-LAST:event_btnC1ActionPerformed
+
+    private void btnClearRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearRActionPerformed
+        txtResum.setText("");
+        txtDetalles.setText("");
+    }//GEN-LAST:event_btnClearRActionPerformed
+
+    private void btnGenRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenRActionPerformed
+        String resumen = txtResum.getText().trim(), detalles = txtDetalles.getText().trim(), idReg = hiddenIDPrestArt.getText().trim();
+        if (!resumen.isEmpty() && !detalles.isEmpty()) {
+            try {
+                ArticuloDB a = new ArticuloDB();
+                int idArt = a.getArticuloID(lblArticuloR.getText().trim());
+                String[] registroPrestamoA = a.getReg(idReg);
+                String idProf = a.profIDPrestamo(registroPrestamoA[2]);
+                a.reporteArt(idProf, resumen, detalles, idArt, Integer.parseInt(idReg)); //profe, titulo, detalles, accesorio id, registro id
+                                
+                txtResum.setText("");
+                txtDetalles.setText("");
+                fechaArtPrestamo.setVisible(true);
+                listaPrestamos.setVisible(false);
+                pnlFormularioR.setVisible(false);
+                fechaPrestamo.setCalendar(null);
+                rdComp.setSelected(false);
+                rdComp1.setSelected(false);
+                rdComp2.setSelected(false);
+                dlgReporte.setVisible(false);
+                dlgReporte.dispose();
+                try {
+                    getTable();
+                } catch (SQLException e) {
+                    System.out.println("Error al cargar los articulos existentes:" + e);
+                }
+                JOptionPane.showMessageDialog(bkRArt, "Se ha generado el reporte\nSe visualizara una notificación en la ventana de Menú por cada reporte\n\nRecuerde para eliminar la notificacion un usuario administrador\ndebe validar que el Profesor ya no tiene adeudo pendiente con este articulo");
+            } catch (SQLException e) {
+                System.out.println("Error al generar reporte de articulo: " + e);
+            }
+        } else {
+            JOptionPane.showMessageDialog(bkRArt, "Por favor complete el formulario!!!\nNo deje nada en blanco");
+        }
+    }//GEN-LAST:event_btnGenRActionPerformed
+
+    private void txtResumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtResumKeyTyped
+        if (txtResum.getText().length() >= 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtResumKeyTyped
+
+    private void txtDetallesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDetallesKeyTyped
+        if (txtDetalles.getText().length() >= 450) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDetallesKeyTyped
+
+    public void clearActualizar() {
         txtNomA.setText("");
         txtExtA.setText("");
         txtDescA.setText("");
         //buscar
         txtIDArt.setText("");
-        
+
         btnActualizar.setEnabled(false);
         pnlBuscarArt.setVisible(true);
         pnlActArt.setVisible(false);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -1894,22 +2398,27 @@ public class Articulo extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Articulo().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Articulo().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane articulosPrestados;
     private javax.swing.JPanel bkArticulos;
+    private javax.swing.JPanel bkRArt;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnC;
+    private javax.swing.JButton btnC1;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnCerrar1;
     private javax.swing.JButton btnCerrar2;
+    private javax.swing.JLabel btnCerrarR;
+    private javax.swing.JButton btnClearR;
     private javax.swing.JButton btnComprobar;
+    private javax.swing.JButton btnGenR;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JToggleButton btnMenu;
     private javax.swing.JButton btnRegresar;
@@ -1917,6 +2426,10 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JDialog dlgBorrar;
     private javax.swing.JDialog dlgConfirm;
     private javax.swing.JDialog dlgNuevo;
+    private javax.swing.JDialog dlgReporte;
+    private javax.swing.JPanel fechaArtPrestamo;
+    private com.toedter.calendar.JDateChooser fechaPrestamo;
+    private javax.swing.JLabel hiddenIDPrestArt;
     private javax.swing.JLabel ico1;
     private javax.swing.JLabel ico2;
     private javax.swing.JLabel ico3;
@@ -1938,8 +2451,14 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -1959,7 +2478,7 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable5;
     private javax.swing.JLabel labelFecha;
@@ -1968,12 +2487,18 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JLabel lbl2;
     private javax.swing.JLabel lbl3;
     private javax.swing.JLabel lbl4;
+    private javax.swing.JLabel lblArticuloR;
     private javax.swing.JLabel lblHiddenID;
+    private javax.swing.JLabel lblInfoR;
     private javax.swing.JLabel lblN1;
     private javax.swing.JLabel lblN2;
     private javax.swing.JLabel lblN3;
     private javax.swing.JLabel lblN4;
+    private javax.swing.JLabel lblTituloR;
     private javax.swing.JLabel lblhiddenNom;
+    private javax.swing.JTable listaArt;
+    private javax.swing.JPanel listaPrestamos;
+    private javax.swing.JLayeredPane lyrCrearReporte;
     private javax.swing.JPanel panelOPC;
     private javax.swing.JPanel pnlActArt;
     private javax.swing.JPanel pnlBtnActualizar;
@@ -1989,18 +2514,26 @@ public class Articulo extends javax.swing.JFrame {
     private javax.swing.JPanel pnlColor5;
     private javax.swing.JPanel pnlColor6;
     private javax.swing.JPanel pnlColor7;
+    private javax.swing.JPanel pnlFormularioR;
     private javax.swing.JScrollPane pnlHoy;
     private javax.swing.JScrollPane pnlTodos;
+    private javax.swing.JRadioButton rdComp;
+    private javax.swing.JRadioButton rdComp1;
+    private javax.swing.JRadioButton rdComp2;
+    private javax.swing.JTable tableArticulos;
     private javax.swing.JToggleButton tglReg;
     private javax.swing.JTextField txtBorrar;
     private javax.swing.JTextArea txtDesc;
     private javax.swing.JTextArea txtDescA;
+    private javax.swing.JTextArea txtDetalles;
     private javax.swing.JTextField txtExist;
     private javax.swing.JTextField txtExtA;
     private javax.swing.JTextField txtIDArt;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNomA;
     private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtProfNom;
+    private javax.swing.JTextField txtResum;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

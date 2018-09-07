@@ -77,7 +77,7 @@ public class UsuarioCreateDB {
             prep.setBoolean(6, nvlAcceso);
             prep.execute();
             prep.close();
-            JOptionPane.showMessageDialog(null, "Su usuario se ha creado con exito!");
+            JOptionPane.showMessageDialog(null, "Su usuario fue registrado como:\n\n"+ idPersonal +"\n\n a partir de ahora puede acceder con este usuario y su contraseña!");
         }catch(SQLException ex){
             System.out.println("Error al crear usuario, revise los datos ingresados: " + ex);
             JOptionPane.showMessageDialog(null, "NO SE GENERO EL REGISTRO", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -102,7 +102,7 @@ public class UsuarioCreateDB {
             prep.setBoolean(6, nvlAcceso);
             prep.executeUpdate();
             prep.close();
-            JOptionPane.showMessageDialog(null, "Su usuario se ha creado con exito!");
+            JOptionPane.showMessageDialog(null, "Su usuario fue registrado como:\n\n"+ id +"\n\n a partir de ahora puede acceder con este usuario y su contraseña!");
             
         }catch(SQLException ex){
             System.out.println("Error al crear usuario, revise los datos ingresados: " + ex);
